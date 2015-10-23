@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp"
+    android:layout_marginTop="2dp">
+
+
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="0.5dp"
+    android:background="@color/colorPrimaryDark"/>
+
+        <!--<View-->
+            <!--android:id="@+id/bgColor"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="#808080"/>-->
+
+        <ImageView
+            android:id="@+id/maskImage"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="0.5dp"
+            android:src="@drawable/empty_photo"
+            android:background="#808080"/>
+
+
+
+    <TextView
+        android:id="@+id/ingredientTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Banana"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="7dp"
+        android:layout_toLeftOf="@+id/addToCup"
+        android:layout_toRightOf="@+id/maskImage" />
+
+
+    <ImageView
+        android:id="@+id/addToCup"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/add"
+        android:padding="15dp"
+        android:layout_alignParentRight="true"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignBottom="@+id/maskImage"
+        android:background="@color/colorPrimaryDark"/>
+
+
+</RelativeLayout>

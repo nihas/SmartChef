@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">SmartChef</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_cup">Cup</string>
+
+    <string-array name="fruits">
+        <item>Apple</item>
+        <item>Apricot</item>
+        <item>Avocado</item>
+        <item>Banana - ripe</item>
+        <item>Banana - raw</item>
+        <item>Black Berry</item>
+        <item>Chickoo</item>
+        <item>Cucumber</item>
+        <item>Custard apple</item>
+        <item>Dates</item>
+        <item>Figs</item>
+        <item>Grapes</item>
+        <item>Grapefruit - Pomelo</item>
+        <item>Gauvas</item>
+        <item>Jackfruit</item>
+        <item>Lychee - Litchi</item>
+        <item>Mango Ripe</item>
+        <item>Mango Green/Raw</item>
+        <item>Muskmelon/Cantalope</item>
+        <item>Olive</item>
+        <item>Orange</item>
+        <item>Papaya Raw</item>
+        <item>Papaya Ripe</item>
+        <item>Pear</item>
+        <item>Plum</item>
+        <item>Pineapple</item>
+        <item>Pomogranate</item>
+        <item>Sapodilla</item>
+        <item>Watermelon</item>
+    </string-array>
+</resources>
