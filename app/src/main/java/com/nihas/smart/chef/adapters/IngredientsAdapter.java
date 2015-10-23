@@ -92,8 +92,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
        holder.addToCup.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Snackbar.make(v, "Added", Snackbar.LENGTH_LONG)
-                       .setAction("Action", null).show();
+
 
                dialog  = new Dialog(activity);
                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -117,13 +116,22 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
                LinearLayout measurement=(LinearLayout)dialog.findViewById(R.id.measurements);
                LinearLayout qty=(LinearLayout)dialog.findViewById(R.id.quantity);
-
+               TextView text = null;
                for(int i=1;i<=50;i++){
-                   TextView text=new TextView(activity);
+                   text=new TextView(activity);
                    text.setPadding(10,10,10,10);
                    text.setText(String.valueOf(i));
                    qty.addView(text);
                }
+               final TextView finalText = text;
+               text.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       Snackbar.make(v, finalText.getText().toString(), Snackbar.LENGTH_LONG)
+                               .setAction("Action", null).show();
+                       dialog.dismiss();
+                   }
+               });
            }
        });
 
