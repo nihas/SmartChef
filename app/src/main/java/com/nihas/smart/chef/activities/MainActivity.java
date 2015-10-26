@@ -70,6 +70,16 @@ public class MainActivity extends AppCompatActivity {
         MenuItem item = menu.findItem(R.id.action_cup);
         MenuItemCompat.setActionView(item, R.layout.cup_icon);
         View view = MenuItemCompat.getActionView(item);
+        view.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //do stuff here
+                Intent intent = new Intent(MainActivity.this, CupActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
+            }
+        });
         return true;
     }
 
@@ -82,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_cup) {
+
             return true;
         }
 

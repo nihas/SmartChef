@@ -1,5 +1,6 @@
 package com.nihas.smart.chef.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -62,6 +63,16 @@ public class IngredientsActivity extends AppCompatActivity{
         MenuItem item = menu.findItem(R.id.action_cup);
         MenuItemCompat.setActionView(item, R.layout.cup_icon);
         View view = MenuItemCompat.getActionView(item);
+        view.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //do stuff here
+                Intent intent = new Intent(IngredientsActivity.this, CupActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
+            }
+        });
         return true;
     }
 

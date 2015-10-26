@@ -12,46 +12,11 @@
         android:layout_margin="8dp"
         android:text="Please select measurement"/>
 
-    <HorizontalScrollView
+    <ListView
+        android:id="@+id/qtyList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:id="@+id/measurements"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        android:layout_height="200dp"></ListView>
 
 
-        </LinearLayout>
-
-
-    </HorizontalScrollView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="8dp"
-        android:text="Please select quantity"/>
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:id="@+id/quantity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-
-
-        </LinearLayout>
-
-
-    </HorizontalScrollView>
 
 </LinearLayout>
