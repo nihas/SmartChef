@@ -115,13 +115,20 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                 if(quantity>0) {
                     quantity--;
                     holder.quantity_text.setText(String.valueOf(quantity));
-                    CupPojo product =
-                            new CupPojo(holder.mIngredient.getText().toString(),measurement, quantity);
+                    if(quantity==0){
+                        if(dbHandler.deleteProduct(holder.mIngredient.getText().toString()))
+                            Toast.makeText(activity,"Deleted",Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(activity,"FAILED Delete",Toast.LENGTH_SHORT).show();
+                    }else {
+                        CupPojo product =
+                                new CupPojo(holder.mIngredient.getText().toString(), measurement, quantity);
 
-                    if(dbHandler.updateQty(product))
-                        Toast.makeText(activity,"Updated",Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
+                        if (dbHandler.updateQty(product))
+                            Toast.makeText(activity, "Updated", Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(activity, "FAILED Update", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -158,7 +165,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                        @Override
                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                           measurement=listView.getItemAtPosition(position).toString();
+                           measurement = listView.getItemAtPosition(position).toString();
 //                           int quantity;
 //                           quantity=1;
                            holder.ingMeasure.setVisibility(View.VISIBLE);
@@ -169,14 +176,19 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
 
                            CupPojo product =
-                                   new CupPojo(holder.mIngredient.getText().toString(), holder.ingMeasure.getText().toString(),1);
+                                   new CupPojo(holder.mIngredient.getText().toString(), holder.ingMeasure.getText().toString(), 1);
+                           if (!dbHandler.isIngredients(holder.mIngredient.getText().toString())) {
+                               if (dbHandler.addProduct(product))
+                                   Toast.makeText(activity, "Added", Toast.LENGTH_SHORT).show();
+                               else
+                                   Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
 
-                           if(dbHandler.addProduct(product))
-                               Toast.makeText(activity,"Added",Toast.LENGTH_SHORT).show();
-                           else
-                               Toast.makeText(activity,"FAILED",Toast.LENGTH_SHORT).show();
-
-                           dialog.dismiss();
+                               dialog.dismiss();
+                           }else{
+                               Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
+                               holder.quantity_text.setText("0");
+                               dialog.dismiss();
+                           }
                        }
                    });
                }else{

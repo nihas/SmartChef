@@ -46,7 +46,7 @@ public class CupActivity extends AppCompatActivity {
         cupAdapter=new CupAdapter(this,getIngredients());
         mRecyclerView.setAdapter(cupAdapter);
 
-        if (cupAdapter==null) {
+        if (getIngredients().isEmpty()) {
             mRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
         }
@@ -64,6 +64,8 @@ public class CupActivity extends AppCompatActivity {
 //            }
 //        });
     }
+
+    
 
     public ArrayList<CupPojo> getIngredients(){
         listIngredients=new ArrayList<>();

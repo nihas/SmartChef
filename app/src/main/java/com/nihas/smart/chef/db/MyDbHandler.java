@@ -84,6 +84,31 @@ public class MyDbHandler extends SQLiteOpenHelper {
         return product;
     }
 
+    public boolean isIngredients(String productname) {
+        String query = "Select * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_PRODUCTNAME + " =  \"" + productname + "\"";
+Boolean hiii;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        CupPojo product = new CupPojo();
+
+        if (cursor.moveToFirst()) {
+
+            cursor.moveToFirst();
+//            product.setId(Integer.parseInt(cursor.getString(0)));
+//            product.setIngredientName(cursor.getString(1));
+//            product.setIngredientQty(Integer.parseInt(cursor.getString(2)));
+            cursor.close();
+            hiii =true;
+        } else {
+            product = null;
+            hiii=false;
+        }
+        db.close();
+        return hiii;
+    }
+
 
     public boolean deleteProduct(String productname) {
 
