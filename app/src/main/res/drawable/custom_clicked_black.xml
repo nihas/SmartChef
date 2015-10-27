@@ -3,12 +3,13 @@
     <item
         android:state_selected="false"
         android:state_pressed="false"
-        android:drawable="@drawable/square_border" />
+
+        android:drawable="@color/color7" />
 
     <item android:state_pressed="true"
-        android:drawable="@drawable/circle_filled" />
+        android:drawable="@color/grey" />
 
     <item android:state_selected="true"
         android:state_pressed="false"
-        android:drawable="@drawable/circle_filled" />
+        android:drawable="@color/grey" />
 </selector>

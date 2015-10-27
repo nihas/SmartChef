@@ -2,6 +2,8 @@ package com.nihas.smart.chef.adapters;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
@@ -21,8 +23,16 @@ import android.widget.Toast;
 
 
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.customui.GradientoverImageDrawable;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.pojos.CupPojo;
+import com.nihas.smart.chef.pojos.IngredientsPojo;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.LoadedFrom;
+import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
+import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +42,9 @@ import java.util.List;
  */
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.ViewHolder> {
 
-    private List<String> mDataset;
-//    private ImageFetcher mImageFetcher;
+    private List<IngredientsPojo> mDataset;
+    ImageLoader imageLoader;
+    DisplayImageOptions options;
     Activity activity;
     Dialog dialog;
 
@@ -48,10 +59,10 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             "Pieces"
     };
 
-    public IngredientsAdapter(Activity activity, ArrayList<String> ingredients) {
+    public IngredientsAdapter(Activity activity, ArrayList<IngredientsPojo> ingredients) {
         mDataset = ingredients;
         this.activity=activity;
-//        this.mImageFetcher=mImageFetcher;
+        imageLoader = ImageLoader.getInstance();
 
     }
 
@@ -71,7 +82,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             addToCup=(TextView)v.findViewById(R.id.addToCup);
             minusToCup=(TextView)v.findViewById(R.id.minusToCup);
             ingMeasure=(TextView)v.findViewById(R.id.ingredientMeasure);
-            ingMeasure.setVisibility(View.INVISIBLE);
+            ingMeasure.setVisibility(View.GONE);
             thumbnail=(ImageView)v.findViewById(R.id.maskImage);
             quantity_text.setText("0");
 
@@ -95,6 +106,22 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         // set the view's size, margins, paddings and layout parameters
 
         ViewHolder vh = new ViewHolder(v);
+        imageLoader.init(ImageLoaderConfiguration.createDefault(activity));
+        options = new DisplayImageOptions.Builder().cacheInMemory(true)
+//                .displayer(new BitmapDisplayer() {
+//            @Override
+//            public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
+//                int gradientStartColor = Color.parseColor("#55000000");//argb(0, 0, 0, 0);
+//                int gradientEndColor = Color.parseColor("#55000000");//argb(255, 0, 0, 0);
+//                GradientoverImageDrawable gradientDrawable = new GradientoverImageDrawable(activity.getResources(), bitmap);
+//                gradientDrawable.setGradientColors(gradientStartColor, gradientEndColor);
+//                imageAware.setImageDrawable(gradientDrawable);
+//            }
+//        })
+                .cacheOnDisc(true).resetViewBeforeLoading(true)
+                .showImageForEmptyUri(R.drawable.empty_photo)
+                .showImageOnFail(R.drawable.empty_photo)
+                .showImageOnLoading(R.drawable.empty_photo).build();
 
 
         return vh;
@@ -102,10 +129,11 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mIngredient.setText(mDataset.get(position));
+        holder.mIngredient.setText(mDataset.get(position).getName());
+        imageLoader.displayImage(mDataset.get(position).getImage_url(), holder.thumbnail, options);
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
         holder.minusToCup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +150,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                             Toast.makeText(activity,"FAILED Delete",Toast.LENGTH_SHORT).show();
                     }else {
                         CupPojo product =
-                                new CupPojo(holder.mIngredient.getText().toString(), measurement, quantity);
+                                new CupPojo(holder.mIngredient.getText().toString(), measurement,mDataset.get(position).getImage_url(), quantity);
 
                         if (dbHandler.updateQty(product))
                             Toast.makeText(activity, "Updated", Toast.LENGTH_SHORT).show();
@@ -168,7 +196,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                            measurement = listView.getItemAtPosition(position).toString();
 //                           int quantity;
 //                           quantity=1;
-                           holder.ingMeasure.setVisibility(View.VISIBLE);
+//                           holder.ingMeasure.setVisibility(View.VISIBLE);
                            holder.ingMeasure.setText(listView.getItemAtPosition(position).toString());
                            holder.quantity_text.setText("1");
 
@@ -176,7 +204,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
 
                            CupPojo product =
-                                   new CupPojo(holder.mIngredient.getText().toString(), holder.ingMeasure.getText().toString(), 1);
+                                   new CupPojo(holder.mIngredient.getText().toString(), holder.ingMeasure.getText().toString(),
+                                           mDataset.get(position).getImage_url(),1);
                            if (!dbHandler.isIngredients(holder.mIngredient.getText().toString())) {
                                if (dbHandler.addProduct(product))
                                    Toast.makeText(activity, "Added", Toast.LENGTH_SHORT).show();
@@ -196,7 +225,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                    quantity++;
                    holder.quantity_text.setText(String.valueOf(quantity));
                    CupPojo product =
-                           new CupPojo(holder.mIngredient.getText().toString(),holder.ingMeasure.getText().toString(), quantity);
+                           new CupPojo(holder.mIngredient.getText().toString(),holder.ingMeasure.getText().toString(),
+                                   mDataset.get(position).getImage_url(),quantity);
 
                    if(dbHandler.updateQty(product))
                         Toast.makeText(activity,"Updated",Toast.LENGTH_SHORT).show();

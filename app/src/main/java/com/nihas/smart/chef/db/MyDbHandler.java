@@ -21,6 +21,7 @@ public class MyDbHandler extends SQLiteOpenHelper {
     public static final String COLUMN_PRODUCTNAME = "ingredient_name";
     public static final String COLUMN_QUANTITY = "ingredient_quantity";
     public static final String COLUMN_MEASUREMENT = "ingredient_measurement";
+    public static final String COLUMN_IMAGE_URL = "image_url";
 
     public MyDbHandler(Context context, String name,
                        SQLiteDatabase.CursorFactory factory, int version) {
@@ -33,7 +34,7 @@ public class MyDbHandler extends SQLiteOpenHelper {
         String CREATE_PRODUCTS_TABLE = "CREATE TABLE " +
                 TABLE_PRODUCTS + "("
                 + COLUMN_ID + " integer primary key autoincrement," + COLUMN_PRODUCTNAME
-                + " TEXT NOT NULL," + COLUMN_MEASUREMENT + " TEXT NOT NULL,"+ COLUMN_QUANTITY + " INTEGER" + ")";
+                + " TEXT NOT NULL," + COLUMN_MEASUREMENT + " TEXT NOT NULL,"+COLUMN_IMAGE_URL + " TEXT NOT NULL,"+ COLUMN_QUANTITY + " INTEGER" + ")";
         db.execSQL(CREATE_PRODUCTS_TABLE);
 
     }
@@ -52,6 +53,7 @@ public class MyDbHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PRODUCTNAME, cupPojo.getIngredientName());
         values.put(COLUMN_MEASUREMENT, cupPojo.getIngredienMeasurement());
+        values.put(COLUMN_IMAGE_URL, cupPojo.getImageUrl());
         values.put(COLUMN_QUANTITY, cupPojo.getIngredientQty());
 
 
@@ -139,6 +141,7 @@ Boolean hiii;
         ContentValues values = new ContentValues();
 //        values.put(COLUMN_PRODUCTNAME, cupPojo.getIngredientName());
         values.put(COLUMN_MEASUREMENT, cupPojo.getIngredienMeasurement());
+        values.put(COLUMN_IMAGE_URL, cupPojo.getImageUrl());
         values.put(COLUMN_QUANTITY, cupPojo.getIngredientQty());
 
         String selection =COLUMN_PRODUCTNAME+"=?"; // where ID column = rowId (that is, selectionArgs)
@@ -159,7 +162,7 @@ Boolean hiii;
     public Cursor getAllCup() {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.query(TABLE_PRODUCTS, new String[] { COLUMN_ID, COLUMN_PRODUCTNAME,
-                COLUMN_MEASUREMENT,COLUMN_QUANTITY }, null, null, null, null, null);
+                COLUMN_MEASUREMENT,COLUMN_IMAGE_URL,COLUMN_QUANTITY }, null, null, null, null, null);
     }
 
 

@@ -11,18 +11,20 @@ public class CupPojo {
     private String ingredienMeasurement;
     private String imageUrl;
 
-    public CupPojo(int id,String IngredientName,int IngredientQty,String IngredienMeasurement){
+    public CupPojo(int id,String IngredientName,String IngredienMeasurement,String ImageUrl,int IngredientQty){
         this.id=id;
         this.ingredientName=IngredientName;
         this.ingredienMeasurement=IngredienMeasurement;
         this.ingredientQty=IngredientQty;
+        this.imageUrl=ImageUrl;
     }
 
-    public CupPojo(String IngredientName,String IngredienMeasurement,int IngredientQty){
+    public CupPojo(String IngredientName,String IngredienMeasurement,String ImageUrl,int IngredientQty){
         this.id=id;
         this.ingredientName=IngredientName;
         this.ingredienMeasurement=IngredienMeasurement;
         this.ingredientQty=IngredientQty;
+        this.imageUrl=ImageUrl;
     }
 
     public CupPojo(){
