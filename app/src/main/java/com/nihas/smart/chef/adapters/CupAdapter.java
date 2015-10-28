@@ -38,6 +38,7 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
 
     public CupAdapter(Activity activity, ArrayList<CupPojo> ingredients) {
         this.activity=activity;
+        this.mDataset=new ArrayList<>();
         this.mDataset=ingredients;
         imageLoader = ImageLoader.getInstance();
     }

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:padding="8dp"
+    android:layout_margin="8dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Please select measurement"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/linearLayout4"
+        android:layout_alignStart="@+id/linearLayout4" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout3"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp">
+    
+    <ImageView
+        android:id="@+id/ing_thumbnail"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/empty_photo"
+        android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/ing_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Hiii"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:id="@+id/linearLayout4">
+
+        <TextView
+            android:id="@+id/ing_minus"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="-"
+            android:padding="8dp"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:background="@drawable/custom_round_clicked"
+            />
+
+        <TextView
+            android:id="@+id/ing_quantity"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="8"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:textColor="#000000"
+            />
+
+        <TextView
+            android:id="@+id/ing_add"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="+"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:textColor="#000000"
+            android:background="@drawable/custom_round_clicked"
+            />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/spinnerLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout4"
+
+        android:layout_marginTop="10dp">
+
+    <Spinner
+        android:id="@+id/ing_measure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:spinnerMode="dialog"
+        android:background="@drawable/custom_clicked"></Spinner>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/add"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/ing_addtoocup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinnerLayout"
+        android:layout_marginTop="10dp"
+        android:text="ADD TO CUP"
+        android:textColor="#ffffff"
+        android:background="@drawable/custom_clicked"/>
+
+
+
+
+
+
+</RelativeLayout>

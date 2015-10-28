@@ -15,9 +15,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +54,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     private static int colorCode=0;
     static int[] colorArray={R.color.color1,R.color.color2, R.color.color3,R.color.color4,
             R.color.color5,R.color.color6,R.color.color7,R.color.color8};
-    String[] values = new String[] { "Gram",
+    String[] values = new String[] { "--- SELECT UNIT ---" ,"Gram",
             "Milli Litre",
             "Cup",
             "Tea Spoon",
@@ -145,7 +147,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                     holder.quantity_text.setText(String.valueOf(quantity));
                     if(quantity==0){
                         if(dbHandler.deleteProduct(holder.mIngredient.getText().toString()))
-                            Toast.makeText(activity,"Deleted",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity,"Deleted"+position,Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(activity,"FAILED Delete",Toast.LENGTH_SHORT).show();
                     }else {
@@ -153,7 +155,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                                 new CupPojo(holder.mIngredient.getText().toString(), measurement,mDataset.get(position).getImage_url(), quantity);
 
                         if (dbHandler.updateQty(product))
-                            Toast.makeText(activity, "Updated", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "Updated"+position, Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(activity, "FAILED Update", Toast.LENGTH_SHORT).show();
                     }
@@ -165,61 +167,110 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
            public void onClick(View v) {
                int quantity=Integer.parseInt(holder.quantity_text.getText().toString());
 
-               if (quantity==0) {
+               if (quantity>=0) {
                    dialog = new Dialog(activity);
                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                   dialog.setContentView(R.layout.select_qty_dialog);
+                   dialog.setContentView(R.layout.select_qty_dialog2);
                    dialog.setCanceledOnTouchOutside(true);
 
                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();//dialog.getWindow().getAttributes();
                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                   lp.dimAmount=0.60f;
                    dialog.getWindow().setAttributes(lp);
                    dialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
+
 //                window.setAttributes(lp);
-                   lp.dimAmount = 0.50f;
+//                   lp.dimAmount = 0.6f;
                    dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                   dialog.getWindow().setGravity(Gravity.BOTTOM);
-                   lp.gravity = Gravity.BOTTOM;
+                   dialog.getWindow().setGravity(Gravity.CENTER);
+//                   lp.gravity = Gravity.CENTER;
+
 //                lp.x = -100;   //x position
 //                lp.y = -100;   //y position
                    dialog.show();
 
-                   final ListView listView = (ListView) dialog.findViewById(R.id.qtyList);
-                   ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity,
-                           android.R.layout.simple_list_item_1, android.R.id.text1, values);
-                   listView.setAdapter(adapter);
-                   listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                   ImageView ingImage=(ImageView)dialog.findViewById(R.id.ing_thumbnail);
+                   TextView ingTitle=(TextView)dialog.findViewById(R.id.ing_name);
+                   TextView ingAdd=(TextView)dialog.findViewById(R.id.ing_add);
+                   TextView ingMinus=(TextView)dialog.findViewById(R.id.ing_minus);
+                   final TextView ingQty=(TextView)dialog.findViewById(R.id.ing_quantity);
+                   final Spinner ingMeasure=(Spinner)dialog.findViewById(R.id.ing_measure);
+                   Button ingAddtoCup=(Button)dialog.findViewById(R.id.ing_addtoocup);
+
+                   imageLoader.displayImage(mDataset.get(position).getImage_url(), ingImage, options);
+                   ingTitle.setText(mDataset.get(position).getName().toString());
+                   ingQty.setText("0");
+                   ingAdd.setOnClickListener(new View.OnClickListener() {
                        @Override
-                       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                           measurement = listView.getItemAtPosition(position).toString();
-//                           int quantity;
-//                           quantity=1;
-//                           holder.ingMeasure.setVisibility(View.VISIBLE);
-                           holder.ingMeasure.setText(listView.getItemAtPosition(position).toString());
-                           holder.quantity_text.setText("1");
-
-                           MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
-
-
-                           CupPojo product =
-                                   new CupPojo(holder.mIngredient.getText().toString(), holder.ingMeasure.getText().toString(),
-                                           mDataset.get(position).getImage_url(),1);
-                           if (!dbHandler.isIngredients(holder.mIngredient.getText().toString())) {
-                               if (dbHandler.addProduct(product))
-                                   Toast.makeText(activity, "Added", Toast.LENGTH_SHORT).show();
-                               else
-                                   Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
-
-                               dialog.dismiss();
-                           }else{
-                               Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
-                               holder.quantity_text.setText("0");
-                               dialog.dismiss();
+                       public void onClick(View v) {
+                           int qty = Integer.parseInt(ingQty.getText().toString().trim());
+                           qty++;
+                           ingQty.setText(String.valueOf(qty));
+                       }
+                   });
+                   ingMinus.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           int qty = Integer.parseInt(ingQty.getText().toString().trim());
+                           if(qty>0) {
+                               qty--;
+                               ingQty.setText(String.valueOf(qty));
                            }
                        }
                    });
+
+
+//                   final Spinner spinner = (Spinner) dialog.findViewById(R.id.ing_measure);
+                   ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity,
+                           android.R.layout.simple_list_item_1, android.R.id.text1, values);
+                   ingMeasure.setAdapter(adapter);
+                   ingMeasure
+                           .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                               @Override
+                               public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                   String imc_met=ingMeasure.getSelectedItem().toString();
+                                   ingMeasure.setSelection(position,true);
+
+                               }
+
+                               @Override
+                               public void onNothingSelected(AdapterView<?> parent) {
+
+                               }
+                           });
+
+//                   spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                       @Override
+//                       public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+//                           measurement = listView.getItemAtPosition(pos).toString();
+////                           int quantity;
+////                           quantity=1;
+////                           holder.ingMeasure.setVisibility(View.VISIBLE);
+//                           holder.ingMeasure.setText(listView.getItemAtPosition(pos).toString());
+//                           holder.quantity_text.setText("1");
+//
+//                           MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
+//
+//
+//                           CupPojo product =
+//                                   new CupPojo(holder.mIngredient.getText().toString(), holder.ingMeasure.getText().toString(),
+//                                           mDataset.get(position).getImage_url(),1);
+//                           if (!dbHandler.isIngredients(holder.mIngredient.getText().toString())) {
+//                               if (dbHandler.addProduct(product))
+//                                   Toast.makeText(activity, "Added"+position, Toast.LENGTH_SHORT).show();
+//                               else
+//                                   Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
+//
+//                               dialog.dismiss();
+//                           }else{
+//                               Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
+//                               holder.quantity_text.setText("0");
+//                               dialog.dismiss();
+//                           }
+//                       }
+//                   });
                }else{
                    MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
                    quantity++;
@@ -229,7 +280,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                                    mDataset.get(position).getImage_url(),quantity);
 
                    if(dbHandler.updateQty(product))
-                        Toast.makeText(activity,"Updated",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity,"Updated"+position,Toast.LENGTH_SHORT).show();
                    else
                         Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
                }
