@@ -58,7 +58,7 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
 //            public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
 //                int gradientStartColor = Color.parseColor("#55000000");//argb(0, 0, 0, 0);
 //                int gradientEndColor = Color.parseColor("#55000000");//argb(255, 0, 0, 0);
-//                GradientoverImageDrawable gradientDrawable = new GradientoverImageDrawable(context.getResources(), bitmap);
+//                GradientoverImageDrawable gradientDrawable = new GradientoverImageDrawable(activity.getResources(), bitmap);
 //                gradientDrawable.setGradientColors(gradientStartColor, gradientEndColor);
 //                imageAware.setImageDrawable(gradientDrawable);
 //            }
