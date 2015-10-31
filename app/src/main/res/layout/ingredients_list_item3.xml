@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/maskImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="#808080"
+        android:scaleType="centerCrop"
+        android:src="@drawable/empty_photo" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/addPlus"
+        android:layout_toStartOf="@+id/addPlus"
+        android:layout_toRightOf="@+id/maskImage"
+        android:layout_toEndOf="@+id/maskImage">
+
+        <TextView
+            android:id="@+id/ingredientTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+
+            android:text="Banana" />
+
+        <LinearLayout
+            android:id="@+id/plus_minus_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/minusToCup"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/custom_round_clicked"
+                android:gravity="center"
+                android:text="-"
+                android:shadowColor="#000000"
+                android:shadowRadius="1"
+                android:shadowDy="1"
+                android:shadowDx="1"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:id="@+id/quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="8dp"
+                android:gravity="center"
+                android:text="0"
+                android:shadowColor="#000000"
+                android:shadowRadius="1"
+                android:shadowDy="1"
+                android:shadowDx="1"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:id="@+id/ingredientMeasure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:text=""
+                android:shadowColor="#000000"
+                android:shadowRadius="1"
+                android:shadowDy="1"
+                android:shadowDx="1"
+                android:textColor="#ffffff" />
+
+
+            <TextView
+                android:id="@+id/addToCup"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/custom_round_clicked"
+                android:gravity="center"
+                android:text="+"
+                android:shadowColor="#000000"
+                android:shadowRadius="1"
+                android:shadowDy="1"
+                android:shadowDx="1"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/add_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/addPlus"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/custom_fill_round_clicked"
+        android:gravity="center"
+        android:text="+"
+        android:shadowColor="#000000"
+        android:shadowRadius="1"
+        android:shadowDy="1"
+        android:shadowDx="1"
+        android:textColor="#ffffff"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"/>
+
+    <View
+        android:id="@+id/vara"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignBottom="@+id/maskImage"
+        android:background="@color/colorPrimaryDark"/>
+
+
+</RelativeLayout>

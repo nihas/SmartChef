@@ -1,6 +1,7 @@
 package com.nihas.smart.chef.activities;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,10 +13,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.adapters.CategoryAdapter;
+import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.pojos.AllPojo;
+import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.utils.RecyclerItemClickListener;
 
 import java.util.ArrayList;
@@ -23,6 +27,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    TextView cupQty;
     RecyclerView mRecyclerView;
     ArrayList<AllPojo> listCuisines;
 
@@ -80,6 +86,16 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
             }
         });
+        cupQty=(TextView)view.findViewById(R.id.cup_qty);
+        MyDbHandler dbHandler = new MyDbHandler(this, null, null, 1);
+        Cursor c=dbHandler.getAllCup();
+        CupPojo pojo=new CupPojo();
+        if(c==null)
+            pojo.setCup_count(0);
+        else
+            pojo.setCup_count(c.getCount());
+        cupQty.setText(String.valueOf(pojo.getCup_count()));
+
         return true;
     }
 
@@ -115,4 +131,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    public void UpdateQty(){
+        CupPojo pojo=new CupPojo();
+        cupQty.setText(pojo.getCup_count());
+    }
+
+
 }

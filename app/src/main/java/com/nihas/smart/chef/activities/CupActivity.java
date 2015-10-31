@@ -65,12 +65,15 @@ public class CupActivity extends AppCompatActivity {
 //        });
     }
 
-    
+
 
     public ArrayList<CupPojo> getIngredients(){
         listIngredients=new ArrayList<>();
         MyDbHandler dbHandler = new MyDbHandler(this, null, null, 1);
         Cursor c=dbHandler.getAllCup();
+//        Toast.makeText(this, String.valueOf(c.getCount()), Toast.LENGTH_LONG).show();
+        CupPojo pojo= new CupPojo();
+        pojo.setCup_count(c.getCount());
         if (c.moveToFirst()) {
             do {
 //                DisplayContact(c);

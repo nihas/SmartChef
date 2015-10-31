@@ -1,6 +1,7 @@
 package com.nihas.smart.chef.adapters;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -94,6 +95,12 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
                             notifyItemChanged(position);
                             notifyItemRemoved(position);
                             mDataset.remove(position);
+                            Cursor c=dbHandler.getAllCup();
+                            CupPojo pojo=new CupPojo();
+                            if(c==null)
+                                pojo.setCup_count(0);
+                            else
+                                pojo.setCup_count(c.getCount());
 
                         }
                         else

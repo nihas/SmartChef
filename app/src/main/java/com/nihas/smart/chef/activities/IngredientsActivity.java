@@ -1,6 +1,7 @@
 package com.nihas.smart.chef.activities;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,9 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.adapters.IngredientsAdapter;
+import com.nihas.smart.chef.db.MyDbHandler;
+import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.pojos.IngredientsPojo;
 
 import java.util.ArrayList;
@@ -30,6 +34,7 @@ public class IngredientsActivity extends AppCompatActivity{
     RecyclerView mRecyclerView;
     ArrayList<IngredientsPojo> listIngredients;
     IngredientsAdapter ingAdapter;
+    TextView cupQty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +45,7 @@ public class IngredientsActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         mRecyclerView=(RecyclerView)findViewById(R.id.rv);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ingAdapter=new IngredientsAdapter(this,getIngredients());
         mRecyclerView.setAdapter(ingAdapter);
@@ -55,6 +60,13 @@ public class IngredientsActivity extends AppCompatActivity{
         });
 
 
+        ingAdapter.setOnDataChangeListener(new IngredientsAdapter.OnDataChangeListener() {
+            @Override
+            public void onDataChanged(int size) {
+                CupPojo pojo=new CupPojo();
+                cupQty.setText(String.valueOf(pojo.getCup_count()));
+            }
+        });
     }
 
 
@@ -75,6 +87,16 @@ public class IngredientsActivity extends AppCompatActivity{
                 overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
             }
         });
+
+        cupQty=(TextView)view.findViewById(R.id.cup_qty);
+        MyDbHandler dbHandler = new MyDbHandler(this, null, null, 1);
+        Cursor c=dbHandler.getAllCup();
+        CupPojo pojo=new CupPojo();
+        if(c==null)
+            pojo.setCup_count(0);
+        else
+            pojo.setCup_count(c.getCount());
+        cupQty.setText(String.valueOf(pojo.getCup_count()));
         return true;
     }
 
@@ -142,4 +164,7 @@ public class IngredientsActivity extends AppCompatActivity{
 
 
     }
+
+
+
 }

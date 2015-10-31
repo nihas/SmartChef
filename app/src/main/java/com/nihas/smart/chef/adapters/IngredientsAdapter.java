@@ -2,6 +2,7 @@ package com.nihas.smart.chef.adapters;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -25,6 +26,8 @@ import android.widget.Toast;
 
 
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.activities.IngredientsActivity;
+import com.nihas.smart.chef.activities.MainActivity;
 import com.nihas.smart.chef.customui.GradientHalfoverImageDrawable;
 import com.nihas.smart.chef.customui.GradientoverImageDrawable;
 import com.nihas.smart.chef.db.MyDbHandler;
@@ -111,22 +114,22 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.ingredients_list_item2, parent, false);
+                .inflate(R.layout.ingredients_list_item3, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
         ViewHolder vh = new ViewHolder(v);
         imageLoader.init(ImageLoaderConfiguration.createDefault(activity));
         options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                .displayer(new BitmapDisplayer() {
-            @Override
-            public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
-                int gradientStartColor = Color.parseColor("#00000000");//argb(0, 0, 0, 0);
-                int gradientEndColor = Color.parseColor("#88000000");//argb(255, 0, 0, 0);
-                GradientHalfoverImageDrawable gradientDrawable = new GradientHalfoverImageDrawable(activity.getResources(), bitmap);
-                gradientDrawable.setGradientColors(gradientStartColor, gradientEndColor);
-                imageAware.setImageDrawable(gradientDrawable);
-            }
-        })
+//                .displayer(new BitmapDisplayer() {
+//            @Override
+//            public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
+//                int gradientStartColor = Color.parseColor("#00000000");//argb(0, 0, 0, 0);
+//                int gradientEndColor = Color.parseColor("#88000000");//argb(255, 0, 0, 0);
+//                GradientHalfoverImageDrawable gradientDrawable = new GradientHalfoverImageDrawable(activity.getResources(), bitmap);
+//                gradientDrawable.setGradientColors(gradientStartColor, gradientEndColor);
+//                imageAware.setImageDrawable(gradientDrawable);
+//            }
+//        })
                 .cacheOnDisc(true).resetViewBeforeLoading(true)
                 .showImageForEmptyUri(R.drawable.empty_photo)
                 .showImageOnFail(R.drawable.empty_photo)
@@ -141,6 +144,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+
+
         holder.mIngredient.setText(mDataset.get(position).getName());
         imageLoader.displayImage(mDataset.get(position).getImage_url(), holder.thumbnail, options);
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
@@ -271,18 +276,38 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                                    if (dbHandler.addProduct(product)) {
                                        Toast.makeText(activity, "Added" + position, Toast.LENGTH_SHORT).show();
                                        innerHolder3.quantity_text.setText(ingQty.getText().toString().trim());
-                                       innerHolder3.plusMinusLayout.setVisibility(View.VISIBLE);
-                                       innerHolder3.addLayout.setVisibility(View.GONE);
+//                                       innerHolder3.plusMinusLayout.setVisibility(View.VISIBLE);
+//                                       innerHolder3.addLayout.setVisibility(View.GONE);
                                        innerHolder3.ingMeasure.setVisibility(View.VISIBLE);
+                                       Cursor c=dbHandler.getAllCup();
+                                       CupPojo pojo=new CupPojo();
+                                       if(c==null)
+                                           pojo.setCup_count(0);
+                                       else
+                                           pojo.setCup_count(c.getCount());
+                                       doButtonOneClickActions(pojo.getCup_count());
                                    }
                                    else
                                        Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
 
                                    dialog.dismiss();
                                } else {
-                                   Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
-                                   Snackbar.make(v, "Already Exists", Snackbar.LENGTH_LONG)
-                                           .setAction("Action", null).show();
+//                                   Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
+//                                   Snackbar.make(v, "Already Exists", Snackbar.LENGTH_LONG)
+//                                           .setAction("Action", null).show();
+                                   int quantity;
+                                   quantity=Integer.parseInt(ingQty.getText().toString().trim());
+                                   CupPojo pro =
+                                           new CupPojo(innerHolder3.mIngredient.getText().toString(),innerHolder3.ingMeasure.getText().toString(),
+                                                   mDataset.get(position).getImage_url(),quantity);
+
+                                   if(dbHandler.updateQty(product)){
+                                       Toast.makeText(activity,"Updated"+position,Toast.LENGTH_SHORT).show();
+                                       dialog.dismiss();
+                                   }
+                                   else
+                                       Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
+
 //                                   holder.quantity_text.setText("0");
 //                                   dialog.dismiss();
                                }
@@ -364,4 +389,21 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public int getItemCount() {
         return mDataset.size();
     }
+
+    public interface OnDataChangeListener{
+        public void onDataChanged(int size);
+    }
+
+    OnDataChangeListener mOnDataChangeListener;
+    public void setOnDataChangeListener(OnDataChangeListener onDataChangeListener){
+        mOnDataChangeListener = onDataChangeListener;
+    }
+
+    private void doButtonOneClickActions(int size) {
+
+        if(mOnDataChangeListener != null){
+            mOnDataChangeListener.onDataChanged(size);
+        }
+    }
+
 }

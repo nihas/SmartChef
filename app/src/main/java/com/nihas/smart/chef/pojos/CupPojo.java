@@ -10,6 +10,7 @@ public class CupPojo {
     private int ingredientQty;
     private String ingredienMeasurement;
     private String imageUrl;
+    public int cup_count;
 
     public CupPojo(int id,String IngredientName,String IngredienMeasurement,String ImageUrl,int IngredientQty){
         this.id=id;
@@ -69,5 +70,16 @@ public class CupPojo {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+
+    public int getCup_count() {
+        return cup_count;
+    }
+
+
+
+    public void setCup_count(int cup_count) {
+        this.cup_count = cup_count;
     }
 }
