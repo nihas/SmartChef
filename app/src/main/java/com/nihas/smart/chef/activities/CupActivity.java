@@ -1,5 +1,6 @@
 package com.nihas.smart.chef.activities;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,15 +32,16 @@ public class CupActivity extends AppCompatActivity {
     ArrayList<CupPojo> listIngredients;
     CupAdapter cupAdapter;
     TextView emptyView;
-
+    Button cookButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_cup);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        cookButton=(Button)findViewById(R.id.cook_button);
         emptyView=(TextView)findViewById(R.id.empty_view);
         mRecyclerView=(RecyclerView)findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -54,6 +57,15 @@ public class CupActivity extends AppCompatActivity {
             mRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
+
+        cookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent newInten=new Intent(CupActivity.this,RecipeActivity.class);
+                startActivity(newInten);
+                finish();
+            }
+        });
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
