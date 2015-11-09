@@ -1,114 +1,97 @@
 package com.nihas.smart.chef.activities;
 
 import android.content.Intent;
-import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.nihas.smart.chef.R;
-import com.nihas.smart.chef.adapters.IngredientsAdapter;
 import com.nihas.smart.chef.adapters.RecipesAdapter;
-import com.nihas.smart.chef.db.MyDbHandler;
-import com.nihas.smart.chef.pojos.CupPojo;
-import com.nihas.smart.chef.pojos.IngredientsPojo;
+import com.nihas.smart.chef.customui.GradientHalfoverImageDrawable;
 import com.nihas.smart.chef.pojos.RecipesPojo;
 import com.nihas.smart.chef.utils.RecyclerItemClickListener;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.LoadedFrom;
+import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
+import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 
 import java.util.ArrayList;
 
 /**
- * Created by Nihas on 08-11-2015.
+ * Created by Nihas on 10-11-2015.
  */
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeDetailsActivity extends AppCompatActivity {
 
+    Toolbar toolbar;
+    RecyclerView mRecyclerView;
     ArrayList<RecipesPojo> listRecipes;
     RecipesAdapter recipAdapter;
-    RecyclerView mRecyclerView;
-    TextView cupQty;
+    ImageView thumb;
+    ImageLoader imageLoader;
+    DisplayImageOptions options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_recipe_details);
+//        initializeRecylceView();
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Rasperry Ice");
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mRecyclerView=(RecyclerView)findViewById(R.id.rv);
+        thumb=(ImageView)findViewById(R.id.thumb);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                .displayer(new BitmapDisplayer() {
+                    @Override
+                    public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
+                        int gradientStartColor = Color.parseColor("#00000000");//argb(0, 0, 0, 0);
+                        int gradientEndColor = Color.parseColor("#88000000");//argb(255, 0, 0, 0);
+                        GradientHalfoverImageDrawable gradientDrawable = new GradientHalfoverImageDrawable(getResources(), bitmap);
+                        gradientDrawable.setGradientColors(gradientStartColor, gradientEndColor);
+                        imageAware.setImageDrawable(gradientDrawable);
+                    }
+                })
+                .cacheOnDisc(true).resetViewBeforeLoading(true)
+                .showImageForEmptyUri(R.drawable.empty_photo)
+                .showImageOnFail(R.drawable.empty_photo)
+                .showImageOnLoading(R.drawable.empty_photo).build();
+        imageLoader = ImageLoader.getInstance();
+        imageLoader.destroy();
+        imageLoader.init(ImageLoaderConfiguration.createDefault(this));
+        imageLoader.displayImage("http://www.twopeasandtheirpod.com/wp-content/uploads/2013/07/Vegan-Coconut-Raspberry-Ice-Cream-7.jpg", thumb, options);
+    }
+
+    private void initializeRecylceView() {
+//        mRecyclerView=(RecyclerView)findViewById(R.id.recyclerView);
+//        initializeData();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        mRecyclerView.setHasFixedSize(false);
         recipAdapter=new RecipesAdapter(this,getIngredients());
         mRecyclerView.setAdapter(recipAdapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
-        recipAdapter.setOnDataChangeListener(new RecipesAdapter.OnDataChangeListener() {
-            @Override
-            public void onDataChanged(int size) {
-                CupPojo pojo = new CupPojo();
-                cupQty.setText(String.valueOf(pojo.getCup_count()));
-            }
-        });
-
-        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent(RecipeActivity.this, RecipeDetailsActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
-            }
-        }));
     }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem item = menu.findItem(R.id.action_cup);
-        MenuItemCompat.setActionView(item, R.layout.cup_icon);
-        View view = MenuItemCompat.getActionView(item);
-        view.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                //do stuff here
-                Intent intent = new Intent(RecipeActivity.this, CupActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
-            }
-        });
-
-        cupQty=(TextView)view.findViewById(R.id.cup_qty);
-        MyDbHandler dbHandler = new MyDbHandler(this, null, null, 1);
-        Cursor c=dbHandler.getAllCup();
-        CupPojo pojo=new CupPojo();
-        if(c==null)
-            pojo.setCup_count(0);
-        else
-            pojo.setCup_count(c.getCount());
-        cupQty.setText(String.valueOf(pojo.getCup_count()));
-        return true;
-    }
-
 
     public ArrayList<RecipesPojo> getIngredients(){
         listRecipes=new ArrayList<>();
