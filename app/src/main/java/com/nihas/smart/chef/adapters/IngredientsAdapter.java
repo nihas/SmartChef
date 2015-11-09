@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +55,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     DisplayImageOptions options;
     Activity activity;
     Dialog dialog;
+    String ingMeasure_text;
 
     static String measurement;
     private static int colorCode=0;
@@ -232,7 +235,11 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                    TextView ingAdd=(TextView)dialog.findViewById(R.id.ing_add);
                    TextView ingMinus=(TextView)dialog.findViewById(R.id.ing_minus);
                    final TextView ingQty=(TextView)dialog.findViewById(R.id.ing_quantity);
-                   final Spinner ingMeasure=(Spinner)dialog.findViewById(R.id.ing_measure);
+                   final RadioGroup ingMeasure=(RadioGroup)dialog.findViewById(R.id.rGroup);
+                   final RadioButton button1=(RadioButton)dialog.findViewById(R.id.rb1);
+                   final RadioButton button2=(RadioButton)dialog.findViewById(R.id.rb2);
+                   final RadioButton button3=(RadioButton)dialog.findViewById(R.id.rb3);
+//                   final Spinner ingMeasure=(Spinner)dialog.findViewById(R.id.ing_measure);
                    Button ingAddtoCup=(Button)dialog.findViewById(R.id.ing_addtoocup);
 
                    imageLoader.displayImage(mDataset.get(position).getImage_url(), ingImage, options);
@@ -259,18 +266,33 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                    ingAddtoCup.setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
+
                            if (ingQty.getText().toString().equals("0")) {
                                Snackbar.make(v, "Quantity is 0", Snackbar.LENGTH_LONG)
                                        .setAction("Action", null).show();
-                           }else if(ingMeasure.getSelectedItemId()==0){
+                           }else if(ingMeasure.getCheckedRadioButtonId()==-1){
                                Snackbar.make(v, "Measurement not selected", Snackbar.LENGTH_LONG)
                                        .setAction("Action", null).show();
                            } else {
-                               MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
 
+//                               ingMeasure.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//                                   @Override
+//                                   public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                                       if (checkedId == R.id.rb1) {
+//                                           ingMeasure_text = (String) button1.getText();
+//                                       }else if(checkedId == R.id.rb2){
+//                                           ingMeasure_text = (String) button2.getText();
+//                                       }else if(checkedId == R.id.rb3){
+//                                           ingMeasure_text = (String) button3.getText();
+//                                       }
+//                                   }
+//                               });
+
+                               MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
+                                ingMeasure_text=((RadioButton)dialog.findViewById(ingMeasure.getCheckedRadioButtonId())).getText().toString();
 
                                CupPojo product =
-                                       new CupPojo(ingTitle.getText().toString().trim(), ingMeasure.getSelectedItem().toString(),
+                                       new CupPojo(ingTitle.getText().toString().trim(), ingMeasure_text,
                                                mDataset.get(position).getImage_url(), Integer.parseInt(ingQty.getText().toString().trim()));
                                if (!dbHandler.isIngredients(ingTitle.getText().toString())) {
                                    if (dbHandler.addProduct(product)) {
@@ -319,21 +341,21 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 //                   final Spinner spinner = (Spinner) dialog.findViewById(R.id.ing_measure);
                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity,
                            android.R.layout.simple_list_item_1, android.R.id.text1, values);
-                   ingMeasure.setAdapter(adapter);
-                   ingMeasure
-                           .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                               @Override
-                               public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                   String imc_met=ingMeasure.getSelectedItem().toString();
-                                   ingMeasure.setSelection(position,true);
-
-                               }
-
-                               @Override
-                               public void onNothingSelected(AdapterView<?> parent) {
-
-                               }
-                           });
+//                   ingMeasure.setAdapter(adapter);
+//                   ingMeasure
+//                           .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                               @Override
+//                               public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                                   String imc_met=ingMeasure.getSelectedItem().toString();
+//                                   ingMeasure.setSelection(position,true);
+//
+//                               }
+//
+//                               @Override
+//                               public void onNothingSelected(AdapterView<?> parent) {
+//
+//                               }
+//                           });
 
 //                   spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //                       @Override

@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Please select measurement"
+        android:text="Please Select Quantity"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/linearLayout4"
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Hiii"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:gravity="center_vertical" />
 
     </LinearLayout>
@@ -104,13 +104,56 @@
                 android:layout_height="0.5dp"
                 android:background="#808080"/>
 
-    <Spinner
-        android:id="@+id/ing_measure"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingRight="4dp"
-        android:spinnerMode="dialog"
-        android:background="@drawable/custom_clicked_transparent"></Spinner>
+    <!--<Spinner-->
+        <!--android:id="@+id/ing_measure"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingRight="4dp"-->
+        <!--android:spinnerMode="dialog"-->
+        <!--android:background="@drawable/custom_clicked_transparent"></Spinner>-->
+
+            <RadioGroup
+                android:id="@+id/rGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+
+
+
+                <RadioButton
+                    android:id="@+id/rb1"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Gram"
+                    android:button="@android:color/transparent"
+                    android:background="@drawable/selector_radio_button"
+                    android:padding="10dp"/>
+
+                <RadioButton
+                    android:id="@+id/rb2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:button="@android:color/transparent"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/selector_radio_button"
+                    android:text="Piece"/>
+
+                <RadioButton
+                    android:id="@+id/rb3"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/selector_radio_button"
+                    android:padding="10dp"
+                    android:button="@android:color/transparent"
+                    android:layout_marginLeft="5dp"
+                    android:text="Tspon"/>
+
+            </RadioGroup>
 
 
             <View
@@ -132,7 +175,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spinnerLayout"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="25dp"
         android:text="ADD TO CUP"
         android:textColor="#ffffff"
         android:background="@drawable/custom_clicked"/>
