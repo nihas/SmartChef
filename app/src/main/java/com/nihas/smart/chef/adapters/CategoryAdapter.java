@@ -54,12 +54,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView Title,SubTitle;
-        ImageView mImageView;
+        ImageView mImageView,catIcon;
         public ViewHolder(View v) {
             super(v);
             Title=(TextView)v.findViewById(R.id.cuisineTitle);
             SubTitle=(TextView)v.findViewById(R.id.cuisineSubTitle);
             mImageView=(ImageView)v.findViewById(R.id.img_thumbnail);
+            catIcon=(ImageView)v.findViewById(R.id.cat_icon);
 
         }
     }
@@ -76,7 +77,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         // create a new view
         View v = inflater
-                .inflate(R.layout.category_item, parent, false);
+                .inflate(R.layout.category_item2, parent, false);
         ViewHolder vh = new ViewHolder(v);
         // set the view's size, margins, paddings and layout parameters
         imageLoader.init(ImageLoaderConfiguration.createDefault(context));
@@ -114,6 +115,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mImageView);
         imageLoader.displayImage(mDataset.get(position).getUrl(), holder.mImageView, options);
         holder.SubTitle.setText(mDataset.get(position).getSubTitle());
+        holder.catIcon.setImageResource(mDataset.get(position).getImg_drawable());
 
     }
 

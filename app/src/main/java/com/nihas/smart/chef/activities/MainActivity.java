@@ -117,12 +117,12 @@ public class MainActivity extends AppCompatActivity {
 
     public ArrayList<AllPojo> getCuisines(){
         listCuisines=new ArrayList<>();
-        listCuisines.add(new AllPojo("FRUITS","http://salemcart.com/media/shopshark/blog/BestFruits_article.jpg","2 Ingredients"));
-        listCuisines.add(new AllPojo("VEGETABLES","http://cms.bbcomcdn.com/fun/images/2007/sclark78b.jpg","5 Ingredients"));
-        listCuisines.add(new AllPojo("SPICES/MASALA","http://www.stemkart.com/media/resized/l/blog/blog-3.jpg","5 Ingredients"));
-        listCuisines.add(new AllPojo("GRAINS","http://www.in.all.biz/img/in/catalog/404097.jpeg","5 Ingredients"));
-        listCuisines.add(new AllPojo("LENTILS - PULSES","http://matirkatha.gov.in/wp-content/uploads/2013/11/pulses.jpg","5 Ingredients"));
-        listCuisines.add(new AllPojo("SEEDS","http://www.fitho.in/wp-content/uploads/2011/02/Nuts-and-Seeds.jpg","5 Ingredients"));
+        listCuisines.add(new AllPojo("FRUITS","http://salemcart.com/media/shopshark/blog/BestFruits_article.jpg","2 Ingredients",R.drawable.ic_fruits));
+        listCuisines.add(new AllPojo("VEGETABLES","http://cms.bbcomcdn.com/fun/images/2007/sclark78b.jpg","5 Ingredients",R.drawable.ic_vegetables));
+        listCuisines.add(new AllPojo("SPICES/MASALA","http://www.stemkart.com/media/resized/l/blog/blog-3.jpg","5 Ingredients",R.drawable.ic_spices_masala));
+        listCuisines.add(new AllPojo("GRAINS","http://www.in.all.biz/img/in/catalog/404097.jpeg","5 Ingredients",R.drawable.ic_grains));
+        listCuisines.add(new AllPojo("LENTILS - PULSES","http://matirkatha.gov.in/wp-content/uploads/2013/11/pulses.jpg","5 Ingredients",R.drawable.ic_lentils));
+        listCuisines.add(new AllPojo("SEEDS","http://www.fitho.in/wp-content/uploads/2011/02/Nuts-and-Seeds.jpg","5 Ingredients",R.drawable.ic_seeds));
 //        listCuisines.add(new AllPojo("CHINESE","https://lh3.googleusercontent.com/-Tt9oNXXrAzo/ViYJSNptqLI/AAAAAAAAAoU/P3rVzaRPIPM/s240-Ic42/italy.png","5 Recipes"));
 //        listCuisines.add(new AllPojo("PIZZA","https://lh3.googleusercontent.com/-Tt9oNXXrAzo/ViYJSNptqLI/AAAAAAAAAoU/P3rVzaRPIPM/s240-Ic42/italy.png","5 Recipes"));
 //        listCuisines.add(new AllPojo("SEA FOOD","https://lh3.googleusercontent.com/-Tt9oNXXrAzo/ViYJSNptqLI/AAAAAAAAAoU/P3rVzaRPIPM/s240-Ic42/italy.png","5 Recipes"));
