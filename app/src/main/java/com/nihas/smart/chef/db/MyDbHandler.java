@@ -34,7 +34,7 @@ public class MyDbHandler extends SQLiteOpenHelper {
         String CREATE_PRODUCTS_TABLE = "CREATE TABLE " +
                 TABLE_PRODUCTS + "("
                 + COLUMN_ID + " integer primary key autoincrement," + COLUMN_PRODUCTNAME
-                + " TEXT NOT NULL," + COLUMN_MEASUREMENT + " TEXT NOT NULL,"+COLUMN_IMAGE_URL + " TEXT NOT NULL,"+ COLUMN_QUANTITY + " INTEGER" + ")";
+                + " TEXT NOT NULL," + COLUMN_MEASUREMENT + " TEXT,"+COLUMN_IMAGE_URL + " TEXT NOT NULL,"+ COLUMN_QUANTITY + " INTEGER" + ")";
         db.execSQL(CREATE_PRODUCTS_TABLE);
 
     }

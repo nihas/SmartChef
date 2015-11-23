@@ -89,7 +89,7 @@ public class CupActivity extends AppCompatActivity {
         if (c.moveToFirst()) {
             do {
 //                DisplayContact(c);
-                listIngredients.add(new CupPojo(Integer.parseInt(c.getString(0)),c.getString(1),c.getString(2),c.getString(3),Integer.parseInt(c.getString(4))));
+                listIngredients.add(new CupPojo(Integer.parseInt(c.getString(0)),c.getString(1),c.getString(3)));
             } while (c.moveToNext());
         }
 //        String[] array=getResources().getStringArray(R.array.fruits);

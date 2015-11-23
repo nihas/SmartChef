@@ -140,7 +140,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         holder.title.setText(mDataset.get(position).getName());
         imageLoader.displayImage(mDataset.get(position).getImage_url(), holder.thumbnail, options);
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
-    holder.serveTo.setText(mDataset.get(position).getServe_to()+" Persons");
+    holder.serveTo.setText(mDataset.get(position).getServe_to()+"");
         holder.timeTaken.setText(mDataset.get(position).getTime_taken());
 
     }

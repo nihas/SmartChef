@@ -152,255 +152,259 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         holder.mIngredient.setText(mDataset.get(position).getName());
         imageLoader.displayImage(mDataset.get(position).getImage_url(), holder.thumbnail, options);
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
-        final ViewHolder innerHolder=holder;
-        holder.minusToCup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
-                int quantity=Integer.parseInt(innerHolder.quantity_text.getText().toString());
-                if(quantity>0) {
-                    quantity--;
-                    innerHolder.quantity_text.setText(String.valueOf(quantity));
-                    if(quantity==0){
-                        if(dbHandler.deleteProduct(innerHolder.mIngredient.getText().toString())) {
-                            Toast.makeText(activity, "Deleted" + position, Toast.LENGTH_SHORT).show();
-                            innerHolder.plusMinusLayout.setVisibility(View.GONE);
-                            innerHolder.addLayout.setVisibility(View.VISIBLE);
-                            innerHolder.ingMeasure.setVisibility(View.GONE);
-                        }
-                        else
-                            Toast.makeText(activity,"FAILED Delete",Toast.LENGTH_SHORT).show();
-                    }else {
-                        CupPojo product =
-                                new CupPojo(innerHolder.mIngredient.getText().toString(), holder.ingMeasure.getText().toString().trim(),mDataset.get(position).getImage_url(), quantity);
-
-                        if (dbHandler.updateQty(product))
-                            Toast.makeText(activity, "Updated"+position, Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(activity, "FAILED Update", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-        final ViewHolder innerHolder2=holder;
-        holder.addToCup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
-                int quantity=Integer.parseInt(innerHolder2.quantity_text.getText().toString().trim());
-                quantity++;
-                innerHolder2.quantity_text.setText(String.valueOf(quantity));
-                CupPojo product =
-                        new CupPojo(innerHolder2.mIngredient.getText().toString(),innerHolder.ingMeasure.getText().toString(),
-                                mDataset.get(position).getImage_url(),quantity);
-
-                if(dbHandler.updateQty(product))
-                    Toast.makeText(activity,"Updated"+position,Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
-            }
-        });
-        final ViewHolder innerHolder3=holder;
+//        final ViewHolder innerHolder=holder;
+//        holder.minusToCup.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
+//                int quantity=Integer.parseInt(innerHolder.quantity_text.getText().toString());
+//                if(quantity>0) {
+//                    quantity--;
+//                    innerHolder.quantity_text.setText(String.valueOf(quantity));
+//                    if(quantity==0){
+//                        if(dbHandler.deleteProduct(innerHolder.mIngredient.getText().toString())) {
+//                            Toast.makeText(activity, "Deleted" + position, Toast.LENGTH_SHORT).show();
+//                            innerHolder.plusMinusLayout.setVisibility(View.GONE);
+//                            innerHolder.addLayout.setVisibility(View.VISIBLE);
+//                            innerHolder.ingMeasure.setVisibility(View.GONE);
+//                        }
+//                        else
+//                            Toast.makeText(activity,"FAILED Delete",Toast.LENGTH_SHORT).show();
+//                    }else {
+//                        CupPojo product =
+//                                new CupPojo(innerHolder.mIngredient.getText().toString(), holder.ingMeasure.getText().toString().trim(),mDataset.get(position).getImage_url(), quantity);
+//
+//                        if (dbHandler.updateQty(product))
+//                            Toast.makeText(activity, "Updated"+position, Toast.LENGTH_SHORT).show();
+//                        else
+//                            Toast.makeText(activity, "FAILED Update", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//        });
+//        final ViewHolder innerHolder2=holder;
+//        holder.addToCup.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
+//                int quantity=Integer.parseInt(innerHolder2.quantity_text.getText().toString().trim());
+//                quantity++;
+//                innerHolder2.quantity_text.setText(String.valueOf(quantity));
+//                CupPojo product =
+//                        new CupPojo(innerHolder2.mIngredient.getText().toString(),innerHolder.ingMeasure.getText().toString(),
+//                                mDataset.get(position).getImage_url(),quantity);
+//
+//                if(dbHandler.updateQty(product))
+//                    Toast.makeText(activity,"Updated"+position,Toast.LENGTH_SHORT).show();
+//                else
+//                    Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
+//            }
+//        });
        holder.addPlus.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               int quantity=Integer.parseInt(innerHolder3.quantity_text.getText().toString());
+//               int quantity=Integer.parseInt(innerHolder3.quantity_text.getText().toString());
 
-               if (quantity>=0) {
-                   dialog = new Dialog(activity);
-                   dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                   dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                   dialog.setContentView(R.layout.select_qty_dialog2);
-                   dialog.setCanceledOnTouchOutside(true);
+//               if (quantity>=0) {
 
-                   WindowManager.LayoutParams lp = new WindowManager.LayoutParams();//dialog.getWindow().getAttributes();
-                   lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                   lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                   lp.dimAmount=0.60f;
-                   dialog.getWindow().setAttributes(lp);
-                   dialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
 
-//                window.setAttributes(lp);
-//                   lp.dimAmount = 0.6f;
-                   dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                   dialog.getWindow().setGravity(Gravity.CENTER);
-//                   lp.gravity = Gravity.CENTER;
+                   MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
 
-//                lp.x = -100;   //x position
-//                lp.y = -100;   //y position
-                   dialog.show();
-
-                   ImageView ingImage=(ImageView)dialog.findViewById(R.id.ing_thumbnail);
-                   final TextView ingTitle=(TextView)dialog.findViewById(R.id.ing_name);
-                   TextView ingAdd=(TextView)dialog.findViewById(R.id.ing_add);
-                   TextView ingMinus=(TextView)dialog.findViewById(R.id.ing_minus);
-                   final TextView ingQty=(TextView)dialog.findViewById(R.id.ing_quantity);
-                   final RadioGroup ingMeasure=(RadioGroup)dialog.findViewById(R.id.rGroup);
-                   final RadioButton button1=(RadioButton)dialog.findViewById(R.id.rb1);
-                   final RadioButton button2=(RadioButton)dialog.findViewById(R.id.rb2);
-                   final RadioButton button3=(RadioButton)dialog.findViewById(R.id.rb3);
-//                   final Spinner ingMeasure=(Spinner)dialog.findViewById(R.id.ing_measure);
-                   Button ingAddtoCup=(Button)dialog.findViewById(R.id.ing_addtoocup);
-
-                   imageLoader.displayImage(mDataset.get(position).getImage_url(), ingImage, options);
-                   ingTitle.setText(mDataset.get(position).getName().toString());
-                   ingQty.setText("0");
-                   ingAdd.setOnClickListener(new View.OnClickListener() {
-                       @Override
-                       public void onClick(View v) {
-                           int qty = Integer.parseInt(ingQty.getText().toString().trim());
-                           qty++;
-                           ingQty.setText(String.valueOf(qty));
-                       }
-                   });
-                   ingMinus.setOnClickListener(new View.OnClickListener() {
-                       @Override
-                       public void onClick(View v) {
-                           int qty = Integer.parseInt(ingQty.getText().toString().trim());
-                           if(qty>0) {
-                               qty--;
-                               ingQty.setText(String.valueOf(qty));
-                           }
-                       }
-                   });
-                   ingAddtoCup.setOnClickListener(new View.OnClickListener() {
-                       @Override
-                       public void onClick(View v) {
-
-                           if (ingQty.getText().toString().equals("0")) {
-                               Snackbar.make(v, "Quantity is 0", Snackbar.LENGTH_LONG)
-                                       .setAction("Action", null).show();
-                           }else if(ingMeasure.getCheckedRadioButtonId()==-1){
-                               Snackbar.make(v, "Measurement not selected", Snackbar.LENGTH_LONG)
-                                       .setAction("Action", null).show();
-                           } else {
-
-//                               ingMeasure.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//                                   @Override
-//                                   public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                                       if (checkedId == R.id.rb1) {
-//                                           ingMeasure_text = (String) button1.getText();
-//                                       }else if(checkedId == R.id.rb2){
-//                                           ingMeasure_text = (String) button2.getText();
-//                                       }else if(checkedId == R.id.rb3){
-//                                           ingMeasure_text = (String) button3.getText();
-//                                       }
-//                                   }
-//                               });
-
-                               MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
-                                ingMeasure_text=((RadioButton)dialog.findViewById(ingMeasure.getCheckedRadioButtonId())).getText().toString();
-
-                               CupPojo product =
-                                       new CupPojo(ingTitle.getText().toString().trim(), ingMeasure_text,
-                                               mDataset.get(position).getImage_url(), Integer.parseInt(ingQty.getText().toString().trim()));
-                               if (!dbHandler.isIngredients(ingTitle.getText().toString())) {
-                                   if (dbHandler.addProduct(product)) {
-                                       Toast.makeText(activity, "Added" + position, Toast.LENGTH_SHORT).show();
-                                       innerHolder3.quantity_text.setText(ingQty.getText().toString().trim());
+                   CupPojo product =
+                           new CupPojo(mDataset.get(position).getName(),
+                                   mDataset.get(position).getImage_url());
+                   if (!dbHandler.isIngredients(mDataset.get(position).getName())) {
+                       if (dbHandler.addProduct(product)) {
+                           Toast.makeText(activity, "Added" + position, Toast.LENGTH_SHORT).show();
+//                           innerHolder3.quantity_text.setText(ingQty.getText().toString().trim());
 //                                       innerHolder3.plusMinusLayout.setVisibility(View.VISIBLE);
 //                                       innerHolder3.addLayout.setVisibility(View.GONE);
-                                       innerHolder3.ingMeasure.setVisibility(View.VISIBLE);
-                                       Cursor c=dbHandler.getAllCup();
-                                       CupPojo pojo=new CupPojo();
-                                       if(c==null)
-                                           pojo.setCup_count(0);
-                                       else
-                                           pojo.setCup_count(c.getCount());
-                                       doButtonOneClickActions(pojo.getCup_count());
-                                   }
-                                   else
-                                       Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
+//                           innerHolder3.ingMeasure.setVisibility(View.VISIBLE);
+                           Cursor c=dbHandler.getAllCup();
+                           CupPojo pojo=new CupPojo();
+                           if(c==null)
+                               pojo.setCup_count(0);
+                           else
+                               pojo.setCup_count(c.getCount());
+                           doButtonOneClickActions(pojo.getCup_count());
+                       }
+                       else
+                           Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
 
-                                   dialog.dismiss();
-                               } else {
-//                                   Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
+//                       dialog.dismiss();
+                   } else {
+                                   Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
 //                                   Snackbar.make(v, "Already Exists", Snackbar.LENGTH_LONG)
 //                                           .setAction("Action", null).show();
-                                   int quantity;
-                                   quantity=Integer.parseInt(ingQty.getText().toString().trim());
-                                   CupPojo pro =
-                                           new CupPojo(innerHolder3.mIngredient.getText().toString(),innerHolder3.ingMeasure.getText().toString(),
-                                                   mDataset.get(position).getImage_url(),quantity);
-
-                                   if(dbHandler.updateQty(product)){
-                                       Toast.makeText(activity,"Updated"+position,Toast.LENGTH_SHORT).show();
-                                       dialog.dismiss();
-                                   }
-                                   else
-                                       Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
+//                       int quantity;
+//                       quantity=Integer.parseInt(ingQty.getText().toString().trim());
+//                       CupPojo pro =
+//                               new CupPojo(mDataset.get(position).getName(),
+//                                       mDataset.get(position).getImage_url());
+//
+//                       if(dbHandler.updateQty(product)){
+//                           Toast.makeText(activity,"Updated"+position,Toast.LENGTH_SHORT).show();
+////                           dialog.dismiss();
+//                       }
+//                       else
+//                           Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
 
 //                                   holder.quantity_text.setText("0");
 //                                   dialog.dismiss();
-                               }
-                           }
-                       }
-                   });
+                   }
 
 
-//                   final Spinner spinner = (Spinner) dialog.findViewById(R.id.ing_measure);
-                   ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity,
-                           android.R.layout.simple_list_item_1, android.R.id.text1, values);
-//                   ingMeasure.setAdapter(adapter);
-//                   ingMeasure
-//                           .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                               @Override
-//                               public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                                   String imc_met=ingMeasure.getSelectedItem().toString();
-//                                   ingMeasure.setSelection(position,true);
-//
-//                               }
-//
-//                               @Override
-//                               public void onNothingSelected(AdapterView<?> parent) {
-//
-//                               }
-//                           });
 
-//                   spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+//                   dialog = new Dialog(activity);
+//                   dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                   dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//                   dialog.setContentView(R.layout.select_qty_dialog2);
+//                   dialog.setCanceledOnTouchOutside(true);
+//
+//                   WindowManager.LayoutParams lp = new WindowManager.LayoutParams();//dialog.getWindow().getAttributes();
+//                   lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                   lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//                   lp.dimAmount=0.60f;
+//                   dialog.getWindow().setAttributes(lp);
+//                   dialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
+//
+////                window.setAttributes(lp);
+////                   lp.dimAmount = 0.6f;
+//                   dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+//                   dialog.getWindow().setGravity(Gravity.CENTER);
+////                   lp.gravity = Gravity.CENTER;
+//
+////                lp.x = -100;   //x position
+////                lp.y = -100;   //y position
+//                   dialog.show();
+
+//                   ImageView ingImage=(ImageView)dialog.findViewById(R.id.ing_thumbnail);
+//                   final TextView ingTitle=(TextView)dialog.findViewById(R.id.ing_name);
+//                   TextView ingAdd=(TextView)dialog.findViewById(R.id.ing_add);
+//                   TextView ingMinus=(TextView)dialog.findViewById(R.id.ing_minus);
+//                   final TextView ingQty=(TextView)dialog.findViewById(R.id.ing_quantity);
+//                   final RadioGroup ingMeasure=(RadioGroup)dialog.findViewById(R.id.rGroup);
+//                   final RadioButton button1=(RadioButton)dialog.findViewById(R.id.rb1);
+//                   final RadioButton button2=(RadioButton)dialog.findViewById(R.id.rb2);
+//                   final RadioButton button3=(RadioButton)dialog.findViewById(R.id.rb3);
+////                   final Spinner ingMeasure=(Spinner)dialog.findViewById(R.id.ing_measure);
+//                   Button ingAddtoCup=(Button)dialog.findViewById(R.id.ing_addtoocup);
+
+//                   imageLoader.displayImage(mDataset.get(position).getImage_url(), ingImage, options);
+//                   ingTitle.setText(mDataset.get(position).getName().toString());
+//                   ingQty.setText("0");
+//                   ingAdd.setOnClickListener(new View.OnClickListener() {
 //                       @Override
-//                       public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-//                           measurement = listView.getItemAtPosition(pos).toString();
-////                           int quantity;
-////                           quantity=1;
-////                           holder.ingMeasure.setVisibility(View.VISIBLE);
-//                           holder.ingMeasure.setText(listView.getItemAtPosition(pos).toString());
-//                           holder.quantity_text.setText("1");
+//                       public void onClick(View v) {
+//                           int qty = Integer.parseInt(ingQty.getText().toString().trim());
+//                           qty++;
+//                           ingQty.setText(String.valueOf(qty));
+//                       }
+//                   });
+//                   ingMinus.setOnClickListener(new View.OnClickListener() {
+//                       @Override
+//                       public void onClick(View v) {
+//                           int qty = Integer.parseInt(ingQty.getText().toString().trim());
+//                           if(qty>0) {
+//                               qty--;
+//                               ingQty.setText(String.valueOf(qty));
+//                           }
+//                       }
+//                   });
+//                   ingAddtoCup.setOnClickListener(new View.OnClickListener() {
+//                       @Override
+//                       public void onClick(View v) {
 //
-//                           MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
+//                           if (ingQty.getText().toString().equals("0")) {
+//                               Snackbar.make(v, "Quantity is 0", Snackbar.LENGTH_LONG)
+//                                       .setAction("Action", null).show();
+//                           }else if(ingMeasure.getCheckedRadioButtonId()==-1){
+//                               Snackbar.make(v, "Measurement not selected", Snackbar.LENGTH_LONG)
+//                                       .setAction("Action", null).show();
+//                           } else {
 //
+////                               ingMeasure.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+////                                   @Override
+////                                   public void onCheckedChanged(RadioGroup group, int checkedId) {
+////                                       if (checkedId == R.id.rb1) {
+////                                           ingMeasure_text = (String) button1.getText();
+////                                       }else if(checkedId == R.id.rb2){
+////                                           ingMeasure_text = (String) button2.getText();
+////                                       }else if(checkedId == R.id.rb3){
+////                                           ingMeasure_text = (String) button3.getText();
+////                                       }
+////                                   }
+////                               });
 //
-//                           CupPojo product =
-//                                   new CupPojo(holder.mIngredient.getText().toString(), holder.ingMeasure.getText().toString(),
-//                                           mDataset.get(position).getImage_url(),1);
-//                           if (!dbHandler.isIngredients(holder.mIngredient.getText().toString())) {
-//                               if (dbHandler.addProduct(product))
-//                                   Toast.makeText(activity, "Added"+position, Toast.LENGTH_SHORT).show();
-//                               else
-//                                   Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
+//                               MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
+////                                ingMeasure_text=((RadioButton)dialog.findViewById(ingMeasure.getCheckedRadioButtonId())).getText().toString();
 //
-//                               dialog.dismiss();
-//                           }else{
-//                               Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
-//                               holder.quantity_text.setText("0");
-//                               dialog.dismiss();
+//                               CupPojo product =
+//                                       new CupPojo(mDataset.get(position).getName(),
+//                                               mDataset.get(position).getImage_url());
+//                               if (!dbHandler.isIngredients(mDataset.get(position).getName())) {
+//                                   if (dbHandler.addProduct(product)) {
+//                                       Toast.makeText(activity, "Added" + position, Toast.LENGTH_SHORT).show();
+////                                       innerHolder3.quantity_text.setText(ingQty.getText().toString().trim());
+////                                       innerHolder3.plusMinusLayout.setVisibility(View.VISIBLE);
+////                                       innerHolder3.addLayout.setVisibility(View.GONE);
+////                                       innerHolder3.ingMeasure.setVisibility(View.VISIBLE);
+//                                       Cursor c=dbHandler.getAllCup();
+//                                       CupPojo pojo=new CupPojo();
+//                                       if(c==null)
+//                                           pojo.setCup_count(0);
+//                                       else
+//                                           pojo.setCup_count(c.getCount());
+//                                       doButtonOneClickActions(pojo.getCup_count());
+//                                   }
+//                                   else
+//                                       Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
+//
+//                                   dialog.dismiss();
+//                               } else {
+////                                   Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
+////                                   Snackbar.make(v, "Already Exists", Snackbar.LENGTH_LONG)
+////                                           .setAction("Action", null).show();
+////                                   int quantity;
+////                                   quantity=Integer.parseInt(ingQty.getText().toString().trim());
+//                                   CupPojo pro =
+//                                           new CupPojo(mDataset.get(position).getName(),
+//                                                   mDataset.get(position).getImage_url());
+//
+//                                   if(dbHandler.updateQty(pro)){
+//                                       Toast.makeText(activity,"Updated"+position,Toast.LENGTH_SHORT).show();
+//                                       dialog.dismiss();
+//                                   }
+//                                   else
+//                                       Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
+//
+////                                   holder.quantity_text.setText("0");
+////                                   dialog.dismiss();
+//                               }
 //                           }
 //                       }
 //                   });
 
-               }else{
-                   MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
-                   quantity++;
-                   innerHolder3.quantity_text.setText(String.valueOf(quantity));
-                   CupPojo product =
-                           new CupPojo(innerHolder3.mIngredient.getText().toString(),innerHolder3.ingMeasure.getText().toString(),
-                                   mDataset.get(position).getImage_url(),quantity);
 
-                   if(dbHandler.updateQty(product))
-                        Toast.makeText(activity,"Updated"+position,Toast.LENGTH_SHORT).show();
-                   else
-                        Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
-               }
+//                   final Spinner spinner = (Spinner) dialog.findViewById(R.id.ing_measure);
+//                   ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity,
+//                           android.R.layout.simple_list_item_1, android.R.id.text1, values);
+
+
+//               }else{
+//                   MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
+////                   quantity++;
+////                   innerHolder3.quantity_text.setText(String.valueOf(quantity));
+//                   CupPojo product =
+//                           new CupPojo(mDataset.get(position).getName(),
+//                                   mDataset.get(position).getImage_url());
+//
+//                   if(dbHandler.updateQty(product))
+//                        Toast.makeText(activity,"Updated"+position,Toast.LENGTH_SHORT).show();
+//                   else
+//                        Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
+//               }
            }
        });
 

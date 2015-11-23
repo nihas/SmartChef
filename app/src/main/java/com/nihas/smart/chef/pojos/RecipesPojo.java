@@ -7,10 +7,10 @@ public class RecipesPojo {
 
     String name;
     String image_url;
-    int serve_to;
+    String serve_to;
     String time_taken;
 
-    public RecipesPojo(String Name, String Image_url, int serve, String time){
+    public RecipesPojo(String Name, String Image_url, String serve, String time){
         this.name=Name;
         this.image_url=Image_url;
         this.serve_to=serve;
@@ -25,7 +25,7 @@ public class RecipesPojo {
         return image_url;
     }
 
-    public int getServe_to() {
+    public String getServe_to() {
         return serve_to;
     }
 

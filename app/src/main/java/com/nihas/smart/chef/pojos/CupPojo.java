@@ -12,19 +12,19 @@ public class CupPojo {
     private String imageUrl;
     public int cup_count;
 
-    public CupPojo(int id,String IngredientName,String IngredienMeasurement,String ImageUrl,int IngredientQty){
+    public CupPojo(int id,String IngredientName,String ImageUrl){
         this.id=id;
         this.ingredientName=IngredientName;
-        this.ingredienMeasurement=IngredienMeasurement;
-        this.ingredientQty=IngredientQty;
+//        this.ingredienMeasurement=IngredienMeasurement;
+//        this.ingredientQty=IngredientQty;
         this.imageUrl=ImageUrl;
     }
 
-    public CupPojo(String IngredientName,String IngredienMeasurement,String ImageUrl,int IngredientQty){
+    public CupPojo(String IngredientName,String ImageUrl){
         this.id=id;
         this.ingredientName=IngredientName;
-        this.ingredienMeasurement=IngredienMeasurement;
-        this.ingredientQty=IngredientQty;
+//        this.ingredienMeasurement=IngredienMeasurement;
+//        this.ingredientQty=IngredientQty;
         this.imageUrl=ImageUrl;
     }
 

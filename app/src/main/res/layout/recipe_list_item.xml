@@ -52,16 +52,16 @@
             android:gravity="center"
             android:layout_centerVertical="true">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Serves Upto:"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_person"/>
 
             <TextView
                 android:id="@+id/serve_to"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5 Persons"
+                android:text="5 - 3"
                 android:layout_marginLeft="3dp"/>
 
             </LinearLayout>

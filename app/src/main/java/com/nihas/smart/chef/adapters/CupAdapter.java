@@ -77,6 +77,7 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
         holder.mIngredient.setText(mDataset.get(position).getIngredientName());
         holder.ingMeasure.setText(mDataset.get(position).getIngredienMeasurement());
         holder.quantity_text.setText(mDataset.get(position).getIngredientQty().toString());
+        holder.quantity_text.setVisibility(View.GONE);
         imageLoader.displayImage(mDataset.get(position).getImageUrl(), holder.thumbnail, options);
 
 
@@ -84,11 +85,11 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
-                int quantity = Integer.parseInt(holder.quantity_text.getText().toString());
-                if (quantity > 0) {
-                    quantity--;
-                    holder.quantity_text.setText(String.valueOf(quantity));
-                    if (quantity == 0) {
+//                int quantity = Integer.parseInt(holder.quantity_text.getText().toString());
+//                if (quantity > 0) {
+//                    quantity--;
+//                    holder.quantity_text.setText(String.valueOf(quantity));
+//                    if (quantity == 0) {
                         if (dbHandler.deleteProduct(holder.mIngredient.getText().toString())) {
                             Toast.makeText(activity, "Deleted", Toast.LENGTH_SHORT).show();
                             notifyDataSetChanged();
@@ -105,17 +106,17 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
                         }
                         else
                             Toast.makeText(activity, "FAILED Delete", Toast.LENGTH_SHORT).show();
-                    } else {
-                        CupPojo product =
-                                new CupPojo(holder.mIngredient.getText().toString(), holder.ingMeasure.getText().toString(),mDataset.get(position).getImageUrl(), quantity);
-
-                        if (dbHandler.updateQty(product))
-                            Toast.makeText(activity, "Updated", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(activity, "FAILED Update", Toast.LENGTH_SHORT).show();
-                    }
+//                    } else {
+//                        CupPojo product =
+//                                new CupPojo(holder.mIngredient.getText().toString().toString(),mDataset.get(position).getImageUrl());
+//
+//                        if (dbHandler.updateQty(product))
+//                            Toast.makeText(activity, "Updated", Toast.LENGTH_SHORT).show();
+//                        else
+//                            Toast.makeText(activity, "FAILED Update", Toast.LENGTH_SHORT).show();
+//                    }
                 }
-            }
+
         });
 
         holder.addToCup.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +128,7 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
                 quantity++;
                 holder.quantity_text.setText(String.valueOf(quantity));
                 CupPojo product =
-                        new CupPojo(holder.mIngredient.getText().toString(),holder.ingMeasure.getText().toString(),mDataset.get(position).getImageUrl(), quantity);
+                        new CupPojo(holder.mIngredient.getText().toString().toString(),mDataset.get(position).getImageUrl());
 
                 if(dbHandler.updateQty(product))
                     Toast.makeText(activity,"Updated",Toast.LENGTH_SHORT).show();

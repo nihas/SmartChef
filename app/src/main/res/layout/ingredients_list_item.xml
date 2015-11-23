@@ -53,6 +53,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="0"
+        android:visibility="gone"
         android:layout_marginTop="5dp"
         android:textColor="#000000"
         android:background="@drawable/circle_border"
@@ -67,6 +68,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         android:textColor="#000000"
+        android:visibility="gone"
         android:layout_alignParentTop="true" />
 
 </LinearLayout>
@@ -88,16 +90,13 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="-"
+            android:text="X"
             android:paddingRight="15dp"
             android:paddingLeft="15dp"
             android:textColor="#ffffff"
             android:background="@drawable/custom_clicked_black"
             />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"/>
 
 
 
@@ -108,6 +107,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="+"
+            android:visibility="gone"
             android:paddingRight="15dp"
             android:paddingLeft="15dp"
             android:textColor="#ffffff"

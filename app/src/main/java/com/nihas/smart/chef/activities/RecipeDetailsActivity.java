@@ -83,47 +83,47 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         imageLoader.displayImage("http://www.twopeasandtheirpod.com/wp-content/uploads/2013/07/Vegan-Coconut-Raspberry-Ice-Cream-7.jpg", thumb, options);
     }
 
-    private void initializeRecylceView() {
-//        mRecyclerView=(RecyclerView)findViewById(R.id.recyclerView);
-//        initializeData();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setHasFixedSize(false);
-        recipAdapter=new RecipesAdapter(this,getIngredients());
-        mRecyclerView.setAdapter(recipAdapter);
+//    private void initializeRecylceView() {
+////        mRecyclerView=(RecyclerView)findViewById(R.id.recyclerView);
+////        initializeData();
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        mRecyclerView.setHasFixedSize(false);
+//        recipAdapter=new RecipesAdapter(this,getIngredients());
+//        mRecyclerView.setAdapter(recipAdapter);
+//
+//    }
 
-    }
-
-    public ArrayList<RecipesPojo> getIngredients(){
-        listRecipes=new ArrayList<>();
-//        String[] array=getResources().getStringArray(R.array.fruits);
-//        listIngredients=new ArrayList<>(Arrays.asList(array));
-        listRecipes.add(new RecipesPojo("Apple","http://img1.exportersindia.com/product_images/bc-small/dir_100/2970062/fresh-apple-1062283.jpg",2,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Apricot","http://www.foodallergens.info/foodimages/apricot.jpg",1,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Avocado","http://content.everydayhealth.com/sbd2/cms/how-to-enjoy-avocado-200x200.jpg",8,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Banana - ripe","https://southernmarylandvapes.com/wp-content/uploads/2013/10/Ripe-Banana.jpg",2,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Banana - raw","http://bakalu.in/wp-content/uploads/2015/09/Raw-Banana.jpg",3,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Black Berry","http://3.imimg.com/data3/JD/YL/MY-2762220/blackberry-250x250.jpg",2,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Chickoo","http://imghost1.indiamart.com/data2/VM/SK/IMFCP-3283736/fresh-fruits-828505-250x250.jpg",5,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Cucumber","http://static.wixstatic.com/media/7a456c_8f59c685d9b746a89746f48511388cbb.jpg_256",1,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Custard apple","http://img1.exportersindia.com/product_images/bc-small/dir_108/3225894/custard-apple-1368732.jpg",2,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Dates","http://ghk.h-cdn.co/assets/cm/15/11/54fdcfd529790-dates-rf-200.jpg",5,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Figs","http://www.dansessentials.com/wp-content/uploads/2011/11/fruits_0000s_0000s_0018_figs.png",9,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Grapes","http://static.caloriecount.about.com/images/medium/grapes-157546.jpg",12,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Grapefruit - Pomelo","http://www.frutasiru.com/uploads/catalogo/productos/thumb/pomelo.png",6,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Gauvas","http://catalog.wlimg.com/1/997490/small-images/fresh-red-guava-910893.jpg",9,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Jackfruit","http://img1.exportersindia.com/product_images/bc-small/dir_74/2208948/jack-fruits-1266061.jpg",2,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Lychee - Litchi","http://www.pakissan.com/english/advisory/images/dat.lychee05.jpg",2,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Mango Ripe","http://1.bp.blogspot.com/-bAJap1YWaf8/UBHmM7yagFI/AAAAAAAAABk/u840qocUyZM/s200/mango+2.jpg",8,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Mango Green/Raw","http://loyalbazaar.com/wp-content/uploads/2015/04/raw-mango-200x200.jpg",7,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Muskmelon/Cantalope","http://g03.s.alicdn.com/kf/UT8Sc5GXD0aXXagOFbXL/MUSK-MELON-OIL-WHOLESALE-MUSK-MELON-OIL.jpg_200x200.jpg",1,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Olive","http://www.gourmetsleuth.com/images/default-source/dictionary/gaeta-olives-jpg.jpg?sfvrsn=4",2,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Orange","http://earthsciencenaturals.com/images/uploads/2013042515541099356_big.jpg",6,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Papaya Raw","http://rakeshfruits.com/image/cache/catalog/Veg/raw-papaya-200x200.jpg",2,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Papaya Ripe","http://images.mathrubhumi.com/english_images/2013/Jul/11/03082_191611.jpg",4,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Pear","http://www.godist.net/img/pears_packham.jpg",5,"4 Minutes"));
-        listRecipes.add(new RecipesPojo("Plum","http://www.whatsfresh.co.nz/images/produce/plums-200x200.jpg",4,"4 Minutes"));
-        return listRecipes;
-
-
-    }
+//    public ArrayList<RecipesPojo> getIngredients(){
+//        listRecipes=new ArrayList<>();
+////        String[] array=getResources().getStringArray(R.array.fruits);
+////        listIngredients=new ArrayList<>(Arrays.asList(array));
+//        listRecipes.add(new RecipesPojo("Apple","http://img1.exportersindia.com/product_images/bc-small/dir_100/2970062/fresh-apple-1062283.jpg",2,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Apricot","http://www.foodallergens.info/foodimages/apricot.jpg",1,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Avocado","http://content.everydayhealth.com/sbd2/cms/how-to-enjoy-avocado-200x200.jpg",8,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Banana - ripe","https://southernmarylandvapes.com/wp-content/uploads/2013/10/Ripe-Banana.jpg",2,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Banana - raw","http://bakalu.in/wp-content/uploads/2015/09/Raw-Banana.jpg",3,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Black Berry","http://3.imimg.com/data3/JD/YL/MY-2762220/blackberry-250x250.jpg",2,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Chickoo","http://imghost1.indiamart.com/data2/VM/SK/IMFCP-3283736/fresh-fruits-828505-250x250.jpg",5,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Cucumber","http://static.wixstatic.com/media/7a456c_8f59c685d9b746a89746f48511388cbb.jpg_256",1,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Custard apple","http://img1.exportersindia.com/product_images/bc-small/dir_108/3225894/custard-apple-1368732.jpg",2,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Dates","http://ghk.h-cdn.co/assets/cm/15/11/54fdcfd529790-dates-rf-200.jpg",5,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Figs","http://www.dansessentials.com/wp-content/uploads/2011/11/fruits_0000s_0000s_0018_figs.png",9,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Grapes","http://static.caloriecount.about.com/images/medium/grapes-157546.jpg",12,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Grapefruit - Pomelo","http://www.frutasiru.com/uploads/catalogo/productos/thumb/pomelo.png",6,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Gauvas","http://catalog.wlimg.com/1/997490/small-images/fresh-red-guava-910893.jpg",9,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Jackfruit","http://img1.exportersindia.com/product_images/bc-small/dir_74/2208948/jack-fruits-1266061.jpg",2,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Lychee - Litchi","http://www.pakissan.com/english/advisory/images/dat.lychee05.jpg",2,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Mango Ripe","http://1.bp.blogspot.com/-bAJap1YWaf8/UBHmM7yagFI/AAAAAAAAABk/u840qocUyZM/s200/mango+2.jpg",8,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Mango Green/Raw","http://loyalbazaar.com/wp-content/uploads/2015/04/raw-mango-200x200.jpg",7,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Muskmelon/Cantalope","http://g03.s.alicdn.com/kf/UT8Sc5GXD0aXXagOFbXL/MUSK-MELON-OIL-WHOLESALE-MUSK-MELON-OIL.jpg_200x200.jpg",1,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Olive","http://www.gourmetsleuth.com/images/default-source/dictionary/gaeta-olives-jpg.jpg?sfvrsn=4",2,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Orange","http://earthsciencenaturals.com/images/uploads/2013042515541099356_big.jpg",6,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Papaya Raw","http://rakeshfruits.com/image/cache/catalog/Veg/raw-papaya-200x200.jpg",2,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Papaya Ripe","http://images.mathrubhumi.com/english_images/2013/Jul/11/03082_191611.jpg",4,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Pear","http://www.godist.net/img/pears_packham.jpg",5,"4 Minutes"));
+//        listRecipes.add(new RecipesPojo("Plum","http://www.whatsfresh.co.nz/images/produce/plums-200x200.jpg",4,"4 Minutes"));
+//        return listRecipes;
+//
+//
+//    }
 }
