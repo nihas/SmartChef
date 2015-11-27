@@ -47,7 +47,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //        initializeRecylceView();
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Rasperry Ice");
+//        getSupportActionBar().setTitle("Rasperry Ice");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

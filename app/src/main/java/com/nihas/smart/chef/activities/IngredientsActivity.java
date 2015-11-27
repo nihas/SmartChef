@@ -2,6 +2,7 @@ package com.nihas.smart.chef.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,9 +19,13 @@ import android.widget.TextView;
 
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.adapters.IngredientsAdapter;
+import com.nihas.smart.chef.api.WebRequest;
+import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.pojos.IngredientsPojo;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,6 +93,8 @@ public class IngredientsActivity extends AppCompatActivity{
             }
         });
 
+
+
         cupQty=(TextView)view.findViewById(R.id.cup_qty);
         MyDbHandler dbHandler = new MyDbHandler(this, null, null, 1);
         Cursor c=dbHandler.getAllCup();
@@ -110,9 +117,37 @@ public class IngredientsActivity extends AppCompatActivity{
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_cup) {
             return true;
+        }else if(id==R.id.action_search){
+            Intent searchInten=new Intent(IngredientsActivity.this,SearchActivity.class);
+            startActivity(searchInten);
+//            return true;
+
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private class getAllBusinessProfile extends AsyncTask<String, Void, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            JSONObject jsonObject = null;
+            try {
+                return WebRequest.postData(params[0], WebServices.getIngredients(1));
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+            return jsonObject;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+//            progressBar.setVisibility(View.GONE);
+//            onDone(jsonObject);
+        }
     }
 
     public ArrayList<IngredientsPojo> getIngredients(){

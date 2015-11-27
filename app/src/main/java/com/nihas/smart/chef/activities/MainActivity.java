@@ -110,6 +110,11 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_cup) {
 
             return true;
+        }else if(id==R.id.action_search){
+            Intent searchInten=new Intent(MainActivity.this,SearchActivity.class);
+            startActivity(searchInten);
+//            return true;
+
         }
 
         return super.onOptionsItemSelected(item);

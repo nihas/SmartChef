@@ -3,10 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/search_icon"
+        android:title="Search"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/action_cup"
         android:actionLayout="@layout/cup_icon"
         android:title="@string/action_cup"
         app:showAsAction="always" />
+
 
 </menu>

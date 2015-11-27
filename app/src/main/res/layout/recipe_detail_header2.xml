@@ -49,8 +49,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/fav_fill"
+            android:background="?selectableItemBackground"
             android:layout_alignParentRight="true"
-            android:id="@+id/imageView" />
+            android:id="@+id/fav_button" />
 
     </RelativeLayout>
 
@@ -68,17 +69,13 @@
         android:layout_gravity="center"
         android:paddingRight="8dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_ingredients"
-            android:padding="8dp"
-            android:layout_alignParentRight="true"/>
-        
         <RelativeLayout
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:padding="7dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?selectableItemBackground"
             android:layout_gravity="center">
             <ImageView
                 android:layout_width="80dp"
@@ -93,12 +90,12 @@
                 android:layout_centerInParent="true"
                 android:gravity="center">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4.2"
-                android:textColor="@color/colorPrimary"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4.2"
+                    android:textColor="@color/colorPrimary"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -109,10 +106,25 @@
         </RelativeLayout>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_ingredients"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?selectableItemBackground"
+            android:layout_alignParentRight="true"/>
+        
+
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:padding="8dp"
             android:src="@drawable/ic_share"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?selectableItemBackground"
             android:layout_alignParentRight="true"/>
 
     </LinearLayout>
@@ -138,8 +150,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mhbjfvnmsd fvmdnjjvkm v jbvmd fvjh fvnbdkv djhvbdj fvdhv vhbv vhivjvkajsjknvkhb bvksbmvbv kjbvbvbv jjvbbv bvbbvncvnxcujvhjf jhfjhf jhjhdjhsdguyuyten ytyhdftsjhdf hgdfgfgdas fhagdfdsadfsdf sdfhadjahskhska sydgfjsdfhsghdf ugsdhfgshdf ysdgfusgdf ydhgjsdcaiushuyyweqew y54654 sydftgjsfhsfsf yusghgf hghsghsg "
-            android:textStyle="bold"/>
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+            android:layout_alignParentRight="true"
+            android:padding="8dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+            android:layout_alignParentRight="true"
+            android:padding="8dp"
+            android:textColor="#000000"/>
 
     </LinearLayout>
 
