@@ -42,11 +42,11 @@ import java.util.Collections;
  */
 public class IngredientsActivity extends AppCompatActivity{
 
-    RecyclerView mRecyclerView;
-    ArrayList<IngredientsPojo> listIngredients;
-    IngredientsAdapter ingAdapter;
-    TextView cupQty;
-    ProgressBar progressBar;
+//    RecyclerView mRecyclerView;
+//    ArrayList<IngredientsPojo> listIngredients;
+//    IngredientsAdapter ingAdapter;
+    static TextView cupQty;
+//    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +56,15 @@ public class IngredientsActivity extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        progressBar=(ProgressBar)findViewById(R.id.pBar);
-        if (SmartChefApp.isNetworkAvailable()) {
-            new getAllCategories().execute();
-        } else {
-
-        }
-
-        mRecyclerView=(RecyclerView)findViewById(R.id.rv);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        progressBar=(ProgressBar)findViewById(R.id.pBar);
+//        if (SmartChefApp.isNetworkAvailable()) {
+//            new getAllCategories().execute();
+//        } else {
+//
+//        }
+//
+//        mRecyclerView=(RecyclerView)findViewById(R.id.rv);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 //        ingAdapter=new IngredientsAdapter(this,getIngredients());
 //        mRecyclerView.setAdapter(ingAdapter);
@@ -117,9 +117,12 @@ public class IngredientsActivity extends AppCompatActivity{
             pojo.setCup_count(0);
         else
             pojo.setCup_count(c.getCount());
+
         cupQty.setText(String.valueOf(pojo.getCup_count()));
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -142,112 +145,8 @@ public class IngredientsActivity extends AppCompatActivity{
     }
 
 
-    private class getAllCategories extends AsyncTask<String, Void, JSONArray> {
-
-        @Override
-        protected JSONArray doInBackground(String... params) {
-            JSONArray jsonObject = null;
-            try {
-
-                return WebRequest.getDataJSONArray(WebServices.getIngredients(SmartChefApp.readFromPreferences(getApplicationContext(),"ID",1)));
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
-            return jsonObject;
-        }
-
-        @Override
-        protected void onPostExecute(JSONArray jArray) {
-            super.onPostExecute(jArray);
-            progressBar.setVisibility(View.GONE);
-            onDone(jArray);
-        }
-    }
 
 
-    private void onDone(JSONArray jArray){
-        try {
-            if(jArray != null) {
-                listIngredients = new ArrayList<>();
-                if (jArray.length() > 0) {
-                    for (int i = 0; i < jArray.length(); i++) {
-//                            AllPojo cp = new AllPojo();
-////                            cp.setName(jArray.getString(i));
-                        listIngredients.add(new IngredientsPojo(jArray.getJSONObject(i).getString(Keys.name),
-                                jArray.getJSONObject(i).getString(Keys.image)));
-                    }
-                } else {
-                    SmartChefApp.showAToast("Something Went Wrong.");
-                }
-
-//                    final EstablishmentTypeAdapter adapter = new EstablishmentTypeAdapter(getContext(), estTypeListArray);
-//                    typeList.setAdapter(adapter);
-                ingAdapter=new IngredientsAdapter(this,listIngredients);
-                mRecyclerView.setAdapter(ingAdapter);
-
-
-
-
-
-            }else{
-                SmartChefApp.showAToast("Something Went Wrong.");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
-
-    public ArrayList<IngredientsPojo> getIngredients(){
-        listIngredients=new ArrayList<>();
-//        String[] array=getResources().getStringArray(R.array.fruits);
-//        listIngredients=new ArrayList<>(Arrays.asList(array));
-        listIngredients.add(new IngredientsPojo("Apple","http://img1.exportersindia.com/product_images/bc-small/dir_100/2970062/fresh-apple-1062283.jpg"));
-        listIngredients.add(new IngredientsPojo("Apricot","http://www.foodallergens.info/foodimages/apricot.jpg"));
-        listIngredients.add(new IngredientsPojo("Avocado","http://content.everydayhealth.com/sbd2/cms/how-to-enjoy-avocado-200x200.jpg"));
-        listIngredients.add(new IngredientsPojo("Banana - ripe","https://southernmarylandvapes.com/wp-content/uploads/2013/10/Ripe-Banana.jpg"));
-        listIngredients.add(new IngredientsPojo("Banana - raw","http://bakalu.in/wp-content/uploads/2015/09/Raw-Banana.jpg"));
-        listIngredients.add(new IngredientsPojo("Black Berry","http://3.imimg.com/data3/JD/YL/MY-2762220/blackberry-250x250.jpg"));
-        listIngredients.add(new IngredientsPojo("Chickoo","http://imghost1.indiamart.com/data2/VM/SK/IMFCP-3283736/fresh-fruits-828505-250x250.jpg"));
-        listIngredients.add(new IngredientsPojo("Cucumber","http://static.wixstatic.com/media/7a456c_8f59c685d9b746a89746f48511388cbb.jpg_256"));
-        listIngredients.add(new IngredientsPojo("Custard apple","http://img1.exportersindia.com/product_images/bc-small/dir_108/3225894/custard-apple-1368732.jpg"));
-        listIngredients.add(new IngredientsPojo("Dates","http://ghk.h-cdn.co/assets/cm/15/11/54fdcfd529790-dates-rf-200.jpg"));
-        listIngredients.add(new IngredientsPojo("Figs","http://www.dansessentials.com/wp-content/uploads/2011/11/fruits_0000s_0000s_0018_figs.png"));
-        listIngredients.add(new IngredientsPojo("Grapes","http://static.caloriecount.about.com/images/medium/grapes-157546.jpg"));
-        listIngredients.add(new IngredientsPojo("Grapefruit - Pomelo","http://www.frutasiru.com/uploads/catalogo/productos/thumb/pomelo.png"));
-        listIngredients.add(new IngredientsPojo("Gauvas","http://catalog.wlimg.com/1/997490/small-images/fresh-red-guava-910893.jpg"));
-        listIngredients.add(new IngredientsPojo("Jackfruit","http://img1.exportersindia.com/product_images/bc-small/dir_74/2208948/jack-fruits-1266061.jpg"));
-        listIngredients.add(new IngredientsPojo("Lychee - Litchi","http://www.pakissan.com/english/advisory/images/dat.lychee05.jpg"));
-        listIngredients.add(new IngredientsPojo("Mango Ripe","http://1.bp.blogspot.com/-bAJap1YWaf8/UBHmM7yagFI/AAAAAAAAABk/u840qocUyZM/s200/mango+2.jpg"));
-        listIngredients.add(new IngredientsPojo("Mango Green/Raw","http://loyalbazaar.com/wp-content/uploads/2015/04/raw-mango-200x200.jpg"));
-        listIngredients.add(new IngredientsPojo("Muskmelon/Cantalope","http://g03.s.alicdn.com/kf/UT8Sc5GXD0aXXagOFbXL/MUSK-MELON-OIL-WHOLESALE-MUSK-MELON-OIL.jpg_200x200.jpg"));
-        listIngredients.add(new IngredientsPojo("Olive","http://www.gourmetsleuth.com/images/default-source/dictionary/gaeta-olives-jpg.jpg?sfvrsn=4"));
-        listIngredients.add(new IngredientsPojo("Orange","http://earthsciencenaturals.com/images/uploads/2013042515541099356_big.jpg"));
-        listIngredients.add(new IngredientsPojo("Papaya Raw","http://rakeshfruits.com/image/cache/catalog/Veg/raw-papaya-200x200.jpg"));
-        listIngredients.add(new IngredientsPojo("Papaya Ripe","http://images.mathrubhumi.com/english_images/2013/Jul/11/03082_191611.jpg"));
-        listIngredients.add(new IngredientsPojo("Pear","http://www.godist.net/img/pears_packham.jpg"));
-        listIngredients.add(new IngredientsPojo("Plum","http://www.whatsfresh.co.nz/images/produce/plums-200x200.jpg"));
-        listIngredients.add(new IngredientsPojo("Pineapple","http://www.tropicalpopsicles.com/image/Pineapple.png"));
-        listIngredients.add(new IngredientsPojo("Pomogranate","http://tajagroproducts.com/pomegranates/tajagro_dry-pomegranates.jpg"));
-        listIngredients.add(new IngredientsPojo("Sapodilla","http://3.imimg.com/data3/FK/AU/MY-8574577/sapodilla-250x250.jpg"));
-        listIngredients.add(new IngredientsPojo("Watermelon","http://www.azspagirls.com/files/2013/08/watermelon-200.jpg"));
-//        listIngredients.add("Banana");
-//        listIngredients.add("Apple");
-//        listIngredients.add("Onion");
-//        listIngredients.add("Ginger");
-//        listIngredients.add("Garlic");
-//        listIngredients.add("Tamarind");
-//        listIngredients.add("Cucumber");
-//        listIngredients.add("Tomato");
-//        listIngredients.add("Chilly");
-//        listIngredients.add("Chicken");
-//        listIngredients.add("Brinjal");
-//        listIngredients.add("Elephant Yam");
-        return listIngredients;
-
-
-    }
 
 
 

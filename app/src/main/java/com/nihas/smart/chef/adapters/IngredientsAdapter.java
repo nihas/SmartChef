@@ -230,7 +230,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                                pojo.setCup_count(0);
                            else
                                pojo.setCup_count(c.getCount());
-                           doButtonOneClickActions(pojo.getCup_count());
+                           MainActivity.updateCupValue(pojo.getCup_count());
                        }
                        else
                            Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
