@@ -15,16 +15,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.adapters.CategoryAdapter;
 import com.nihas.smart.chef.adapters.IngredientsAdapter;
 import com.nihas.smart.chef.api.WebRequest;
 import com.nihas.smart.chef.api.WebServices;
+import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.db.MyDbHandler;
+import com.nihas.smart.chef.pojos.AllPojo;
 import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.pojos.IngredientsPojo;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -40,6 +46,7 @@ public class IngredientsActivity extends AppCompatActivity{
     ArrayList<IngredientsPojo> listIngredients;
     IngredientsAdapter ingAdapter;
     TextView cupQty;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +56,18 @@ public class IngredientsActivity extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        progressBar=(ProgressBar)findViewById(R.id.pBar);
+        if (SmartChefApp.isNetworkAvailable()) {
+            new getAllCategories().execute();
+        } else {
+
+        }
+
         mRecyclerView=(RecyclerView)findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        ingAdapter=new IngredientsAdapter(this,getIngredients());
-        mRecyclerView.setAdapter(ingAdapter);
+//        ingAdapter=new IngredientsAdapter(this,getIngredients());
+//        mRecyclerView.setAdapter(ingAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -65,13 +79,13 @@ public class IngredientsActivity extends AppCompatActivity{
         });
 
 
-        ingAdapter.setOnDataChangeListener(new IngredientsAdapter.OnDataChangeListener() {
-            @Override
-            public void onDataChanged(int size) {
-                CupPojo pojo=new CupPojo();
-                cupQty.setText(String.valueOf(pojo.getCup_count()));
-            }
-        });
+//        ingAdapter.setOnDataChangeListener(new IngredientsAdapter.OnDataChangeListener() {
+//            @Override
+//            public void onDataChanged(int size) {
+//                CupPojo pojo=new CupPojo();
+//                cupQty.setText(String.valueOf(pojo.getCup_count()));
+//            }
+//        });
     }
 
 
@@ -128,13 +142,14 @@ public class IngredientsActivity extends AppCompatActivity{
     }
 
 
-    private class getAllBusinessProfile extends AsyncTask<String, Void, JSONObject> {
+    private class getAllCategories extends AsyncTask<String, Void, JSONArray> {
 
         @Override
-        protected JSONObject doInBackground(String... params) {
-            JSONObject jsonObject = null;
+        protected JSONArray doInBackground(String... params) {
+            JSONArray jsonObject = null;
             try {
-                return WebRequest.postData(params[0], WebServices.getIngredients(1));
+
+                return WebRequest.getDataJSONArray(WebServices.getIngredients(SmartChefApp.readFromPreferences(getApplicationContext(),"ID",1)));
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -143,11 +158,45 @@ public class IngredientsActivity extends AppCompatActivity{
         }
 
         @Override
-        protected void onPostExecute(JSONObject jsonObject) {
-            super.onPostExecute(jsonObject);
-//            progressBar.setVisibility(View.GONE);
-//            onDone(jsonObject);
+        protected void onPostExecute(JSONArray jArray) {
+            super.onPostExecute(jArray);
+            progressBar.setVisibility(View.GONE);
+            onDone(jArray);
         }
+    }
+
+
+    private void onDone(JSONArray jArray){
+        try {
+            if(jArray != null) {
+                listIngredients = new ArrayList<>();
+                if (jArray.length() > 0) {
+                    for (int i = 0; i < jArray.length(); i++) {
+//                            AllPojo cp = new AllPojo();
+////                            cp.setName(jArray.getString(i));
+                        listIngredients.add(new IngredientsPojo(jArray.getJSONObject(i).getString(Keys.name),
+                                jArray.getJSONObject(i).getString(Keys.image)));
+                    }
+                } else {
+                    SmartChefApp.showAToast("Something Went Wrong.");
+                }
+
+//                    final EstablishmentTypeAdapter adapter = new EstablishmentTypeAdapter(getContext(), estTypeListArray);
+//                    typeList.setAdapter(adapter);
+                ingAdapter=new IngredientsAdapter(this,listIngredients);
+                mRecyclerView.setAdapter(ingAdapter);
+
+
+
+
+
+            }else{
+                SmartChefApp.showAToast("Something Went Wrong.");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public ArrayList<IngredientsPojo> getIngredients(){

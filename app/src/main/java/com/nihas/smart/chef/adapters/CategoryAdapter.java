@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.customui.GradientoverImageDrawable;
 import com.nihas.smart.chef.pojos.AllPojo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -44,6 +45,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         inflater = LayoutInflater.from(this.context);
 //        this.mImageFetcher=mImageFetcher;
         imageLoader = ImageLoader.getInstance();
+
 
     }
 
@@ -80,7 +82,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 .inflate(R.layout.category_item2, parent, false);
         ViewHolder vh = new ViewHolder(v);
         // set the view's size, margins, paddings and layout parameters
-        imageLoader.init(ImageLoaderConfiguration.createDefault(context));
+//        imageLoader.init(ImageLoaderConfiguration.createDefault(context));
+        SmartChefApp.initImageLoader(context);
 //        options = new DisplayImageOptions.Builder().cacheInMemory(true)
 //                .cacheOnDisc(true).resetViewBeforeLoading(true)
 //                .showImageForEmptyUri(R.drawable.empty_photo)
@@ -113,9 +116,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         // - replace the contents of the view with that element
         holder.Title.setText(mDataset.get(position).getTitle());
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mImageView);
-        imageLoader.displayImage(mDataset.get(position).getUrl(), holder.mImageView, options);
-        holder.SubTitle.setText(mDataset.get(position).getSubTitle());
-        holder.catIcon.setImageResource(mDataset.get(position).getImg_drawable());
+        imageLoader.displayImage(SmartChefApp.getImageUrl(mDataset.get(position).getUrl()), holder.catIcon, options);
+//        holder.SubTitle.setText(mDataset.get(position).getSubTitle());
+//        holder.catIcon.setImageResource(mDataset.get(position).getImg_drawable());
 
     }
 

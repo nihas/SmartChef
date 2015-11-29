@@ -2,6 +2,7 @@ package com.nihas.smart.chef.api;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -118,6 +119,56 @@ public class WebRequest {
 
 
         return jsonObject;
+
+    }
+
+
+
+    public static JSONArray getDataJSONArray(String url){
+        StringBuffer response = new StringBuffer();
+        URL obj = null;
+        JSONArray jArray = null;
+        try {
+            System.out.println("URL :: " + url);
+            obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+            int responseCode = con.getResponseCode();
+            System.out.println("GET Response Code :: " + responseCode);
+            if (responseCode == HttpURLConnection.HTTP_OK) { // success
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                        con.getInputStream()));
+                String inputLine;
+                response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // print result
+                System.out.println(response.toString());
+                jArray = new JSONArray(response.toString());
+            } else {
+                System.out.println("GET request not worked");
+            }
+
+
+
+        } catch (UnsupportedEncodingException e) {
+            Log.d("login issue", e.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return jArray;
 
     }
 

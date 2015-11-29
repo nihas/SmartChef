@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.IngredientsActivity;
 import com.nihas.smart.chef.activities.MainActivity;
+import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.customui.GradientHalfoverImageDrawable;
 import com.nihas.smart.chef.customui.GradientoverImageDrawable;
 import com.nihas.smart.chef.db.MyDbHandler;
@@ -106,7 +107,9 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     }
 
 
-
+    public interface CartChanged{
+        public void updateCup(String text);
+    }
 
 
     // Create new views (invoked by the layout manager)
@@ -121,7 +124,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         // set the view's size, margins, paddings and layout parameters
 
         ViewHolder vh = new ViewHolder(v);
-        imageLoader.init(ImageLoaderConfiguration.createDefault(activity));
+//        imageLoader.init(ImageLoaderConfiguration.createDefault(activity));
+        SmartChefApp.initImageLoader(activity);
         options = new DisplayImageOptions.Builder().cacheInMemory(true)
 //                .displayer(new BitmapDisplayer() {
 //            @Override
@@ -150,7 +154,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
 
         holder.mIngredient.setText(mDataset.get(position).getName());
-        imageLoader.displayImage(mDataset.get(position).getImage_url(), holder.thumbnail, options);
+        imageLoader.displayImage(SmartChefApp.getImageUrl(mDataset.get(position).getImage_url()), holder.thumbnail, options);
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
 //        final ViewHolder innerHolder=holder;
 //        holder.minusToCup.setOnClickListener(new View.OnClickListener() {
@@ -212,7 +216,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
                    CupPojo product =
                            new CupPojo(mDataset.get(position).getName(),
-                                   mDataset.get(position).getImage_url());
+                                   SmartChefApp.getImageUrl(mDataset.get(position).getImage_url()));
                    if (!dbHandler.isIngredients(mDataset.get(position).getName())) {
                        if (dbHandler.addProduct(product)) {
                            Toast.makeText(activity, "Added" + position, Toast.LENGTH_SHORT).show();

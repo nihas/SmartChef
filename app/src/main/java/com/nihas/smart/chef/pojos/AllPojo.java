@@ -9,6 +9,7 @@ public class AllPojo {
     private String subTitle;
     private String url;
     int img_drawable;
+    private int id;
 
     public AllPojo(String titl, String urll, String subTitl,int ImgDraw){
         this.title=titl;
@@ -17,12 +18,24 @@ public class AllPojo {
         this.img_drawable=ImgDraw;
     }
 
+    public AllPojo(int id,String titl, String urll){
+        this.title=titl;
+        this.url=urll;
+        this.id=id;
+//        this.subTitle=subTitl;
+//        this.img_drawable=ImgDraw;
+    }
+
     public AllPojo(String titl, String urll){
         this.title=titl;
         this.url=urll;
     }
 
     public AllPojo(){
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {
