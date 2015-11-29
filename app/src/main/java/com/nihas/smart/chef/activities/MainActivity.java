@@ -25,6 +25,7 @@ import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.fragments.CategoryFragment;
+import com.nihas.smart.chef.fragments.CupFragment;
 import com.nihas.smart.chef.pojos.AllPojo;
 import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.utils.RecyclerItemClickListener;
@@ -73,8 +74,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //do stuff here
-                Intent intent = new Intent(MainActivity.this, CupActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, CupActivity.class);
+//                startActivity(intent);
+                getSupportFragmentManager().beginTransaction().replace(R.id.container,new CupFragment()).addToBackStack(null).commit();
                 overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
             }
         });

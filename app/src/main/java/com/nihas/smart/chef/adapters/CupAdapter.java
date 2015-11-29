@@ -14,8 +14,10 @@ import android.widget.Toast;
 
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.CupActivity;
+import com.nihas.smart.chef.activities.MainActivity;
 import com.nihas.smart.chef.customui.GradientoverImageDrawable;
 import com.nihas.smart.chef.db.MyDbHandler;
+import com.nihas.smart.chef.fragments.CupFragment;
 import com.nihas.smart.chef.pojos.CupPojo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -98,10 +100,17 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
                             mDataset.remove(position);
                             Cursor c=dbHandler.getAllCup();
                             CupPojo pojo=new CupPojo();
-                            if(c==null)
+                            if(c==null) {
                                 pojo.setCup_count(0);
-                            else
-                                pojo.setCup_count(c.getCount());
+                            }
+                            else {
+                                if(c.getCount()==0)
+                                    CupFragment.updateView();
+                                else
+                                    pojo.setCup_count(c.getCount());
+                            }
+                            MainActivity.updateCupValue(pojo.getCup_count());
+
 
                         }
                         else
