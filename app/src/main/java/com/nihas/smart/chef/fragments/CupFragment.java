@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,12 +45,13 @@ public class CupFragment extends Fragment implements View.OnClickListener {
     static TextView emptyView;
     Button cookButton;
     ProgressBar progressBar;
+    static DrawerLayout drawerLayout;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.content_main, container, false);
+        View rootView = inflater.inflate(R.layout.activity_cup, container, false);
         return rootView;
 
     }
@@ -59,10 +61,18 @@ public class CupFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         initialise(view);
     }
+
+
+    public static  CupFragment newInstance(DrawerLayout drawer) {
+        drawerLayout = drawer;
+        CupFragment f = new CupFragment();
+        return f;
+    }
+
     private void initialise(View rootView) {
         try {
-            progressBar=(ProgressBar)rootView.findViewById(R.id.pBar);
-            progressBar.setVisibility(View.GONE);
+//            progressBar=(ProgressBar)rootView.findViewById(R.id.pBar);
+//            progressBar.setVisibility(View.GONE);
 
             cookButton=(Button)rootView.findViewById(R.id.cook_button);
             emptyView=(TextView)rootView.findViewById(R.id.empty_view);

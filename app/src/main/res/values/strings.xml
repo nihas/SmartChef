@@ -3,6 +3,8 @@
     <string name="action_settings">Settings</string>
     <string name="action_cup">Cup</string>
     <string name="crash_toast_text">Oops.. App Crash</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
 
     <string-array name="fruits">
         <item>Apple</item>
