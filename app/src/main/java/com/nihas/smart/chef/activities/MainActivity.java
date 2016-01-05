@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
-
+    public static boolean isOpen=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(Gravity.END)){
+        if(drawerLayout.isDrawerOpen(Gravity.RIGHT)){
             drawerLayout.closeDrawer(Gravity.RIGHT);
         }else
             super.onBackPressed();
@@ -131,10 +134,17 @@ public class MainActivity extends AppCompatActivity {
                 //do stuff here
 //                Intent intent = new Intent(MainActivity.this, CupActivity.class);
 //                startActivity(intent);
+
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.container_drawer,new CupFragment().newInstance(drawerLayout), "CupFragment")
                         .commit();
-                drawerLayout.openDrawer(Gravity.RIGHT);
+                if(isOpen) {
+                    drawerLayout.closeDrawer(Gravity.RIGHT);
+                    isOpen=false;
+                } else {
+                    drawerLayout.openDrawer(Gravity.RIGHT);
+                    isOpen=true;
+                }
 //                getSupportFragmentManager().beginTransaction().replace(R.id.container,new CupFragment()).addToBackStack(null).commit();
 //                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
             }
@@ -145,8 +155,7 @@ public class MainActivity extends AppCompatActivity {
         CupPojo pojo=new CupPojo();
         if(c==null) {
             pojo.setCup_count(0);
-        }
-        else {
+        } else {
             pojo.setCup_count(c.getCount());
         }
         cupQty.setText(String.valueOf(pojo.getCup_count()));

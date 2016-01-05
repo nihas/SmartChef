@@ -29,6 +29,14 @@ public class MyDbHandler extends SQLiteOpenHelper {
     }
 
     @Override
+    public synchronized void close() {
+        super.close();
+
+    }
+
+
+
+    @Override
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         String CREATE_PRODUCTS_TABLE = "CREATE TABLE " +

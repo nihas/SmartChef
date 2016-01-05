@@ -94,9 +94,26 @@ public class CupFragment extends Fragment implements View.OnClickListener {
             cookButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent newInten = new Intent(getActivity(), RecipeActivity.class);
-                    startActivity(newInten);
-                    getActivity().finish();
+                    String cook_ing="";
+                    MyDbHandler dbHandler = new MyDbHandler(getActivity(), null, null, 1);
+                    Cursor c=dbHandler.getAllCup();
+//        Toast.makeText(this, String.valueOf(c.getCount()), Toast.LENGTH_LONG).show();
+                    CupPojo pojo= new CupPojo();
+                    pojo.setCup_count(c.getCount());
+                    if (c.moveToFirst()) {
+                        do {
+//                DisplayContact(c);
+                          cook_ing=cook_ing+c.getString(1)+",";
+                        } while (c.moveToNext());
+                    }
+                    SmartChefApp.showAToast(cook_ing);
+
+
+                    getFragmentManager().beginTransaction().replace(R.id.container,new RecipeFragment()).addToBackStack(null).commit();
+
+//                    Intent newInten = new Intent(getActivity(), RecipeActivity.class);
+//                    startActivity(newInten);
+//                    getActivity().finish();
                 }
             });
 
