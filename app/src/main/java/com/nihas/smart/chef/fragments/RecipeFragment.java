@@ -48,7 +48,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_cup, container, false);
+        View rootView = inflater.inflate(R.layout.content_main, container, false);
         return rootView;
 
     }
@@ -57,6 +57,12 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initialise(view);
+
+        mRecyclerView=(RecyclerView)view.findViewById(R.id.rv);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        recipAdapter=new RecipesAdapter(getActivity(),getIngredients());
+        mRecyclerView.setAdapter(recipAdapter);
 
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -98,6 +104,26 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    public ArrayList<RecipesPojo> getIngredients(){
+        listRecipes=new ArrayList<>();
+//        String[] array=getResources().getStringArray(R.array.fruits);
+//        listIngredients=new ArrayList<>(Arrays.asList(array));
+        listRecipes.add(new RecipesPojo("Ramen Noodles","https://dz2k5jx87b7zc.cloudfront.net/wp-content/uploads/2013/03/8505482256_18e865c985_z.jpg","2-3","4 Minutes"));
+        listRecipes.add(new RecipesPojo("Ramen Vegetable","https://dz2k5jx87b7zc.cloudfront.net/wp-content/uploads/2013/03/Ramen-Vegetable-Beef-Skillet-Recipe-Taste-and-Tell.jpg","1-5","4 Minutes"));
+        listRecipes.add(new RecipesPojo("Pasta Brocali","http://www.dishbase.com/recipe_images/large/pasta-with-broccoli-and-italian-sausage-12512110711.jpg","8-10","4 Minutes"));
+        listRecipes.add(new RecipesPojo("Shirley Leyung","http://www.restaurantmagazine.com/wp-content/uploads/2012/10/Popeyes-4th-Annual-Crawfish-Festival-is-the-Perfect-Recipe-for-Rich-Louisiana-Flavor.jpg","2-6","4 Minutes"));
+        listRecipes.add(new RecipesPojo("Ramen Noodles","https://dz2k5jx87b7zc.cloudfront.net/wp-content/uploads/2013/03/8505482256_18e865c985_z.jpg","2-6","4 Minutes"));
+        listRecipes.add(new RecipesPojo("Ramen Vegetable","https://dz2k5jx87b7zc.cloudfront.net/wp-content/uploads/2013/03/Ramen-Vegetable-Beef-Skillet-Recipe-Taste-and-Tell.jpg","1-9","4 Minutes"));
+        listRecipes.add(new RecipesPojo("Pasta Brocali","http://www.dishbase.com/recipe_images/large/pasta-with-broccoli-and-italian-sausage-12512110711.jpg","8-10","4 Minutes"));
+        listRecipes.add(new RecipesPojo("Shirley Leyung","http://www.restaurantmagazine.com/wp-content/uploads/2012/10/Popeyes-4th-Annual-Crawfish-Festival-is-the-Perfect-Recipe-for-Rich-Louisiana-Flavor.jpg","2-9","4 Minutes"));
+        listRecipes.add(new RecipesPojo("Ramen Noodles","https://dz2k5jx87b7zc.cloudfront.net/wp-content/uploads/2013/03/8505482256_18e865c985_z.jpg","2-3","4 Minutes"));
+        listRecipes.add(new RecipesPojo("Ramen Vegetable","https://dz2k5jx87b7zc.cloudfront.net/wp-content/uploads/2013/03/Ramen-Vegetable-Beef-Skillet-Recipe-Taste-and-Tell.jpg","1-5","4 Minutes"));
+        listRecipes.add(new RecipesPojo("Pasta Brocali","http://www.dishbase.com/recipe_images/large/pasta-with-broccoli-and-italian-sausage-12512110711.jpg","8-11","4 Minutes"));
+        listRecipes.add(new RecipesPojo("Shirley Leyung","http://www.restaurantmagazine.com/wp-content/uploads/2012/10/Popeyes-4th-Annual-Crawfish-Festival-is-the-Perfect-Recipe-for-Rich-Louisiana-Flavor.jpg","2-5","4 Minutes"));
 
+        return listRecipes;
+
+
+    }
 
 }
