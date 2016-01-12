@@ -3,6 +3,7 @@ package com.nihas.smart.chef.activities;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -58,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle("Smart Chef");
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
         initDrawer();
 
         getSupportFragmentManager().beginTransaction().add(R.id.container,new CategoryFragment()).commit();
