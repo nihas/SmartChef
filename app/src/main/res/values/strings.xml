@@ -5,6 +5,9 @@
     <string name="crash_toast_text">Oops.. App Crash</string>
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
+    <string name="app_id">1059025687471973</string>
+    <string name="google_api_key">AIzaSyC55o3fkBj3r128F32IRI8rCK6H6R_RZTc</string>
+
 
     <string-array name="fruits">
         <item>Apple</item>

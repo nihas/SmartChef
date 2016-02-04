@@ -10,4 +10,6 @@ public interface Keys {
     public static final String image= "image";
     public static final String quantity_type= "quantity_type";
 
+    public static final String email = "email";
+
 }
