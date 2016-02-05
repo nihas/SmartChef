@@ -12,7 +12,7 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
-        <EditText
+        <com.nihas.smart.chef.utils.FloatingSearchView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Type to search..."
