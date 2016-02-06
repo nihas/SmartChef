@@ -25,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
 import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.adapters.CategoryAdapter;
@@ -43,6 +44,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import io.github.yavski.fabspeeddial.FabSpeedDial;
+import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -66,14 +70,34 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().add(R.id.container,new CategoryFragment()).commit();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.fab_speed);
+        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public boolean onMenuItemSelected(MenuItem menuItem) {
+                //TODO: Start some activity
+                int id = menuItem.getItemId();
+
+                //noinspection SimplifiableIfStatement
+                if (id == R.id.action_logout) {
+                    LoginManager.getInstance().logOut();
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
+                    SmartChefApp.clearSharedPrefData(getApplicationContext());
+                    finish();
+                }
+                return false;
             }
         });
+
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
     }
 
 

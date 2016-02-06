@@ -9,7 +9,9 @@
     <string name="app_id_lap">951187541633753</string>
     <string name="google_api_key">AIzaSyC55o3fkBj3r128F32IRI8rCK6H6R_RZTc</string>
 
-
+    <string name="menu_item_email">Privacy Policy</string>
+    <string name="menu_item_text">About</string>
+    <string name="menu_item_logout">LogOut Me</string>
     <string name="fsv.transition.search.layout">fsv_transition_search_layout</string>
     <string-array name="fruits">
         <item>Apple</item>

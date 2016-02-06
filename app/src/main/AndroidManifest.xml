@@ -35,7 +35,7 @@
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/app_id_lap" />
+            android:value="@string/app_id" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

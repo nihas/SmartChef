@@ -390,6 +390,11 @@ private ConnectionResult mConnectionResult;
         if (token != null) {
             uid = token.getUserId();
             access_token = token.getToken();
+
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
+            finish();
         }
 
 

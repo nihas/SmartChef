@@ -36,13 +36,15 @@
     <include layout="@layout/content_main_fragment" />
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <io.github.yavski.fabspeeddial.FabSpeedDial
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+        app:fabGravity="bottom_end"
+        app:fabMenu="@menu/menu_fab"
+        android:id="@+id/fab_speed"
+        app:fabBackgroundTint="?attr/colorPrimaryDark"
+        app:miniFabTitleTextColor="?attr/colorPrimaryDark" />
 
 </android.support.design.widget.CoordinatorLayout>
 
