@@ -36,4 +36,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-identity:8.4.0'
     compile 'com.github.arimorty:floatingsearchview:1.1.2'
     compile 'ch.acra:acra:4.3.0'
+    compile files('libs/gson-2.4.jar')
 }

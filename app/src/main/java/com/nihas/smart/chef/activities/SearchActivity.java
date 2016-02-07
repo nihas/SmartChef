@@ -19,6 +19,10 @@ import com.arlib.floatingsearchview.util.view.IconImageView;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.adapters.IngredientsAdapter;
 import com.nihas.smart.chef.pojos.CupPojo;
+import com.nihas.smart.chef.utils.ColorSuggestion;
+import com.nihas.smart.chef.utils.DataHelper;
+
+import java.util.List;
 
 /**
  * Created by snyxius on 27/11/15.
@@ -53,6 +57,34 @@ FloatingSearchView mSearchView;
 
                 //pass them on to the search view
 //                mSearchView.swapSuggestions(newSuggestions);
+
+                if (!oldQuery.equals("") && newQuery.equals("")) {
+                    mSearchView.clearSuggestions();
+                } else {
+
+                    //this shows the top left circular progress
+                    //you can call it where ever you want, but
+                    //it makes sense to do it when loading something in
+                    //the background.
+                    mSearchView.showProgress();
+
+                    //simulates a query call to a data source
+                    //with a new query.
+                    DataHelper.find(SearchActivity.this, newQuery, new DataHelper.OnFindResultsListener() {
+
+                        @Override
+                        public void onResults(List<ColorSuggestion> results) {
+
+                            //this will swap the data and
+                            //render the collapse/expand animations as necessary
+                            mSearchView.swapSuggestions(results);
+
+                            //let the users know that the background
+                            //process has completed
+                            mSearchView.hideProgress();
+                        }
+                    });
+                }
             }
         });
 
@@ -65,6 +97,15 @@ FloatingSearchView mSearchView;
             }
 
         });
+
+        mSearchView.setOnHomeActionClickListener(
+                new FloatingSearchView.OnHomeActionClickListener() {
+
+                    @Override
+                    public void onHomeClicked() {
+                        finish();
+                    }
+                });
 
     }
 }
