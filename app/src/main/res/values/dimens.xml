@@ -3,4 +3,14 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="viewpager_circleindicator_radius">4.5dp</dimen>
+    <dimen name="padding_normal">10dp</dimen>
+
+    <!-- How To Screen Margins -->
+    <dimen name="margin_top_for_indicator">10dp</dimen>
+    <dimen name="margin_top_for_skip">8dp</dimen>
+    <dimen name="slidingmenu_offset">60dp</dimen>
+    <dimen name="list_padding">10dp</dimen>
+    <dimen name="shadow_width">15dp</dimen>
 </resources>
