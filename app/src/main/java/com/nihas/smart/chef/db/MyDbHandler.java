@@ -166,12 +166,22 @@ Boolean hiii;
         return id > 0;
     }
 
+    public void removeAll()
+    {
+        // db.delete(String tableName, String whereClause, String[] whereArgs);
+        // If whereClause is null, it will delete all rows.
+        SQLiteDatabase db = getWritableDatabase(); // helper is object extends SQLiteOpenHelper
+        db.delete(TABLE_PRODUCTS, null, null);
+    }
+
 
     public Cursor getAllCup() {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.query(TABLE_PRODUCTS, new String[] { COLUMN_ID, COLUMN_PRODUCTNAME,
                 COLUMN_MEASUREMENT,COLUMN_IMAGE_URL,COLUMN_QUANTITY }, null, null, null, null, null);
     }
+
+
 
 
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/landing_img_slide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/ic_launcher"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:padding="20dp"
+        android:layout_marginBottom="120dp">
+
+
+        <TextView
+            android:id="@+id/landing_txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PROMISE"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:shadowColor="#000000"
+            android:shadowRadius="1"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/landing_txt_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:lineSpacingExtra="3dp"
+            android:layout_marginTop="15dp"
+            android:text="We'll help you eith fitness goals"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:shadowColor="#000000"
+            android:shadowRadius="1"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:layout_gravity="center_horizontal"/>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

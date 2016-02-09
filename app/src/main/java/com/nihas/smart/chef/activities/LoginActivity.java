@@ -3,12 +3,19 @@ package com.nihas.smart.chef.activities;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -34,6 +41,7 @@ import com.nihas.smart.chef.Constants;
 import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.app.SmartChefApp;
+import com.nihas.smart.chef.utils.CirclePageIndicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,12 +87,16 @@ private ConnectionResult mConnectionResult;
 
 
     private void initialise(){
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         loginButton = (LoginButton) findViewById(R.id.fblogin);
 //        loginButton.setFragment(this);
         signinButton = (SignInButton)findViewById(R.id.signin);
         signinButton.setOnClickListener(this);
         findViewById(R.id.fb).setOnClickListener(this);
         findViewById(R.id.googlesignin).setOnClickListener(this);
+        viewPager.setAdapter(new ViewPagerAdapter(R.array.icons, R.array.titles, R.array.hints));
+        CirclePageIndicator mIndicator  = (CirclePageIndicator) findViewById(R.id.indicator);
+        mIndicator.setViewPager(viewPager);
     }
 
         private void initializeGooglePlus() {
@@ -415,6 +427,60 @@ private ConnectionResult mConnectionResult;
             case R.id.googlesignin:
                 processSignIn();
                 break;
+
+        }
+    }
+
+
+    public class ViewPagerAdapter extends PagerAdapter {
+
+        private int iconResId, titleArrayResId, hintArrayResId;
+
+        public ViewPagerAdapter(int iconResId, int titleArrayResId, int hintArrayResId) {
+
+            this.iconResId = iconResId;
+            this.titleArrayResId = titleArrayResId;
+            this.hintArrayResId = hintArrayResId;
+        }
+
+        @Override
+        public int getCount() {
+            return getResources().getIntArray(iconResId).length;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+
+            Drawable icon = getResources().obtainTypedArray(iconResId).getDrawable(position);
+            String title = getResources().getStringArray(titleArrayResId)[position];
+            String hint = getResources().getStringArray(hintArrayResId)[position];
+
+
+            View itemView = getLayoutInflater().inflate(R.layout.viewpager_item, container, false);
+
+
+            ImageView iconView = (ImageView) itemView.findViewById(R.id.landing_img_slide);
+            TextView titleView = (TextView) itemView.findViewById(R.id.landing_txt_title);
+            TextView hintView = (TextView) itemView.findViewById(R.id.landing_txt_hint);
+
+
+            iconView.setImageDrawable(icon);
+            titleView.setText(title);
+            hintView.setText(hint);
+
+            container.addView(itemView);
+
+            return itemView;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((RelativeLayout) object);
 
         }
     }

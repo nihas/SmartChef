@@ -2,6 +2,7 @@ package com.nihas.smart.chef.fragments;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -19,10 +20,16 @@ import com.nihas.smart.chef.activities.RecipeActivity;
 import com.nihas.smart.chef.activities.RecipeDetailsActivity;
 import com.nihas.smart.chef.adapters.CupAdapter;
 import com.nihas.smart.chef.adapters.RecipesAdapter;
+import com.nihas.smart.chef.api.WebRequest;
+import com.nihas.smart.chef.api.WebServices;
+import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.pojos.RecipesPojo;
 import com.nihas.smart.chef.utils.RecyclerItemClickListener;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -35,6 +42,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     RecipesAdapter recipAdapter;
     RecyclerView mRecyclerView;
     TextView cupQty;
+    ProgressBar progressBar;
 
 
     public static RecipeFragment newInstance(String ings) {
@@ -57,6 +65,14 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initialise(view);
+
+        progressBar=(ProgressBar)view.findViewById(R.id.pBar);
+        if (SmartChefApp.isNetworkAvailable()) {
+            new getRecipe().execute();
+        } else {
+
+        }
+
 
         mRecyclerView=(RecyclerView)view.findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -100,6 +116,30 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
 
+        }
+    }
+
+    private class getRecipe extends AsyncTask<String, Void, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            JSONObject jsonObject = null;
+            try {
+
+                return WebRequest.getData(WebServices.searchRecipe(getArguments().getString("ingredients"), 1));
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+            return jsonObject;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jobj) {
+            super.onPostExecute(jobj);
+            progressBar.setVisibility(View.GONE);
+//            onDone(jArray);
+            SmartChefApp.showAToast(jobj+"");
         }
     }
 

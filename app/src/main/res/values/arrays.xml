@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--<array name="landing_bg">-->
+    <!--<item>@color/light_green</item>-->
+    <!--<item>@color/light_purple</item>-->
+    <!--<item>@color/light_orange</item>-->
+    <!--<item>@color/light_cyan</item>-->
+
+    <!--</array>-->
+
+    <array name="icons">
+        <item>@drawable/splash1</item>
+        <item>@drawable/splash1</item>
+        <item>@drawable/splash1</item>
+    </array>
+
+    <string-array name="titles" >
+
+        <item>SHARE</item>
+        <item>LOVE</item>
+        <item>EAT</item>
+        <item></item>
+
+    </string-array>
+
+    <string-array name="hints" >
+
+        <item>Lorem ipsum dolor amir abcd</item>
+        <item>Lorem ipsum dolor amir abcd</item>
+        <item>Lorem ipsum dolor amir abcd</item>
+    </string-array>
+
+
+    <array name="colors">
+        <item>@color/color1</item>
+        <item>@color/color2</item>
+        <item>@color/color3</item>
+        <item>@color/color4</item>
+        <item>@color/color5</item>
+        <item>@color/color6</item>
+        <item>@color/color3</item>
+        <item>@color/color3</item>
+    </array>
+</resources>

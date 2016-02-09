@@ -1,5 +1,7 @@
 package com.nihas.smart.chef.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.widget.ProgressBar;
 
 import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.activities.MainActivity;
 import com.nihas.smart.chef.adapters.IngredientsAdapter;
 import com.nihas.smart.chef.api.WebRequest;
 import com.nihas.smart.chef.api.WebServices;
@@ -31,6 +34,8 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
     ArrayList<IngredientsPojo> listIngredients;
     IngredientsAdapter ingAdapter;
     ProgressBar progressBar;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

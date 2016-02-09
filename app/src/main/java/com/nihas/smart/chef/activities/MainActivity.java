@@ -1,5 +1,6 @@
 package com.nihas.smart.chef.activities;
 
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -9,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -35,6 +38,7 @@ import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.fragments.CategoryFragment;
 import com.nihas.smart.chef.fragments.CupFragment;
+import com.nihas.smart.chef.fragments.RecipeFragment;
 import com.nihas.smart.chef.pojos.AllPojo;
 import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.utils.RecyclerItemClickListener;
@@ -66,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitle("Smart Chef");
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
-        initDrawer();
+//        initDrawer();
 
         getSupportFragmentManager().beginTransaction().add(R.id.container,new CategoryFragment()).commit();
 
@@ -125,26 +129,20 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.setDrawerListener(drawerToggle);
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
-    }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
+//    @Override
+//    protected void onPostCreate(Bundle savedInstanceState) {
+//        super.onPostCreate(savedInstanceState);
+//        drawerToggle.syncState();
+//    }
+//
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        drawerToggle.onConfigurationChanged(newConfig);
+//    }
 
-    @Override
-    public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(Gravity.RIGHT)){
-            drawerLayout.closeDrawer(Gravity.RIGHT);
-        }else
-            super.onBackPressed();
 
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -159,19 +157,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //do stuff here
-//                Intent intent = new Intent(MainActivity.this, CupActivity.class);
-//                startActivity(intent);
 
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container_drawer,new CupFragment().newInstance(drawerLayout), "CupFragment")
-                        .commit();
-                if(isOpen) {
-                    drawerLayout.closeDrawer(Gravity.RIGHT);
-                    isOpen=false;
-                } else {
-                    drawerLayout.openDrawer(Gravity.RIGHT);
-                    isOpen=true;
-                }
+                Intent intent = new Intent(MainActivity.this, CupActivity.class);
+//                startActivity(intent);
+                startActivityForResult(intent,2);
+
+//                getSupportFragmentManager().beginTransaction()
+//                        .add(R.id.container_drawer,new CupFragment().newInstance(drawerLayout), "CupFragment")
+//                        .commit();
+//                if(isOpen) {
+//                    drawerLayout.closeDrawer(Gravity.RIGHT);
+//                    isOpen=false;
+//                } else {
+//                    drawerLayout.openDrawer(Gravity.RIGHT);
+//                    isOpen=true;
+//                }
+
+//                getSupportFragmentManager().beginTransaction().replace(R.id.container,new CupFragment()).addToBackStack(null).commit();
+
 //                getSupportFragmentManager().beginTransaction().replace(R.id.container,new CupFragment()).addToBackStack(null).commit();
 //                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
             }
@@ -189,6 +192,26 @@ public class MainActivity extends AppCompatActivity {
 
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(resultCode==2)
+        {
+//            getSupportFragmentManager().beginTransaction().replace(R.id.container,new RecipeFragment()).addToBackStack(null).commit();
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            Fragment fragment = RecipeFragment.newInstance(data.getExtras().getString("ING"));
+            transaction.replace(R.id.container, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }else{
+//            getSupportFragmentManager().beginTransaction().replace(R.id.container,new CategoryFragment()).addToBackStack(null).commit();
+        }
     }
 
 
