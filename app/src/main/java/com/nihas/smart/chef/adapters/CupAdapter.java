@@ -105,7 +105,7 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
                             }
                             else {
                                 if(c.getCount()==0)
-                                    CupFragment.updateView();
+                                    CupActivity.updateView();
                                 else
                                     pojo.setCup_count(c.getCount());
                             }

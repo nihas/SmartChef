@@ -35,7 +35,7 @@ public class CupActivity extends AppCompatActivity {
     ArrayList<CupPojo> listIngredients;
     CupAdapter cupAdapter;
     static TextView emptyView;
-    Button cookButton;
+    static Button cookButton;
     ProgressBar progressBar;
 
 
@@ -153,6 +153,11 @@ initialise();
         intent.putExtra("MESSAGE","msg");
         setResult(1, intent);
         finish();
+    }
+
+    public static void updateView(){
+        emptyView.setVisibility(View.VISIBLE);
+        cookButton.setVisibility(View.GONE);
     }
 }
 
