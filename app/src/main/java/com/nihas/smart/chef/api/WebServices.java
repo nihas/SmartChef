@@ -61,8 +61,12 @@ Response
                       "Restaurant",
                        "Halls"
                 ]
+
 }
 */
+    public static final String searchRecipeQuick(String query) {
+        return "http://quickshop.ae/beta/api/shops/getProductSearchResultByKeyword?shop_id=1&query="+query;
+    }
 
     public static final String searchRecipe(String ingredients,int page){
         return baseUrl + "searchit.php?ins="+ingredients+"&key="+SECRET_KEY+"&page="+page;

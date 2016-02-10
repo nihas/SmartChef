@@ -2,11 +2,20 @@ package com.nihas.smart.chef.utils;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.view.View;
 import android.widget.Filter;
 
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.nihas.smart.chef.api.WebRequest;
+import com.nihas.smart.chef.api.WebServices;
+import com.nihas.smart.chef.app.SmartChefApp;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,9 +52,13 @@ public class DataHelper {
 
         public static void find(Context context, String query, final OnFindResultsListener listener){
 
-                initColorWrapperList(context);
+//                initColorWrapperList(context);
 
-                new Filter(){
+
+                new getSearchQuery().execute(query);
+
+
+               /* new Filter(){
 
                         @Override
                         protected FilterResults performFiltering(CharSequence constraint) {
@@ -76,7 +89,7 @@ public class DataHelper {
                                 if(listener!=null)
                                         listener.onResults((List<ColorSuggestion>)results.values);
                         }
-                }.filter(query);
+                }.filter(query);*/
 
         }
 
@@ -86,6 +99,42 @@ public class DataHelper {
 
                         String jsonString = loadJson(context);
                         sColorWrappers = deserializeColors(jsonString);
+                }
+        }
+
+        private static class getSearchQuery extends AsyncTask<String, Void, JSONObject> {
+
+                @Override
+                protected JSONObject doInBackground(String... params) {
+                        JSONObject jsonObject = null;
+                        try {
+                                return WebRequest.getData(WebServices.searchRecipeQuick(params[0]));
+                        } catch (Exception e) {
+
+                                e.printStackTrace();
+                        }
+                        return jsonObject;
+                }
+
+                @Override
+                protected void onPostExecute(JSONObject jobj) {
+                        super.onPostExecute(jobj);
+                        SmartChefApp.showAToast(jobj + "");
+                        List<String> suggestionList = new ArrayList<>();
+                        try {
+                                JSONArray jarray=jobj.getJSONArray("products");
+                                for(int i=0;i<jarray.length();i++){
+                                        JSONObject jobj2=jarray.getJSONObject(i);
+                                        suggestionList.add(jobj2.getString("product_name"));
+                                }
+
+
+                        } catch (JSONException e) {
+                                e.printStackTrace();
+                        }
+
+//                        progressBar.setVisibility(View.GONE);
+//                        onDone(jArray);
                 }
         }
 
