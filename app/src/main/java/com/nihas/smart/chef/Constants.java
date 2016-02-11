@@ -7,7 +7,7 @@ public class Constants {
 
     public static final String NA = "NA";
 
-    public static final int LIMIT = 8;
+    public static final int  LIMIT = 8;
 
 
     public static final String DEFAULT_STRING = "";

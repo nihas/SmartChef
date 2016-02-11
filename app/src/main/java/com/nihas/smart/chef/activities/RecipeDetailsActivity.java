@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -46,6 +47,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     ImageView thumb;
     ImageLoader imageLoader;
     DisplayImageOptions options;
+    Bundle extras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //        initializeRecylceView();
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        extras=getIntent().getExtras();
 
 //        getSupportActionBar().setTitle("Rasperry Ice");
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -69,6 +72,11 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        if(SmartChefApp.isNetworkAvailable()){
+            new getRecipe().execute(extras.getString("RECIPE_ID"));
+            Log.e("IID",extras.getString("RECIPE_ID"));
+        }
 
         options = new DisplayImageOptions.Builder().cacheInMemory(true)
                 .displayer(new BitmapDisplayer() {
@@ -137,14 +145,14 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
 
 
-    private class getRecipes extends AsyncTask<String, Void, JSONObject> {
+    private class getRecipe extends AsyncTask<String, Void, JSONArray> {
 
         @Override
-        protected JSONObject doInBackground(String... params) {
-            JSONObject jsonObject = null;
+        protected JSONArray doInBackground(String... params) {
+            JSONArray jsonObject = null;
             try {
 
-                return WebRequest.getData(WebServices.getRecipeById(3));
+                return WebRequest.getDataJSONArray(WebServices.getRecipeById(Integer.parseInt(params[0])));
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -153,8 +161,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(JSONObject jArray) {
+        protected void onPostExecute(JSONArray jArray) {
             super.onPostExecute(jArray);
+            SmartChefApp.showAToast(jArray+"");
 //            progressBar.setVisibility(View.GONE);
 //            onDone(jArray);
         }

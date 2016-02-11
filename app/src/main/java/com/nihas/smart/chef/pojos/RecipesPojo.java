@@ -5,31 +5,90 @@ package com.nihas.smart.chef.pojos;
  */
 public class RecipesPojo {
 
-    String name;
-    String image_url;
-    String serve_to;
-    String time_taken;
+//    String name;
+//    String image_url;
+//    String serve_to;
+//    String time_taken;
 
-    public RecipesPojo(String Name, String Image_url, String serve, String time){
-        this.name=Name;
-        this.image_url=Image_url;
-        this.serve_to=serve;
-        this.time_taken=time;
+    String id;
+    String name;
+    String veg;
+    String serves;
+    String food_kind;
+    String cuisine;
+    String preparation_time;
+    String media_url;
+    String media_type;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getServe_to() {
-        return serve_to;
+    public String getVeg() {
+        return veg;
     }
 
-    public String getTime_taken() {
-        return time_taken;
+    public void setVeg(String veg) {
+        this.veg = veg;
+    }
+
+    public String getServes() {
+        return serves;
+    }
+
+    public void setServes(String serves) {
+        this.serves = serves;
+    }
+
+    public String getFood_kind() {
+        return food_kind;
+    }
+
+    public void setFood_kind(String food_kind) {
+        this.food_kind = food_kind;
+    }
+
+    public String getCuisine() {
+        return cuisine;
+    }
+
+    public void setCuisine(String cuisine) {
+        this.cuisine = cuisine;
+    }
+
+    public String getPreparation_time() {
+        return preparation_time;
+    }
+
+    public void setPreparation_time(String preparation_time) {
+        this.preparation_time = preparation_time;
+    }
+
+    public String getMedia_url() {
+        return media_url;
+    }
+
+    public void setMedia_url(String media_url) {
+        this.media_url = media_url;
+    }
+
+    public String getMedia_type() {
+        return media_type;
+    }
+
+    public void setMedia_type(String media_type) {
+        this.media_type = media_type;
     }
 }

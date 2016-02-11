@@ -100,11 +100,13 @@
         android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/food_type"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/veg_icon"/>
 
     <ImageView
+        android:id="@+id/fav"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/fav"

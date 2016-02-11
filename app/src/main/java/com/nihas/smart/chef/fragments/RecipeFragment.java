@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.RecipeActivity;
 import com.nihas.smart.chef.activities.RecipeDetailsActivity;
@@ -29,6 +31,7 @@ import com.nihas.smart.chef.pojos.RecipesPojo;
 import com.nihas.smart.chef.utils.RecyclerItemClickListener;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ import java.util.ArrayList;
 /**
  * Created by Nihas on 29-11-2015.
  */
-public class RecipeFragment extends Fragment implements View.OnClickListener {
+public class RecipeFragment extends Fragment implements View.OnClickListener,Keys {
 
     ArrayList<RecipesPojo> listRecipes;
     RecipesAdapter recipAdapter;
@@ -77,13 +80,14 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
         mRecyclerView=(RecyclerView)view.findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        recipAdapter=new RecipesAdapter(getActivity(),getIngredients());
-        mRecyclerView.setAdapter(recipAdapter);
+
 
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+//                SmartChefApp.showAToast(listRecipes.get(position).getId()+"");
                 Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
+                intent.putExtra("RECIPE_ID",listRecipes.get(position).getId());
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
             }
@@ -139,12 +143,48 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
             super.onPostExecute(jobj);
             progressBar.setVisibility(View.GONE);
 //            onDone(jArray);
-            SmartChefApp.showAToast(jobj+"");
+//            SmartChefApp.showAToast(jobj+"");
+            try {
+
+                if(Integer.parseInt(jobj.getString("results"))>0){
+                    listRecipes=new ArrayList<>();
+                    for(int i=0;i<Integer.parseInt(jobj.getString("results"));i++){
+                        JSONObject innerjobj=new JSONObject(jobj.getString(String.valueOf(i)));
+                        RecipesPojo pojo=new RecipesPojo();
+
+                        pojo.setId(innerjobj.getString(Keys.id));
+                        pojo.setName(innerjobj.getString(Keys.name));
+                        pojo.setVeg(innerjobj.getString(Keys.veg));
+                        pojo.setServes(innerjobj.getString(Keys.serves));
+                        if(!innerjobj.isNull(Keys.food_kind))
+                            pojo.setFood_kind(innerjobj.getString(Keys.food_kind));
+                        if(!innerjobj.isNull(Keys.cuisine))
+                            pojo.setCuisine(innerjobj.getString(Keys.cuisine));
+                        if(!innerjobj.isNull(Keys.preparation_time))
+                            pojo.setPreparation_time(innerjobj.getString(Keys.preparation_time));
+                        if(!innerjobj.isNull(Keys.media_url))
+                            pojo.setMedia_url("http://airesearch.xyz/recipe/"+innerjobj.getString(Keys.media_url));
+                        else
+                            pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                        if (!innerjobj.isNull(Keys.media_type))
+                            pojo.setMedia_type(innerjobj.getString(Keys.media_type));
+
+                        listRecipes.add(pojo);
+                    }
+
+
+
+                    recipAdapter=new RecipesAdapter(getActivity(),listRecipes);
+                    mRecyclerView.setAdapter(recipAdapter);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
 
-    public ArrayList<RecipesPojo> getIngredients(){
+   /* public ArrayList<RecipesPojo> getIngredients(){
         listRecipes=new ArrayList<>();
 //        String[] array=getResources().getStringArray(R.array.fruits);
 //        listIngredients=new ArrayList<>(Arrays.asList(array));
@@ -164,6 +204,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
         return listRecipes;
 
 
-    }
+    }*/
 
 }

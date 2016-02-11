@@ -12,4 +12,14 @@ public interface Keys {
 
     public static final String email = "email";
 
+
+
+    public static final String veg="veg";
+    public static final String serves="serves";
+    public static final String food_kind="food_kind";
+    public static final String cuisine="cuisine";
+    public static final String preparation_time="preparation_time";
+    public static final String media_url="media_url";
+    public static final String media_type="media_type";
+
 }

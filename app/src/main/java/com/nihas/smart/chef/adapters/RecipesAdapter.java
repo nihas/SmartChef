@@ -70,7 +70,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView title,serveTo,timeTaken;
-        ImageView thumbnail;
+        ImageView thumbnail,foodType,fav;
 //        LinearLayout addLayout,plusMinusLayout;
         public ViewHolder(View v) {
             super(v);
@@ -79,6 +79,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             serveTo=(TextView)v.findViewById(R.id.serve_to);
             timeTaken=(TextView)v.findViewById(R.id.time_taken);
 //            minusToCup=(TextView)v.findViewById(R.id.minusToCup);
+            foodType=(ImageView)v.findViewById(R.id.food_type);
+            fav=(ImageView)v.findViewById(R.id.fav);
 //            addPlus=(TextView)v.findViewById(R.id.addPlus);
 //            addLayout=(LinearLayout)v.findViewById(R.id.add_layout);
 //            addLayout.setVisibility(View.VISIBLE);
@@ -138,10 +140,15 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
 
         holder.title.setText(mDataset.get(position).getName());
-        imageLoader.displayImage(mDataset.get(position).getImage_url(), holder.thumbnail, options);
+        imageLoader.displayImage(mDataset.get(position).getMedia_url(), holder.thumbnail, options);
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
-    holder.serveTo.setText(mDataset.get(position).getServe_to()+"");
-        holder.timeTaken.setText(mDataset.get(position).getTime_taken());
+    holder.serveTo.setText(mDataset.get(position).getServes()+"");
+        holder.timeTaken.setText(mDataset.get(position).getPreparation_time());
+        if(Integer.parseInt(mDataset.get(position).getVeg())==1){
+            holder.foodType.setImageResource(R.drawable.veg_icon);
+        }else{
+            holder.foodType.setImageResource(R.drawable.non_veg_icon);
+        }
 
     }
 
