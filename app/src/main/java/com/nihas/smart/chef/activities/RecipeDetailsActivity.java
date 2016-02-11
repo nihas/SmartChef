@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,9 @@ import android.widget.ImageView;
 
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.adapters.RecipesAdapter;
+import com.nihas.smart.chef.api.WebRequest;
+import com.nihas.smart.chef.api.WebServices;
+import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.customui.GradientHalfoverImageDrawable;
 import com.nihas.smart.chef.pojos.RecipesPojo;
 import com.nihas.smart.chef.utils.RecyclerItemClickListener;
@@ -24,6 +28,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -127,4 +134,29 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //
 //
 //    }
+
+
+
+    private class getRecipes extends AsyncTask<String, Void, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            JSONObject jsonObject = null;
+            try {
+
+                return WebRequest.getData(WebServices.getRecipeById(3));
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+            return jsonObject;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jArray) {
+            super.onPostExecute(jArray);
+//            progressBar.setVisibility(View.GONE);
+//            onDone(jArray);
+        }
+    }
 }

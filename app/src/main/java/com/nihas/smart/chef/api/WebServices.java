@@ -9,6 +9,8 @@ public class WebServices {
 
     public static final String baseUrl = "http://creatingfutures.in/sarath/recipe/apis/";
 
+    public static final String baseUrl2 = "http://airesearch.xyz/recipe/apis/";
+
     public static final String signUp = baseUrl +  "merchants/signUp";
 
     /*
@@ -78,6 +80,10 @@ Response
 
     public static final String getIngredients(int cat_id){
         return baseUrl + "cat_ingredients.php?cat="+cat_id+"&key="+SECRET_KEY;
+    }
+
+    public static final String getRecipeById(int recipe_id){
+        return baseUrl2 + "one_recipe.php?rid="+recipe_id+"&key="+SECRET_KEY;
     }
 
     public static final String cuisine = baseUrl  + "establishmenttype/cuisine";
