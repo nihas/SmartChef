@@ -164,6 +164,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         protected void onPostExecute(JSONArray jArray) {
             super.onPostExecute(jArray);
             SmartChefApp.showAToast(jArray+"");
+
+            for(int i=0;i<jArray.length();i++){
+
+            }
 //            progressBar.setVisibility(View.GONE);
 //            onDone(jArray);
         }

@@ -19,7 +19,6 @@
             android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="#000000"
-            android:layout_toLeftOf="@+id/imageView"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
@@ -53,6 +52,110 @@
             android:background="?selectableItemBackground"
             android:layout_alignParentRight="true"
             android:id="@+id/fav_button" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/ing_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INGREDIENTS"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ing_text"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Apple"
+            android:textColor="#000000"/>
+
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="2 Pc"
+                android:textColor="#000000"
+                android:layout_alignParentRight="true"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Apple"
+                    android:textColor="#000000"/>
+
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="2 Pc"
+                    android:textColor="#000000"
+                    android:layout_alignParentRight="true"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Apple"
+                    android:textColor="#000000"/>
+
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="2 Pc"
+                    android:textColor="#000000"
+                    android:layout_alignParentRight="true"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
 
     </RelativeLayout>
 
@@ -113,9 +216,10 @@
             android:padding="8dp"
             android:clickable="true"
             android:focusable="true"
+            android:visibility="gone"
             android:background="?selectableItemBackground"
             android:layout_alignParentRight="true"/>
-        
+
 
 
         <ImageView
