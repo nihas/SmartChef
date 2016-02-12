@@ -3,6 +3,9 @@ package com.nihas.smart.chef.activities;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -37,6 +40,7 @@ public class CupActivity extends AppCompatActivity {
     static TextView emptyView;
     static Button cookButton;
     ProgressBar progressBar;
+    Toolbar toolbar;
 
 
     @Override
@@ -44,8 +48,24 @@ public class CupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cup);
 initialise();
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitle("CUP");
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
 
 
