@@ -102,10 +102,12 @@ initialise();
             if (getIngredients().isEmpty()) {
                 mRecyclerView.setVisibility(View.GONE);
                 emptyView.setVisibility(View.VISIBLE);
+                cookButton.setVisibility(View.GONE);
             }
             else {
                 mRecyclerView.setVisibility(View.VISIBLE);
                 emptyView.setVisibility(View.GONE);
+                cookButton.setVisibility(View.VISIBLE);
             }
 
             cookButton.setOnClickListener(new View.OnClickListener() {
