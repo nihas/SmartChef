@@ -69,7 +69,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView title,serveTo,timeTaken;
+        public TextView title,serveTo,timeTaken,cusine;
         ImageView thumbnail,foodType,fav;
 //        LinearLayout addLayout,plusMinusLayout;
         public ViewHolder(View v) {
@@ -78,6 +78,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 //            mTitleLetter=(TextView)v.findViewById(R.id.titleLetter);
             serveTo=(TextView)v.findViewById(R.id.serve_to);
             timeTaken=(TextView)v.findViewById(R.id.time_taken);
+            cusine=(TextView)v.findViewById(R.id.cusine);
 //            minusToCup=(TextView)v.findViewById(R.id.minusToCup);
             foodType=(ImageView)v.findViewById(R.id.food_type);
             fav=(ImageView)v.findViewById(R.id.fav);
@@ -143,6 +144,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         imageLoader.displayImage(mDataset.get(position).getMedia_url(), holder.thumbnail, options);
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
     holder.serveTo.setText(mDataset.get(position).getServes()+"");
+        holder.cusine.setText(mDataset.get(position).getCuisine());
         holder.timeTaken.setText(mDataset.get(position).getPreparation_time());
         if(Integer.parseInt(mDataset.get(position).getVeg())==1){
             holder.foodType.setImageResource(R.drawable.veg_icon);

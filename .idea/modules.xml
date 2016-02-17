@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/SmartChef.iml" filepath="$PROJECT_DIR$/SmartChef.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/fablibrary/fablibrary.iml" filepath="$PROJECT_DIR$/fablibrary/fablibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/searchview/searchview.iml" filepath="$PROJECT_DIR$/searchview/searchview.iml" />
     </modules>
   </component>
 </project>

@@ -18,13 +18,32 @@
         android:layout_below="@+id/toolbar"
         android:layout_above="@+id/cook_button"/>
 
-    <TextView
+    <LinearLayout
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+
+    <ImageView
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
         android:textColor="#000000"
-        android:text="no data available"
-        android:layout_centerInParent="true"/>
+        android:src="@drawable/cup_empty"
+        android:text="no data available"/>
+
+        <Button
+            android:id="@+id/add_ing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Ingredients"
+            android:textColor="#ffffff"
+            android:layout_marginTop="5dp"
+            android:background="@color/colorPrimaryDark"
+            />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/cook_button"

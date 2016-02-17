@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.customui.GradientoverImageDrawable;
 import com.nihas.smart.chef.pojos.AllPojo;
@@ -116,7 +117,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         // - replace the contents of the view with that element
         holder.Title.setText(mDataset.get(position).getTitle());
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mImageView);
-        imageLoader.displayImage(SmartChefApp.getImageUrl(mDataset.get(position).getUrl()), holder.catIcon, options);
+        imageLoader.displayImage(WebServices.getImagePath(mDataset.get(position).getUrl()), holder.catIcon, options);
 //        holder.SubTitle.setText(mDataset.get(position).getSubTitle());
 //        holder.catIcon.setImageResource(mDataset.get(position).getImg_drawable());
 

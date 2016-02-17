@@ -4,17 +4,29 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
+import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.adapters.RecipesAdapter;
 import com.nihas.smart.chef.api.WebRequest;
@@ -31,6 +43,7 @@ import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -44,10 +57,14 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     ArrayList<RecipesPojo> listRecipes;
     RecipesAdapter recipAdapter;
-    ImageView thumb;
+    ImageView thumb,isVeg;
     ImageLoader imageLoader;
     DisplayImageOptions options;
     Bundle extras;
+    LinearLayout IngView,fullView;
+    TextView recipeName,cusineType,howToCook;
+    ProgressBar pBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +74,21 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         extras=getIntent().getExtras();
+        fullView=(LinearLayout)findViewById(R.id.full_layout);
+        fullView.setVisibility(View.GONE);
 
+        thumb=(ImageView)findViewById(R.id.thumb);
+        thumb.setVisibility(View.GONE);
+        pBar=(ProgressBar)findViewById(R.id.progressBar);
+        IngView=(LinearLayout)findViewById(R.id.ing_view);
+        recipeName=(TextView)findViewById(R.id.recipe_name);
+        cusineType=(TextView)findViewById(R.id.cuisine_type);
+        howToCook=(TextView)findViewById(R.id.how_to_cook);
+        isVeg=(ImageView)findViewById(R.id.is_veg);
 //        getSupportActionBar().setTitle("Rasperry Ice");
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        thumb=(ImageView)findViewById(R.id.thumb);
         final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
@@ -96,7 +122,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         imageLoader = ImageLoader.getInstance();
         imageLoader.destroy();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
-        imageLoader.displayImage("http://www.twopeasandtheirpod.com/wp-content/uploads/2013/07/Vegan-Coconut-Raspberry-Ice-Cream-7.jpg", thumb, options);
+
     }
 
 //    private void initializeRecylceView() {
@@ -163,13 +189,153 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(JSONArray jArray) {
             super.onPostExecute(jArray);
-            SmartChefApp.showAToast(jArray+"");
+
+            pBar.setVisibility(View.GONE);
+            fullView.setVisibility(View.VISIBLE);
+            thumb.setVisibility(View.VISIBLE);
 
             for(int i=0;i<jArray.length();i++){
 
+                try {
+                    JSONObject jobj=jArray.getJSONObject(i);
+                    if(!jobj.isNull(Keys.name))
+                    recipeName.setText(jobj.getString("name"));
+                    if(!jobj.isNull("how_to_cook"))
+                    howToCook.setText(jobj.getString("how_to_cook"));
+                    if(!jobj.isNull("cuisine"))
+                        cusineType.setText(jobj.getString("cuisine"));
+                    if(!jobj.isNull("veg")) {
+                        if(Integer.parseInt(jobj.getString("veg"))==1){
+                            isVeg.setImageResource(R.drawable.veg_icon);
+                        }else{
+                            isVeg.setImageResource(R.drawable.non_veg_icon);
+                        }
+                    }
+                    JSONArray attachmentarr=jobj.getJSONArray("attachments");
+                    for(int j=0;j<attachmentarr.length();j++) {
+                        JSONObject jobj2=attachmentarr.getJSONObject(j);
+                        if((!jobj2.isNull("media_type"))&&(!jobj2.isNull("media_url"))){
+                            if(jobj2.getString("media_type").equals("video")){
+                                imageLoader.displayImage("http://collegemix.ca/img/placeholder.png", thumb, options);
+                            }else{
+                                imageLoader.displayImage(jobj2.getString("media_url"), thumb, options);
+                            }
+                        }
+
+                    }
+
+
+                    JSONArray jarr2=jobj.getJSONArray("ingredients");
+                    for(int j=0;j<jarr2.length();j++) {
+
+                        JSONObject jobj2=jarr2.getJSONObject(j);
+
+                        LinearLayout childLayout = new LinearLayout(
+                                RecipeDetailsActivity.this);
+
+                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT);
+                        childLayout.setLayoutParams(linearParams);
+
+                        TextView mType = new TextView(RecipeDetailsActivity.this);
+                        TextView mValue = new TextView(RecipeDetailsActivity.this);
+
+                        mType.setLayoutParams(new TableLayout.LayoutParams(
+                                0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        mValue.setLayoutParams(new TableLayout.LayoutParams(
+                                0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+
+                        mType.setTextSize(17);
+                        mType.setPadding(5, 3, 0, 3);
+                        mType.setTypeface(Typeface.DEFAULT_BOLD);
+                        mType.setGravity(Gravity.LEFT | Gravity.CENTER);
+
+                        mValue.setTextSize(16);
+                        mValue.setPadding(5, 3, 0, 3);
+                        mValue.setTypeface(null, Typeface.ITALIC);
+                        mValue.setGravity(Gravity.LEFT | Gravity.CENTER);
+
+                        mType.setText(jobj2.getString("name"));
+                        if(!jobj.isNull("qty"))
+                            mValue.setText(jobj2.getString("qty")+" "+jobj2.getString("qty_type"));
+                        else
+                            mValue.setText("0 "+jobj2.getString("qty_type"));
+
+
+                        childLayout.addView(mType);
+                        childLayout.addView(mValue);
+
+                        IngView.addView(childLayout);
+
+
+
+
+//                        LinearLayout inside=new LinearLayout(RecipeDetailsActivity.this);
+//                        inside.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                        inside.setOrientation(LinearLayout.HORIZONTAL);
+//
+//
+//                        TextView ing=new TextView(RecipeDetailsActivity.this);
+////                        ing.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT,1));
+//                        ing.setText(jobj2.getString("name"));
+//                        inside.addView(ing);
+//
+//                        TextView qty=new TextView(RecipeDetailsActivity.this);
+////                        qty.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT,1));
+//                        qty.setText(jobj2.getString("qty_type"));
+//                        inside.addView(ing);
+//
+//                        IngView.addView(inside);
+
+
+
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 //            progressBar.setVisibility(View.GONE);
 //            onDone(jArray);
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_fab, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_share) {
+
+            String image_url = "http://images.cartradeexchange.com//img//800//vehicle//Honda_Brio_562672_5995_6_1438153637072.jpg";
+            Uri uri =  Uri.parse( "http://images.cartradeexchange.com//img//800//vehicle//Honda_Brio_562672_5995_6_1438153637072.jpg" );
+
+            Intent shareIntent = new Intent();
+            shareIntent.setType("image/*");
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            shareIntent.setAction(Intent.ACTION_SEND);
+
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Download Smart Chef to view recipe: "+recipeName.getText());
+            shareIntent.putExtra(Intent.EXTRA_STREAM,uri);
+            // Target whatsapp:
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            try {
+                startActivity(shareIntent);
+            } catch (android.content.ActivityNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

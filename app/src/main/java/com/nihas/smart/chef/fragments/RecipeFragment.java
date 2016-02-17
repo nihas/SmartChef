@@ -34,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 /**
@@ -129,8 +130,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener,Key
         protected JSONObject doInBackground(String... params) {
             JSONObject jsonObject = null;
             try {
-
-                return WebRequest.getData(WebServices.searchRecipe(getArguments().getString("ingredients"), 1));
+                String param=getArguments().getString("ingredients");
+                String encodedpara = URLEncoder.encode(param, "UTF-8");
+                return WebRequest.getData(WebServices.searchRecipe(encodedpara, 1));
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -149,6 +151,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener,Key
                 if(Integer.parseInt(jobj.getString("results"))>0){
                     listRecipes=new ArrayList<>();
                     for(int i=0;i<Integer.parseInt(jobj.getString("results"));i++){
+//                    for(int i=0;i<10;i++){
                         JSONObject innerjobj=new JSONObject(jobj.getString(String.valueOf(i)));
                         RecipesPojo pojo=new RecipesPojo();
 
@@ -163,7 +166,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener,Key
                         if(!innerjobj.isNull(Keys.preparation_time))
                             pojo.setPreparation_time(innerjobj.getString(Keys.preparation_time));
                         if(!innerjobj.isNull(Keys.media_url))
-                            pojo.setMedia_url("http://airesearch.xyz/recipe/"+innerjobj.getString(Keys.media_url));
+                            pojo.setMedia_url(innerjobj.getString(Keys.media_url));
                         else
                             pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
                         if (!innerjobj.isNull(Keys.media_type))
@@ -176,13 +179,15 @@ public class RecipeFragment extends Fragment implements View.OnClickListener,Key
 
                     recipAdapter=new RecipesAdapter(getActivity(),listRecipes);
                     mRecyclerView.setAdapter(recipAdapter);
+                }else{
+                    SmartChefApp.showAToast("No Data Available");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+                SmartChefApp.showAToast("SOMETHNG WRONG");
             }
         }
     }
-
 
    /* public ArrayList<RecipesPojo> getIngredients(){
         listRecipes=new ArrayList<>();

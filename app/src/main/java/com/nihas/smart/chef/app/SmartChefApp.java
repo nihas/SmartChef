@@ -8,9 +8,11 @@ import android.app.Application;
         import android.content.SharedPreferences;
         import android.graphics.Bitmap;
         import android.graphics.BitmapFactory;
-        import android.net.ConnectivityManager;
+import android.media.MediaMetadataRetriever;
+import android.net.ConnectivityManager;
         import android.net.NetworkInfo;
-        import android.preference.PreferenceManager;
+import android.os.Build;
+import android.preference.PreferenceManager;
         import android.util.Base64;
         import android.view.Gravity;
         import android.widget.Toast;
@@ -30,7 +32,8 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
         import java.io.InputStream;
         import java.io.InputStreamReader;
         import java.text.DateFormatSymbols;
-        import java.util.Set;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created by Nihas on 05-11-2015.
@@ -212,8 +215,37 @@ public class SmartChefApp extends Application {
         return str.replaceAll(" ", "%20");
     }
 
-    public static String getImageUrl(String path){
-        return "http://creatingfutures.in/sarath/recipe/"+path;
+    public static Bitmap retriveVideoFrameFromVideo(String videoPath)
+            throws Throwable
+    {
+        Bitmap bitmap = null;
+        MediaMetadataRetriever mediaMetadataRetriever = null;
+        try
+        {
+            mediaMetadataRetriever = new MediaMetadataRetriever();
+            if (Build.VERSION.SDK_INT >= 14)
+                mediaMetadataRetriever.setDataSource(videoPath, new HashMap<String, String>());
+            else
+                mediaMetadataRetriever.setDataSource(videoPath);
+            //   mediaMetadataRetriever.setDataSource(videoPath);
+            bitmap = mediaMetadataRetriever.getFrameAtTime();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new Throwable(
+                    "Exception in retriveVideoFrameFromVideo(String videoPath)"
+                            + e.getMessage());
+
+        }
+        finally
+        {
+            if (mediaMetadataRetriever != null)
+            {
+                mediaMetadataRetriever.release();
+            }
+        }
+        return bitmap;
     }
 
 

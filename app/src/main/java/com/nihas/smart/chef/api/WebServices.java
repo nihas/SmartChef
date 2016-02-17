@@ -10,6 +10,7 @@ public class WebServices {
     public static final String baseUrl = "http://creatingfutures.in/sarath/recipe/apis/";
 
     public static final String baseUrl2 = "http://airesearch.xyz/recipe/apis/";
+    public static final String imageUrl = "http://airesearch.xyz/recipe/";
 
     public static final String signUp = baseUrl +  "merchants/signUp";
 
@@ -69,17 +70,24 @@ Response
     public static final String searchRecipeQuick(String query) {
         return "http://quickshop.ae/beta/api/shops/getProductSearchResultByKeyword?shop_id=1&query="+query;
     }
+    public static final String searchIngRecipe(String query) {
+        return baseUrl2+"ingnrec.php?ins="+query+"&key="+SECRET_KEY;
+    }
 
     public static final String searchRecipe(String ingredients,int page){
-        return baseUrl + "searchit.php?ins="+ingredients+"&key="+SECRET_KEY+"&page="+page;
+        return baseUrl2 + "searchit.php?ins="+ingredients+"&key="+SECRET_KEY+"&page="+page;
+    }
+
+    public static String getImagePath(String path){
+        return imageUrl+path;
     }
 
     public static final String getCategories(){
-        return baseUrl + "cats.php?key="+SECRET_KEY;
+        return baseUrl2 + "cats.php?key="+SECRET_KEY;
     }
 
     public static final String getIngredients(int cat_id){
-        return baseUrl + "cat_ingredients.php?cat="+cat_id+"&key="+SECRET_KEY;
+        return baseUrl2 + "cat_ingredients.php?cat="+cat_id+"&key="+SECRET_KEY;
     }
 
     public static final String getRecipeById(int recipe_id){

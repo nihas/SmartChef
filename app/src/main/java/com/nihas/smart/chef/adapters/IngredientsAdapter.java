@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.IngredientsActivity;
 import com.nihas.smart.chef.activities.MainActivity;
+import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.customui.GradientHalfoverImageDrawable;
 import com.nihas.smart.chef.customui.GradientoverImageDrawable;
@@ -154,7 +155,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
 
         holder.mIngredient.setText(mDataset.get(position).getName());
-        imageLoader.displayImage(SmartChefApp.getImageUrl(mDataset.get(position).getImage_url()), holder.thumbnail, options);
+        imageLoader.displayImage(WebServices.getImagePath(mDataset.get(position).getImage_url()), holder.thumbnail, options);
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
 //        final ViewHolder innerHolder=holder;
 //        holder.minusToCup.setOnClickListener(new View.OnClickListener() {
@@ -216,10 +217,11 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
                    CupPojo product =
                            new CupPojo(mDataset.get(position).getName(),
-                                   SmartChefApp.getImageUrl(mDataset.get(position).getImage_url()));
+                                   WebServices.getImagePath(mDataset.get(position).getImage_url()));
                    if (!dbHandler.isIngredients(mDataset.get(position).getName())) {
                        if (dbHandler.addProduct(product)) {
-                           Toast.makeText(activity, "Added" + position, Toast.LENGTH_SHORT).show();
+//                           Toast.makeText(activity, "Added" + position, Toast.LENGTH_SHORT).show();
+                           MainActivity.showSnak(mDataset.get(position).getName()+" Added to Cup",v);
 //                           innerHolder3.quantity_text.setText(ingQty.getText().toString().trim());
 //                                       innerHolder3.plusMinusLayout.setVisibility(View.VISIBLE);
 //                                       innerHolder3.addLayout.setVisibility(View.GONE);
@@ -237,7 +239,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
 //                       dialog.dismiss();
                    } else {
-                                   Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
+//                                   Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
+                       MainActivity.showSnak(mDataset.get(position).getName()+" Already in Cup",v);
 //                                   Snackbar.make(v, "Already Exists", Snackbar.LENGTH_LONG)
 //                                           .setAction("Action", null).show();
 //                       int quantity;

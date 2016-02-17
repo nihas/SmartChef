@@ -1,111 +1,188 @@
 package com.nihas.smart.chef.activities;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
-import com.arlib.floatingsearchview.util.view.BodyTextView;
-import com.arlib.floatingsearchview.util.view.IconImageView;
+import com.lapism.searchview.adapter.SearchAdapter;
+import com.lapism.searchview.adapter.SearchItem;
+import com.lapism.searchview.history.SearchHistoryTable;
+import com.lapism.searchview.view.SearchCodes;
+import com.lapism.searchview.view.SearchView;
 import com.nihas.smart.chef.R;
-import com.nihas.smart.chef.adapters.IngredientsAdapter;
+import com.nihas.smart.chef.api.WebRequest;
+import com.nihas.smart.chef.api.WebServices;
+import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.pojos.CupPojo;
-import com.nihas.smart.chef.utils.ColorSuggestion;
-import com.nihas.smart.chef.utils.DataHelper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by snyxius on 27/11/15.
  */
 public class SearchActivity extends AppCompatActivity {
-FloatingSearchView mSearchView;
+//FloatingSearchView mSearchView;
+
+    private SearchHistoryTable mHistoryDatabase;
+    private List<SearchItem> mSuggestionsList;
+    private SearchView mSearchView;
+    private int mVersion = SearchCodes.VERSION_MENU_ITEM;
+    private int mStyle = SearchCodes.STYLE_MENU_ITEM_CLASSIC;
+    private int mTheme = SearchCodes.THEME_LIGHT;
+    SearchAdapter mSearchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_layout);
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setHomeButtonEnabled(true);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-//        upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
-//        getSupportActionBar().setHomeAsUpIndicator(upArrow);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
-        mSearchView=(FloatingSearchView)findViewById(R.id.floating_search_view);
-        mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+        mHistoryDatabase = new SearchHistoryTable(this);
+        mSuggestionsList = new ArrayList<>();
+
+        mSearchView = (SearchView) findViewById(R.id.searchView);
+        // important -------------------------------------------------------------------------------
+        mSearchView.setVersion(mVersion);
+        mSearchView.setStyle(mStyle);
+        mSearchView.setTheme(mTheme);
+        // -----------------------------------------------------------------------------------------
+        mSearchView.setDivider(false);
+        mSearchView.setHint("Search");
+        mSearchView.setHint("Search");
+        mSearchView.setHintSize(getResources().getDimension(R.dimen.search_text_medium));
+        mSearchView.setVoice(false);
+        mSearchView.setVoiceText("Voice");
+        mSearchView.setAnimationDuration(200);
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onSearchTextChanged(String oldQuery, final String newQuery) {
+            public boolean onQueryTextSubmit(String query) {
+                mSearchView.hide(false);
+                mHistoryDatabase.addItem(new SearchItem(query));
+                Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
-                //get suggestions based on newQuery
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.length() > 0)
+                    new SearchRecipe().execute(newText);
+                return false;
+            }
+        });
+        mSearchView.setOnSearchViewListener(new SearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                // mFab.hide();
+            }
 
-                //pass them on to the search view
-//                mSearchView.swapSuggestions(newSuggestions);
+            @Override
+            public void onSearchViewClosed() {
+                // mFab.show();
+            }
+        });
 
-                if (!oldQuery.equals("") && newQuery.equals("")) {
-                    mSearchView.clearSuggestions();
-                } else {
+        showSearchView();
 
-                    //this shows the top left circular progress
-                    //you can call it where ever you want, but
-                    //it makes sense to do it when loading something in
-                    //the background.
-                    mSearchView.showProgress();
+    }
 
-                    //simulates a query call to a data source
-                    //with a new query.
-                    DataHelper.find(SearchActivity.this, newQuery, new DataHelper.OnFindResultsListener() {
 
-                        @Override
-                        public void onResults(List<ColorSuggestion> results) {
+    private void showSearchView() {
+        mSuggestionsList.clear();
+        mSuggestionsList.addAll(mHistoryDatabase.getAllItems());
 
-                            //this will swap the data and
-                            //render the collapse/expand animations as necessary
-                            mSearchView.swapSuggestions(results);
+        mSearchView.show(true);
+    }
 
-                            //let the users know that the background
-                            //process has completed
-                            mSearchView.hideProgress();
-                        }
-                    });
+
+    private class SearchRecipe extends AsyncTask<String, Void, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            JSONObject jsonObject = null;
+            try {
+
+                return WebRequest.getData(WebServices.searchIngRecipe(params[0]));
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+            return jsonObject;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jobj) {
+            super.onPostExecute(jobj);
+            try {
+//                JSONObject jobj2=jobj.getJSONObject("ingredients");
+                JSONArray jarray=jobj.getJSONArray("ingredients");
+                mSuggestionsList.clear();
+                for(int i=0;i<jarray.length();i++){
+                    mSuggestionsList.add(new SearchItem(jarray.getString(i)));
                 }
-            }
-        });
+                List<SearchItem> mResultsList = new ArrayList<>();
+                mSearchAdapter = new SearchAdapter(SearchActivity.this, mResultsList, mSuggestionsList, SearchCodes.THEME_LIGHT);
+                mSearchView.setAdapter(mSearchAdapter);
 
-        mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
-            @Override
-            public void onBindSuggestion(IconImageView leftIcon, BodyTextView bodyText, SearchSuggestion item, int itemPosition) {
-
-                //here you can set some attributes for the suggestion's left icon and text. For example,
-                //you can choose your favorite image-loading library for setting the left icon's image.
-            }
-
-        });
-
-        mSearchView.setOnHomeActionClickListener(
-                new FloatingSearchView.OnHomeActionClickListener() {
-
+                mSearchAdapter.setOnItemClickListener(new SearchAdapter.OnItemClickListener() {
                     @Override
-                    public void onHomeClicked() {
-                        finish();
+                    public void onItemClick(View view, int position) {
+                        mSearchView.hide(false);
+                        TextView textView = (TextView) view.findViewById(R.id.textView_item_text);
+                        CharSequence text = textView.getText();
+                        mHistoryDatabase.addItem(new SearchItem(text));
+//                        Toast.makeText(getApplicationContext(), text + ", position: " + position, Toast.LENGTH_SHORT).show();
+
+                        MyDbHandler dbHandler = new MyDbHandler(SearchActivity.this, null, null, 1);
+
+                        CupPojo product =
+                                new CupPojo(text.toString(), "http://collegemix.ca/img/placeholder.png");
+                        if (!dbHandler.isIngredients(text.toString())) {
+                            if (dbHandler.addProduct(product)) {
+                                Toast.makeText(SearchActivity.this, "Added" + position, Toast.LENGTH_SHORT).show();
+//                           innerHolder3.quantity_text.setText(ingQty.getText().toString().trim());
+//                                       innerHolder3.plusMinusLayout.setVisibility(View.VISIBLE);
+//                                       innerHolder3.addLayout.setVisibility(View.GONE);
+//                           innerHolder3.ingMeasure.setVisibility(View.VISIBLE);
+                                Cursor c=dbHandler.getAllCup();
+                                CupPojo pojo=new CupPojo();
+                                if(c==null)
+                                    pojo.setCup_count(0);
+                                else
+                                    pojo.setCup_count(c.getCount());
+                                MainActivity.updateCupValue(pojo.getCup_count());
+                            }
+                            else
+                                Toast.makeText(SearchActivity.this, "FAILED", Toast.LENGTH_SHORT).show();
+
+//                       dialog.dismiss();
+                        } else {
+                            Toast.makeText(SearchActivity.this, "Already Exists", Toast.LENGTH_SHORT).show();
+//
+                        }
                     }
                 });
+//                SmartChefApp.showAToast(""+jobj2);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+//
+//            progressBar.setVisibility(View.GONE);
+//            onDone(jArray);
+        }
+    }
 
+
+    @Override
+    public void onBackPressed() {
+        mSearchView.hide(false);
+        finish();
     }
 }

@@ -347,7 +347,8 @@ private ConnectionResult mConnectionResult;
 
                                     URL profile_pic = new URL("https://graph.facebook.com/" + fbId + "/picture?width=200&height=150");
                                     Log.i("profile_pic", profile_pic + "");
-
+                                    SmartChefApp.saveToPreferences(LoginActivity.this, "profile_pic", profile_pic.toString());
+                                    SmartChefApp.saveToPreferences(LoginActivity.this, "user_name",object.getString("first_name")+" "+object.getString("last_name"));
 
                                     if (object.has("email")) {
                                         emailid = object.getString("email");

@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,8 +38,8 @@ public class CupActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     ArrayList<CupPojo> listIngredients;
     CupAdapter cupAdapter;
-    static TextView emptyView;
-    static Button cookButton;
+    static LinearLayout emptyView;
+    static Button cookButton,addIng;
     ProgressBar progressBar;
     Toolbar toolbar;
 
@@ -49,13 +50,13 @@ public class CupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cup);
 initialise();
         toolbar=(Toolbar)findViewById(R.id.toolbar);
-        toolbar.setTitle("CUP");
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        toolbar.setTitle("CUP");
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
 
         final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
@@ -112,7 +113,14 @@ initialise();
 //            progressBar.setVisibility(View.GONE);
 
             cookButton=(Button)findViewById(R.id.cook_button);
-            emptyView=(TextView)findViewById(R.id.empty_view);
+            addIng=(Button)findViewById(R.id.add_ing);
+            addIng.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+            emptyView=(LinearLayout)findViewById(R.id.empty_view);
             mRecyclerView=(RecyclerView)findViewById(R.id.rv);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -129,6 +137,7 @@ initialise();
                 emptyView.setVisibility(View.GONE);
                 cookButton.setVisibility(View.VISIBLE);
             }
+
 
             cookButton.setOnClickListener(new View.OnClickListener() {
                 @Override

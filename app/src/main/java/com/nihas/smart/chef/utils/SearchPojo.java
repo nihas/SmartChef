@@ -2,7 +2,6 @@ package com.nihas.smart.chef.utils;
 
 import android.os.Parcel;
 
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 
 
 public  class SearchPojo {
