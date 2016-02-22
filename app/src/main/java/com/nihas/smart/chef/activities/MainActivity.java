@@ -7,9 +7,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -17,39 +15,28 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.login.LoginManager;
 import com.lapism.searchview.adapter.SearchAdapter;
 import com.lapism.searchview.adapter.SearchItem;
 import com.lapism.searchview.history.SearchHistoryTable;
 import com.lapism.searchview.view.SearchCodes;
 import com.lapism.searchview.view.SearchView;
-import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
-import com.nihas.smart.chef.adapters.CategoryAdapter;
 import com.nihas.smart.chef.api.WebRequest;
 import com.nihas.smart.chef.api.WebServices;
-import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.fragments.CategoryFragment;
-import com.nihas.smart.chef.fragments.CupFragment;
+import com.nihas.smart.chef.fragments.DrawerFragment;
 import com.nihas.smart.chef.fragments.RecipeFragment;
-import com.nihas.smart.chef.pojos.AllPojo;
 import com.nihas.smart.chef.pojos.CupPojo;
-import com.nihas.smart.chef.utils.RecyclerItemClickListener;
+import com.nihas.smart.chef.pojos.RecipesPojo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,21 +45,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.yavski.fabspeeddial.FabSpeedDial;
-import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
-
 
 public class MainActivity extends AppCompatActivity {
 
 
     static TextView cupQty;
-    Toolbar toolbar;
+    static Toolbar toolbar;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
     public static boolean isOpen=false;
-    private SearchHistoryTable mHistoryDatabase;
+    private static SearchHistoryTable mHistoryDatabase;
     private List<SearchItem> mSuggestionsList;
-    private SearchView mSearchView;
+    private List<RecipesPojo> mSuggestionsRecipe;
+    private static SearchView mSearchView;
     private int mVersion = SearchCodes.VERSION_MENU_ITEM;
     private int mStyle = SearchCodes.STYLE_MENU_ITEM_CLASSIC;
     private int mTheme = SearchCodes.THEME_LIGHT;
@@ -83,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawerLayout=(DrawerLayout)findViewById(R.id.drawerlayout);
         setSupportActionBar(toolbar);
 
@@ -100,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         mHistoryDatabase = new SearchHistoryTable(this);
         mSuggestionsList = new ArrayList<>();
+        mSuggestionsRecipe = new ArrayList<>();
 
         mSearchView = (SearchView) findViewById(R.id.searchView);
         // important -------------------------------------------------------------------------------
@@ -199,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     private void initDrawer() {
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.container_drawer,new CupFragment().newInstance(drawerLayout), "CupFragment")
+                .add(R.id.container_drawer,new DrawerFragment().newInstance(drawerLayout), "CupFragment")
                 .commit();
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
@@ -363,9 +349,23 @@ public class MainActivity extends AppCompatActivity {
             try {
 //                JSONObject jobj2=jobj.getJSONObject("ingredients");
                 JSONArray jarray=jobj.getJSONArray("ingredients");
+                JSONArray jarray2=jobj.getJSONArray("recipes");
                 mSuggestionsList.clear();
+                mSuggestionsRecipe.clear();
                 for(int i=0;i<jarray.length();i++){
                     mSuggestionsList.add(new SearchItem(jarray.getString(i)));
+                }
+                for (int j=0;j<jarray2.length();j++){
+                    JSONObject job=jarray2.getJSONObject(j);
+                    RecipesPojo pojo=new RecipesPojo();
+                    pojo.setId(job.getString("id"));
+                    pojo.setName(job.getString("name"));
+                    pojo.setMedia_type("media_type");
+                    if(pojo.getMedia_type()=="image")
+                        pojo.setMedia_url("media_url");
+                    else
+                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                    mSuggestionsRecipe.add(pojo);
                 }
                 List<SearchItem> mResultsList = new ArrayList<>();
                 mSearchAdapter = new SearchAdapter(MainActivity.this, mResultsList, mSuggestionsList, SearchCodes.THEME_LIGHT);
@@ -433,6 +433,16 @@ public static void showSnak(String msg,View v) {
     Snackbar.make(v, msg, Snackbar.LENGTH_LONG)
                        .setAction("Action", null).show();
 }
+
+
+    public static void setTitle(String msg) {
+        toolbar.setTitle(msg);
+    }
+
+    public static void hideSearch(CharSequence text){
+        mSearchView.hide(false);
+        mHistoryDatabase.addItem(new SearchItem(text));
+    }
 
 
 }

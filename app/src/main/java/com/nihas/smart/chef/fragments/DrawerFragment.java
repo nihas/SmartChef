@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.facebook.login.LoginManager;
 import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.activities.CookBook;
 import com.nihas.smart.chef.activities.LoginActivity;
 import com.nihas.smart.chef.activities.RecipeActivity;
 import com.nihas.smart.chef.adapters.CategoryAdapter;
@@ -43,12 +44,13 @@ import java.util.ArrayList;
 /**
  * Created by Nihas on 29-11-2015.
  */
-public class CupFragment extends Fragment implements View.OnClickListener {
+public class DrawerFragment extends Fragment implements View.OnClickListener {
 
 
-    TextView logOut,userName,eMail;
+    TextView logOut,userName,eMail,myCookBook;
     CircleImageView proPic;
     ImageLoader imageLoader;
+
 
 
     @Override
@@ -65,6 +67,8 @@ public class CupFragment extends Fragment implements View.OnClickListener {
 
         logOut=(TextView)view.findViewById(R.id.log_out);
         logOut.setOnClickListener(this);
+        myCookBook=(TextView)view.findViewById(R.id.my_cook_book);
+        myCookBook.setOnClickListener(this);
         proPic=(CircleImageView)view.findViewById(R.id.profile);
         userName=(TextView)view.findViewById(R.id.username);
         eMail=(TextView)view.findViewById(R.id.email);
@@ -75,9 +79,9 @@ public class CupFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    public static  CupFragment newInstance(DrawerLayout drawer) {
+    public static  DrawerFragment newInstance(DrawerLayout drawer) {
 
-        CupFragment f = new CupFragment();
+        DrawerFragment f = new DrawerFragment();
         return f;
     }
 
@@ -110,6 +114,10 @@ public class CupFragment extends Fragment implements View.OnClickListener {
                 builder.show();
 
 
+                break;
+            case R.id.my_cook_book:
+                Intent cookIntent=new Intent(getActivity(), CookBook.class);
+                startActivity(cookIntent);
                 break;
             default:
                 SmartChefApp.showAToast("Under Construction");

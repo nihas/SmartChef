@@ -17,7 +17,6 @@ import com.nihas.smart.chef.activities.CupActivity;
 import com.nihas.smart.chef.activities.MainActivity;
 import com.nihas.smart.chef.customui.GradientoverImageDrawable;
 import com.nihas.smart.chef.db.MyDbHandler;
-import com.nihas.smart.chef.fragments.CupFragment;
 import com.nihas.smart.chef.pojos.CupPojo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -87,11 +86,6 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
-//                int quantity = Integer.parseInt(holder.quantity_text.getText().toString());
-//                if (quantity > 0) {
-//                    quantity--;
-//                    holder.quantity_text.setText(String.valueOf(quantity));
-//                    if (quantity == 0) {
                         if (dbHandler.deleteProduct(holder.mIngredient.getText().toString())) {
                             Toast.makeText(activity, "Deleted", Toast.LENGTH_SHORT).show();
                             notifyDataSetChanged();
@@ -115,15 +109,6 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
                         }
                         else
                             Toast.makeText(activity, "FAILED Delete", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        CupPojo product =
-//                                new CupPojo(holder.mIngredient.getText().toString().toString(),mDataset.get(position).getImageUrl());
-//
-//                        if (dbHandler.updateQty(product))
-//                            Toast.makeText(activity, "Updated", Toast.LENGTH_SHORT).show();
-//                        else
-//                            Toast.makeText(activity, "FAILED Update", Toast.LENGTH_SHORT).show();
-//                    }
                 }
 
         });

@@ -1,5 +1,6 @@
 package com.nihas.smart.chef.api;
 
+import android.net.Uri;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -7,9 +8,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -114,6 +117,63 @@ public class WebRequest {
         } catch (IOException e) {
             e.printStackTrace();
         }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+
+        return jsonObject;
+
+    }
+
+
+
+    public static String postDataParams(String key,String value,String url){
+        StringBuffer response = new StringBuffer();
+        String jsonObject = null;
+        URL obj = null;
+        try {
+            System.out.println("URL :: " + url);
+            obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            // For POST only - START
+            con.setDoOutput(true);
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter(key, value);
+            String query = builder.build().getEncodedQuery();
+
+            OutputStream os = con.getOutputStream();
+            os.write(query.getBytes("UTF-8"));
+            os.flush();
+            os.close();
+            // For POST only - END
+            int responseCode = con.getResponseCode();
+            System.out.println("POST Response Code :: " + responseCode);
+
+            if (responseCode == HttpURLConnection.HTTP_OK) { //success
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                        con.getInputStream()));
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // print result
+                System.out.println(response.toString());
+
+                jsonObject = response.toString();
+
+            } else {
+                System.out.println("POST request not worked");
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

@@ -83,16 +83,13 @@ public class RecipeFragment extends Fragment implements View.OnClickListener,Key
 
 
 
-        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-//                SmartChefApp.showAToast(listRecipes.get(position).getId()+"");
-                Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
-                intent.putExtra("RECIPE_ID",listRecipes.get(position).getId());
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
-            }
-        }));
+//        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+////                SmartChefApp.showAToast(listRecipes.get(position).getId()+"");
+//
+//            }
+//        }));
     }
 
 
@@ -107,7 +104,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener,Key
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 //            recipAdapter=new RecipesAdapter(this,getIngredients());
-            mRecyclerView.setAdapter(recipAdapter);
+//            mRecyclerView.setAdapter(recipAdapter);
 
 
 

@@ -112,6 +112,7 @@
         android:paddingRight="8dp">
 
         <RelativeLayout
+            android:id="@+id/review_layout"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:padding="15dp"

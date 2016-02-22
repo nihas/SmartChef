@@ -2,18 +2,28 @@ package com.nihas.smart.chef.adapters;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,6 +38,7 @@ import android.widget.Toast;
 
 
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.activities.CupActivity;
 import com.nihas.smart.chef.activities.IngredientsActivity;
 import com.nihas.smart.chef.activities.MainActivity;
 import com.nihas.smart.chef.api.WebServices;
@@ -44,6 +55,7 @@ import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +67,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     private List<IngredientsPojo> mDataset;
     ImageLoader imageLoader;
     DisplayImageOptions options;
-    Activity activity;
+    Context activity;
     Dialog dialog;
     String ingMeasure_text;
 
@@ -70,7 +82,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             "Pieces"
     };
 
-    public IngredientsAdapter(Activity activity, ArrayList<IngredientsPojo> ingredients) {
+    public IngredientsAdapter(Context activity, ArrayList<IngredientsPojo> ingredients) {
         mDataset = ingredients;
         this.activity=activity;
         imageLoader = ImageLoader.getInstance();
@@ -83,8 +95,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView addToCup,minusToCup,mIngredient,quantity_text,ingMeasure,addPlus;
-        ImageView thumbnail;
+        public TextView addToCup,minusToCup,mIngredient,quantity_text,ingMeasure;
+        ImageView thumbnail,addPlus;
         LinearLayout addLayout,plusMinusLayout;
         public ViewHolder(View v) {
             super(v);
@@ -93,7 +105,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             quantity_text=(TextView)v.findViewById(R.id.quantity);
             addToCup=(TextView)v.findViewById(R.id.addToCup);
             minusToCup=(TextView)v.findViewById(R.id.minusToCup);
-            addPlus=(TextView)v.findViewById(R.id.addPlus);
+            addPlus=(ImageView)v.findViewById(R.id.addPlus);
             addLayout=(LinearLayout)v.findViewById(R.id.add_layout);
             addLayout.setVisibility(View.VISIBLE);
             plusMinusLayout=(LinearLayout)v.findViewById(R.id.plus_minus_layout);
@@ -102,6 +114,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             ingMeasure.setVisibility(View.GONE);
             thumbnail=(ImageView)v.findViewById(R.id.maskImage);
             quantity_text.setText("0");
+
 
 //            mTextView = v;
         }
@@ -152,7 +165,12 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-
+        MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
+        if (dbHandler.isIngredients(mDataset.get(position).getName())) {
+            holder.addPlus.setImageDrawable(activity.getResources().getDrawable(R.drawable.minus));
+        }else {
+            holder.addPlus.setImageDrawable(activity.getResources().getDrawable(R.drawable.plus));
+        }
 
         holder.mIngredient.setText(mDataset.get(position).getName());
         imageLoader.displayImage(WebServices.getImagePath(mDataset.get(position).getImage_url()), holder.thumbnail, options);
@@ -208,210 +226,95 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
        holder.addPlus.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-//               int quantity=Integer.parseInt(innerHolder3.quantity_text.getText().toString());
 
-//               if (quantity>=0) {
+//               int fromLoc[] = new int[2];
+//               ImageView img=(ImageView)v.getTag();
+//               v.getLocationOnScreen(fromLoc);
+//               float startX = fromLoc[0];
+//               float startY = fromLoc[1];
 
+//               int toLoc[] = new int[2];
+//               v.getRootView().getRight();
+//               float destX = toLoc[0];
+//               float destY = toLoc[1];
+//               Display mdisp = activity.getWindowManager().getDefaultDisplay();
+//               Point mdispSize = new Point();
+//               mdisp.getSize(mdispSize);
+//               float destX = mdispSize.x;
+//               float destY = mdispSize.y;
+//               Log.e("njaaana",startX+" "+startY+" "+destX+" "+destY);
+
+//               Animation fromAtoB = new TranslateAnimation(
+//                       Animation.RELATIVE_TO_PARENT, //from xType
+//                       startX,
+//                       Animation.RELATIVE_TO_PARENT, //to xType
+//                       destX,
+//                       Animation.RELATIVE_TO_PARENT, //from yType
+//                       startY,
+//                       Animation.RELATIVE_TO_PARENT, //to yType
+//                       122
+//               );
+//
+//               fromAtoB.setDuration(3000);
+////               fromAtoB.setInterpolator(new AnticipateOvershootInterpolator(1.0f));
+//               v.setAnimation(fromAtoB);
+
+               ImageView img = (ImageView) v;
+               if (img.getDrawable().getConstantState().equals
+                       (activity.getResources().getDrawable(R.drawable.plus).getConstantState())){
+
+                   Animation anim= AnimationUtils.loadAnimation(activity,R.anim.wibble);
+                   img.setAnimation(anim);
+                   anim.start();
 
                    MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
 
-                   CupPojo product =
-                           new CupPojo(mDataset.get(position).getName(),
-                                   WebServices.getImagePath(mDataset.get(position).getImage_url()));
-                   if (!dbHandler.isIngredients(mDataset.get(position).getName())) {
-                       if (dbHandler.addProduct(product)) {
-//                           Toast.makeText(activity, "Added" + position, Toast.LENGTH_SHORT).show();
-                           MainActivity.showSnak(mDataset.get(position).getName()+" Added to Cup",v);
-//                           innerHolder3.quantity_text.setText(ingQty.getText().toString().trim());
-//                                       innerHolder3.plusMinusLayout.setVisibility(View.VISIBLE);
-//                                       innerHolder3.addLayout.setVisibility(View.GONE);
-//                           innerHolder3.ingMeasure.setVisibility(View.VISIBLE);
-                           Cursor c=dbHandler.getAllCup();
-                           CupPojo pojo=new CupPojo();
-                           if(c==null)
-                               pojo.setCup_count(0);
-                           else
-                               pojo.setCup_count(c.getCount());
-                           MainActivity.updateCupValue(pojo.getCup_count());
-                       }
+               CupPojo product =
+                       new CupPojo(mDataset.get(position).getName(),
+                               WebServices.getImagePath(mDataset.get(position).getImage_url()));
+               if (!dbHandler.isIngredients(mDataset.get(position).getName())) {
+                   if (dbHandler.addProduct(product)) {
+                       MainActivity.showSnak(mDataset.get(position).getName() + " Added to Cup", v);
+                       Cursor c = dbHandler.getAllCup();
+                       CupPojo pojo = new CupPojo();
+                       if (c == null)
+                           pojo.setCup_count(0);
                        else
-                           Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
+                           pojo.setCup_count(c.getCount());
+                       MainActivity.updateCupValue(pojo.getCup_count());
+                       holder.addPlus.setImageResource(R.drawable.minus);
+                   } else
+                       Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
 
-//                       dialog.dismiss();
-                   } else {
-//                                   Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
-                       MainActivity.showSnak(mDataset.get(position).getName()+" Already in Cup",v);
-//                                   Snackbar.make(v, "Already Exists", Snackbar.LENGTH_LONG)
-//                                           .setAction("Action", null).show();
-//                       int quantity;
-//                       quantity=Integer.parseInt(ingQty.getText().toString().trim());
-//                       CupPojo pro =
-//                               new CupPojo(mDataset.get(position).getName(),
-//                                       mDataset.get(position).getImage_url());
-//
-//                       if(dbHandler.updateQty(product)){
-//                           Toast.makeText(activity,"Updated"+position,Toast.LENGTH_SHORT).show();
-////                           dialog.dismiss();
-//                       }
-//                       else
-//                           Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
+               } else {
+                   MainActivity.showSnak(mDataset.get(position).getName() + " Already in Cup", v);
 
-//                                   holder.quantity_text.setText("0");
-//                                   dialog.dismiss();
+               }
+
+           }else{
+                   MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
+                   if (dbHandler.deleteProduct(holder.mIngredient.getText().toString())) {
+                       Toast.makeText(activity, "Deleted", Toast.LENGTH_SHORT).show();
+                       notifyDataSetChanged();
+                       Cursor c=dbHandler.getAllCup();
+                       CupPojo pojo=new CupPojo();
+                       if(c==null) {
+                           pojo.setCup_count(0);
+                       }
+                       else {
+
+                               pojo.setCup_count(c.getCount());
+                       }
+                       MainActivity.updateCupValue(pojo.getCup_count());
+                       holder.addPlus.setImageDrawable(activity.getResources().getDrawable(R.drawable.plus));
+
                    }
+                   else
+                       Toast.makeText(activity, "FAILED Delete", Toast.LENGTH_SHORT).show();
+               }
 
 
 
-
-//                   dialog = new Dialog(activity);
-//                   dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                   dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-//                   dialog.setContentView(R.layout.select_qty_dialog2);
-//                   dialog.setCanceledOnTouchOutside(true);
-//
-//                   WindowManager.LayoutParams lp = new WindowManager.LayoutParams();//dialog.getWindow().getAttributes();
-//                   lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                   lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//                   lp.dimAmount=0.60f;
-//                   dialog.getWindow().setAttributes(lp);
-//                   dialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
-//
-////                window.setAttributes(lp);
-////                   lp.dimAmount = 0.6f;
-//                   dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-//                   dialog.getWindow().setGravity(Gravity.CENTER);
-////                   lp.gravity = Gravity.CENTER;
-//
-////                lp.x = -100;   //x position
-////                lp.y = -100;   //y position
-//                   dialog.show();
-
-//                   ImageView ingImage=(ImageView)dialog.findViewById(R.id.ing_thumbnail);
-//                   final TextView ingTitle=(TextView)dialog.findViewById(R.id.ing_name);
-//                   TextView ingAdd=(TextView)dialog.findViewById(R.id.ing_add);
-//                   TextView ingMinus=(TextView)dialog.findViewById(R.id.ing_minus);
-//                   final TextView ingQty=(TextView)dialog.findViewById(R.id.ing_quantity);
-//                   final RadioGroup ingMeasure=(RadioGroup)dialog.findViewById(R.id.rGroup);
-//                   final RadioButton button1=(RadioButton)dialog.findViewById(R.id.rb1);
-//                   final RadioButton button2=(RadioButton)dialog.findViewById(R.id.rb2);
-//                   final RadioButton button3=(RadioButton)dialog.findViewById(R.id.rb3);
-////                   final Spinner ingMeasure=(Spinner)dialog.findViewById(R.id.ing_measure);
-//                   Button ingAddtoCup=(Button)dialog.findViewById(R.id.ing_addtoocup);
-
-//                   imageLoader.displayImage(mDataset.get(position).getImage_url(), ingImage, options);
-//                   ingTitle.setText(mDataset.get(position).getName().toString());
-//                   ingQty.setText("0");
-//                   ingAdd.setOnClickListener(new View.OnClickListener() {
-//                       @Override
-//                       public void onClick(View v) {
-//                           int qty = Integer.parseInt(ingQty.getText().toString().trim());
-//                           qty++;
-//                           ingQty.setText(String.valueOf(qty));
-//                       }
-//                   });
-//                   ingMinus.setOnClickListener(new View.OnClickListener() {
-//                       @Override
-//                       public void onClick(View v) {
-//                           int qty = Integer.parseInt(ingQty.getText().toString().trim());
-//                           if(qty>0) {
-//                               qty--;
-//                               ingQty.setText(String.valueOf(qty));
-//                           }
-//                       }
-//                   });
-//                   ingAddtoCup.setOnClickListener(new View.OnClickListener() {
-//                       @Override
-//                       public void onClick(View v) {
-//
-//                           if (ingQty.getText().toString().equals("0")) {
-//                               Snackbar.make(v, "Quantity is 0", Snackbar.LENGTH_LONG)
-//                                       .setAction("Action", null).show();
-//                           }else if(ingMeasure.getCheckedRadioButtonId()==-1){
-//                               Snackbar.make(v, "Measurement not selected", Snackbar.LENGTH_LONG)
-//                                       .setAction("Action", null).show();
-//                           } else {
-//
-////                               ingMeasure.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-////                                   @Override
-////                                   public void onCheckedChanged(RadioGroup group, int checkedId) {
-////                                       if (checkedId == R.id.rb1) {
-////                                           ingMeasure_text = (String) button1.getText();
-////                                       }else if(checkedId == R.id.rb2){
-////                                           ingMeasure_text = (String) button2.getText();
-////                                       }else if(checkedId == R.id.rb3){
-////                                           ingMeasure_text = (String) button3.getText();
-////                                       }
-////                                   }
-////                               });
-//
-//                               MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
-////                                ingMeasure_text=((RadioButton)dialog.findViewById(ingMeasure.getCheckedRadioButtonId())).getText().toString();
-//
-//                               CupPojo product =
-//                                       new CupPojo(mDataset.get(position).getName(),
-//                                               mDataset.get(position).getImage_url());
-//                               if (!dbHandler.isIngredients(mDataset.get(position).getName())) {
-//                                   if (dbHandler.addProduct(product)) {
-//                                       Toast.makeText(activity, "Added" + position, Toast.LENGTH_SHORT).show();
-////                                       innerHolder3.quantity_text.setText(ingQty.getText().toString().trim());
-////                                       innerHolder3.plusMinusLayout.setVisibility(View.VISIBLE);
-////                                       innerHolder3.addLayout.setVisibility(View.GONE);
-////                                       innerHolder3.ingMeasure.setVisibility(View.VISIBLE);
-//                                       Cursor c=dbHandler.getAllCup();
-//                                       CupPojo pojo=new CupPojo();
-//                                       if(c==null)
-//                                           pojo.setCup_count(0);
-//                                       else
-//                                           pojo.setCup_count(c.getCount());
-//                                       doButtonOneClickActions(pojo.getCup_count());
-//                                   }
-//                                   else
-//                                       Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
-//
-//                                   dialog.dismiss();
-//                               } else {
-////                                   Toast.makeText(activity, "Already Exists", Toast.LENGTH_SHORT).show();
-////                                   Snackbar.make(v, "Already Exists", Snackbar.LENGTH_LONG)
-////                                           .setAction("Action", null).show();
-////                                   int quantity;
-////                                   quantity=Integer.parseInt(ingQty.getText().toString().trim());
-//                                   CupPojo pro =
-//                                           new CupPojo(mDataset.get(position).getName(),
-//                                                   mDataset.get(position).getImage_url());
-//
-//                                   if(dbHandler.updateQty(pro)){
-//                                       Toast.makeText(activity,"Updated"+position,Toast.LENGTH_SHORT).show();
-//                                       dialog.dismiss();
-//                                   }
-//                                   else
-//                                       Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
-//
-////                                   holder.quantity_text.setText("0");
-////                                   dialog.dismiss();
-//                               }
-//                           }
-//                       }
-//                   });
-
-
-//                   final Spinner spinner = (Spinner) dialog.findViewById(R.id.ing_measure);
-//                   ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity,
-//                           android.R.layout.simple_list_item_1, android.R.id.text1, values);
-
-
-//               }else{
-//                   MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
-////                   quantity++;
-////                   innerHolder3.quantity_text.setText(String.valueOf(quantity));
-//                   CupPojo product =
-//                           new CupPojo(mDataset.get(position).getName(),
-//                                   mDataset.get(position).getImage_url());
-//
-//                   if(dbHandler.updateQty(product))
-//                        Toast.makeText(activity,"Updated"+position,Toast.LENGTH_SHORT).show();
-//                   else
-//                        Toast.makeText(activity,"FAILED Update",Toast.LENGTH_SHORT).show();
-//               }
            }
        });
 
@@ -439,4 +342,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         }
     }
 
+
+
 }
+

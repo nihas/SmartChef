@@ -117,7 +117,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         // - replace the contents of the view with that element
         holder.Title.setText(mDataset.get(position).getTitle());
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mImageView);
-        imageLoader.displayImage(WebServices.getImagePath(mDataset.get(position).getUrl()), holder.catIcon, options);
+        imageLoader.displayImage(WebServices.getImagePath(mDataset.get(position).getUrl()), holder.catIcon);
 //        holder.SubTitle.setText(mDataset.get(position).getSubTitle());
 //        holder.catIcon.setImageResource(mDataset.get(position).getImg_drawable());
 

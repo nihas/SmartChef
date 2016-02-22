@@ -2,42 +2,36 @@ package com.nihas.smart.chef.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.adapters.CupAdapter;
-import com.nihas.smart.chef.adapters.IngredientsAdapter;
-import com.nihas.smart.chef.app.SmartChefApp;
+import com.nihas.smart.chef.adapters.RecipesAdapter;
 import com.nihas.smart.chef.db.MyDbHandler;
-import com.nihas.smart.chef.fragments.RecipeFragment;
 import com.nihas.smart.chef.pojos.CupPojo;
+import com.nihas.smart.chef.pojos.RecipesPojo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by snyxius on 10/23/2015.
  */
-public class CupActivity extends AppCompatActivity {
+public class CookBook extends AppCompatActivity {
     RecyclerView mRecyclerView;
-    ArrayList<CupPojo> listIngredients;
-    CupAdapter cupAdapter;
+    ArrayList<RecipesPojo> listIngredients;
+    RecipesAdapter recipeAdapter;
     static LinearLayout emptyView;
     static Button cookButton,addIng;
     ProgressBar progressBar;
@@ -55,7 +49,7 @@ initialise();
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle("CUP");
+        toolbar.setTitle("COOK BOOK");
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
 
         final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
@@ -72,17 +66,25 @@ initialise();
 
     }
 
-    public ArrayList<CupPojo> getIngredients(){
+    public ArrayList<RecipesPojo> getIngredients(){
         listIngredients=new ArrayList<>();
-        MyDbHandler dbHandler = new MyDbHandler(CupActivity.this, null, null, 1);
-        Cursor c=dbHandler.getAllCup();
+        MyDbHandler dbHandler = new MyDbHandler(CookBook.this, null, null, 1);
+        Cursor c=dbHandler.getAllFav();
 //        Toast.makeText(this, String.valueOf(c.getCount()), Toast.LENGTH_LONG).show();
-        CupPojo pojo= new CupPojo();
-        pojo.setCup_count(c.getCount());
+
         if (c.moveToFirst()) {
             do {
 //                DisplayContact(c);
-                listIngredients.add(new CupPojo(Integer.parseInt(c.getString(0)),c.getString(1),c.getString(3)));
+                RecipesPojo pojo= new RecipesPojo();
+                pojo.setId(c.getString(0));
+                pojo.setName(c.getString(1));
+                pojo.setVeg(c.getString(2));
+                pojo.setServes(c.getString(3));
+                pojo.setFood_kind(c.getString(4));
+                pojo.setCuisine(c.getString(5));
+                pojo.setPreparation_time(c.getString(6));
+                pojo.setMedia_url(c.getString(7));
+                listIngredients.add(pojo);
             } while (c.moveToNext());
         }
 //        String[] array=getResources().getStringArray(R.array.fruits);
@@ -99,6 +101,7 @@ initialise();
 //        listIngredients.add("Chicken");
 //        listIngredients.add("Brinjal");
 //        listIngredients.add("Elephant Yam");
+
         return listIngredients;
 
 
@@ -124,8 +127,8 @@ initialise();
             mRecyclerView=(RecyclerView)findViewById(R.id.rv);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-            cupAdapter=new CupAdapter(CupActivity.this,getIngredients());
-            mRecyclerView.setAdapter(cupAdapter);
+            recipeAdapter=new RecipesAdapter(CookBook.this,getIngredients());
+            mRecyclerView.setAdapter(recipeAdapter);
 
             if (getIngredients().isEmpty()) {
                 mRecyclerView.setVisibility(View.GONE);
@@ -139,37 +142,6 @@ initialise();
             }
 
 
-            cookButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String cook_ing="";
-                    MyDbHandler dbHandler = new MyDbHandler(CupActivity.this, null, null, 1);
-                    Cursor c=dbHandler.getAllCup();
-//        Toast.makeText(this, String.valueOf(c.getCount()), Toast.LENGTH_LONG).show();
-                    CupPojo pojo= new CupPojo();
-                    pojo.setCup_count(c.getCount());
-                    if (c.moveToFirst()) {
-                        do {
-//                DisplayContact(c);
-                            cook_ing=cook_ing+c.getString(1)+",";
-                        } while (c.moveToNext());
-                    }
-//                    SmartChefApp.showAToast(cook_ing);
-//                    dbHandler.removeAll();
-//                    pojo.setCup_count(0);
-//                    MainActivity.updateCupValue(pojo.getCup_count());
-                    Intent intent=new Intent();
-                    intent.putExtra("ING",cook_ing);
-                    setResult(2,intent);
-                    finish();//finishing activity
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.container,new RecipeFragment()).addToBackStack(null).commit();
-//                    finish();
-
-//                    Intent newInten = new Intent(getActivity(), RecipeActivity.class);
-//                    startActivity(newInten);
-//                    getActivity().finish();
-                }
-            });
 
 
         }catch (Exception e){

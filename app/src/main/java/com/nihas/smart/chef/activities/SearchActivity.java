@@ -128,7 +128,7 @@ public class SearchActivity extends AppCompatActivity {
                     mSuggestionsList.add(new SearchItem(jarray.getString(i)));
                 }
                 List<SearchItem> mResultsList = new ArrayList<>();
-                mSearchAdapter = new SearchAdapter(SearchActivity.this, mResultsList, mSuggestionsList, SearchCodes.THEME_LIGHT);
+//                mSearchAdapter = new SearchAdapter(SearchActivity.this, mResultsList, mSuggestionsList, mSuggestionsRecipe, SearchCodes.THEME_LIGHT);
                 mSearchView.setAdapter(mSearchAdapter);
 
                 mSearchAdapter.setOnItemClickListener(new SearchAdapter.OnItemClickListener() {

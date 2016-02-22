@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
 
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initialise(view);
+        MainActivity.setTitle(SmartChefApp.readFromPreferences(getContext(),"CAT",""));
     }
     private void initialise(View rootView) {
         try {
@@ -118,7 +121,7 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
 
 //                    final EstablishmentTypeAdapter adapter = new EstablishmentTypeAdapter(getContext(), estTypeListArray);
 //                    typeList.setAdapter(adapter);
-                ingAdapter=new IngredientsAdapter(getActivity(),listIngredients);
+                ingAdapter=new IngredientsAdapter(getContext(),listIngredients);
                 mRecyclerView.setAdapter(ingAdapter);
 
 

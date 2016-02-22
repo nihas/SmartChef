@@ -53,6 +53,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initialise(view);
+        MainActivity.setTitle("Smart Chef");
     }
     private void initialise(View rootView) {
         try {
@@ -77,7 +78,8 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
                 public void onItemClick(View view, int position) {
 //                SmartChefApp.showAToast(String.valueOf(listCuisines.get(position).getId()));
                     SmartChefApp.saveToPreferences(getActivity().getApplicationContext(), "ID", listCuisines.get(position).getId());
-                    getFragmentManager().beginTransaction().replace(R.id.container,new IngredientsFragment()).addToBackStack(null).commit();
+                    SmartChefApp.saveToPreferences(getActivity().getApplicationContext(), "CAT", listCuisines.get(position).getTitle());
+                    getFragmentManager().beginTransaction().replace(R.id.container, new IngredientsFragment()).addToBackStack(null).commit();
 //                    Intent intent = new Intent(MainActivity.this, IngredientsActivity.class);
 //                    startActivity(intent);
 //                    overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);

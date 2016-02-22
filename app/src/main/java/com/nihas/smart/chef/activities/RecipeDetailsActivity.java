@@ -10,30 +10,41 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.adapters.RecipesAdapter;
+import com.nihas.smart.chef.adapters.ReviewAdapter;
 import com.nihas.smart.chef.api.WebRequest;
 import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
+import com.nihas.smart.chef.customui.CircleImageView;
 import com.nihas.smart.chef.customui.GradientHalfoverImageDrawable;
+import com.nihas.smart.chef.fragments.ReviewDialog;
 import com.nihas.smart.chef.pojos.RecipesPojo;
+import com.nihas.smart.chef.pojos.ReviewPojo;
 import com.nihas.smart.chef.utils.RecyclerItemClickListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -47,6 +58,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Nihas on 10-11-2015.
@@ -64,6 +76,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     LinearLayout IngView,fullView;
     TextView recipeName,cusineType,howToCook;
     ProgressBar pBar;
+    RelativeLayout reviewLayout;
+    public static final ArrayList<ReviewPojo> rvwList=new ArrayList<>();
 
 
     @Override
@@ -77,6 +91,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         fullView=(LinearLayout)findViewById(R.id.full_layout);
         fullView.setVisibility(View.GONE);
 
+        reviewLayout=(RelativeLayout)findViewById(R.id.review_layout);
         thumb=(ImageView)findViewById(R.id.thumb);
         thumb.setVisibility(View.GONE);
         pBar=(ProgressBar)findViewById(R.id.progressBar);
@@ -122,6 +137,16 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         imageLoader = ImageLoader.getInstance();
         imageLoader.destroy();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
+
+
+        reviewLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getSupportFragmentManager();
+                ReviewDialog dialogFragment = new ReviewDialog();
+                dialogFragment.show(fm, "Sample Fragment");
+            }
+        });
 
     }
 
@@ -223,7 +248,17 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         }
 
                     }
+                        JSONArray reviewarr = jobj.getJSONArray("reviews");
+                        rvwList.clear();
+                        for (int j = 0; j < reviewarr.length(); j++) {
+                            JSONObject jobjrev = reviewarr.getJSONObject(j);
+                            ReviewPojo rwpojo = new ReviewPojo();
+                            rwpojo.setUser(jobjrev.getString("user"));
+                            rwpojo.setRating(jobjrev.getString("rating"));
+                            rwpojo.setReview(jobjrev.getString("review"));
+                            rvwList.add(rwpojo);
 
+                        }
 
                     JSONArray jarr2=jobj.getJSONArray("ingredients");
                     for(int j=0;j<jarr2.length();j++) {
@@ -339,3 +374,5 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+
+

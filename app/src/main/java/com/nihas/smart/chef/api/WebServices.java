@@ -94,6 +94,8 @@ Response
         return baseUrl2 + "one_recipe.php?rid="+recipe_id+"&key="+SECRET_KEY;
     }
 
+    public static final String postReview=baseUrl2+"review_in.php?key="+SECRET_KEY;
+
     public static final String cuisine = baseUrl  + "establishmenttype/cuisine";
 
     public static final String ambiance = baseUrl  + "establishmenttype/ambiance";
