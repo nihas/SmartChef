@@ -64,7 +64,7 @@ public class ReviewDialog extends DialogFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        getDialog().setTitle("Reviews");
         pro_pic=(CircleImageView)view.findViewById(R.id.profile);
 //        title=(TextView)view.findViewById(R.id.title);
         recyclerView=(RecyclerView)view.findViewById(R.id.rv);
@@ -93,7 +93,7 @@ public class ReviewDialog extends DialogFragment {
                     jsonPost = new JSONObject();
                     jsonPost.accumulate("rid", RecipeDetailsActivity.rvwList.get(0).getRid());
                     jsonPost.accumulate("user",SmartChefApp.readFromPreferences(getActivity(), "user_id", ""));
-                    jsonPost.accumulate("review",review_detail);
+                    jsonPost.accumulate("review",review.getText().toString().trim());
                     jsonPost.accumulate("rating",String.valueOf(ratingBar.getRating()));
                     if(SmartChefApp.isNetworkAvailable()){
                         new postReview().execute(String.valueOf(jsonPost));

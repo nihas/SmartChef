@@ -141,7 +141,8 @@ public class WebRequest {
             con.setDoOutput(true);
             Uri.Builder builder = new Uri.Builder()
                     .appendQueryParameter(key, value);
-            String query = builder.build().getEncodedQuery();
+            String query = key+"= "+value;//builder.build().getEncodedQuery();
+            System.out.println("QUERY" + query);
 
             OutputStream os = con.getOutputStream();
             os.write(query.getBytes("UTF-8"));

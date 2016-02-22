@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.activities.CookBook;
 import com.nihas.smart.chef.activities.MainActivity;
 import com.nihas.smart.chef.activities.RecipeDetailsActivity;
 import com.nihas.smart.chef.api.WebServices;
@@ -212,6 +213,12 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                     if (dbHandler.deletefromFav(mDataset.get(position).getId())) {
                         MainActivity.showSnak(mDataset.get(position).getName() + "Remov frm Fav", view);
                         holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav));
+                        notifyDataSetChanged();
+                        notifyItemChanged(position);
+                        notifyItemRemoved(position);
+                        mDataset.remove(position);
+                        if(mDataset.isEmpty())
+                            CookBook.updateView();
                     } else
                         Toast.makeText(activity, "FAILED REMOV", Toast.LENGTH_SHORT).show();
                 }

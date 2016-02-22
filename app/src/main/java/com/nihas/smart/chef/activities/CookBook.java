@@ -33,7 +33,7 @@ public class CookBook extends AppCompatActivity {
     ArrayList<RecipesPojo> listIngredients;
     RecipesAdapter recipeAdapter;
     static LinearLayout emptyView;
-    static Button cookButton,addIng;
+//    static Button cookButton,addIng;
     ProgressBar progressBar;
     Toolbar toolbar;
 
@@ -41,7 +41,7 @@ public class CookBook extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cup);
+        setContentView(R.layout.activity_cook_book);
 initialise();
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
@@ -115,14 +115,14 @@ initialise();
 //            progressBar=(ProgressBar)rootView.findViewById(R.id.pBar);
 //            progressBar.setVisibility(View.GONE);
 
-            cookButton=(Button)findViewById(R.id.cook_button);
-            addIng=(Button)findViewById(R.id.add_ing);
-            addIng.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
+//            cookButton=(Button)findViewById(R.id.cook_button);
+//            addIng=(Button)findViewById(R.id.add_ing);
+//            addIng.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                }
+//            });
             emptyView=(LinearLayout)findViewById(R.id.empty_view);
             mRecyclerView=(RecyclerView)findViewById(R.id.rv);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -133,12 +133,12 @@ initialise();
             if (getIngredients().isEmpty()) {
                 mRecyclerView.setVisibility(View.GONE);
                 emptyView.setVisibility(View.VISIBLE);
-                cookButton.setVisibility(View.GONE);
+//                cookButton.setVisibility(View.GONE);
             }
             else {
                 mRecyclerView.setVisibility(View.VISIBLE);
                 emptyView.setVisibility(View.GONE);
-                cookButton.setVisibility(View.VISIBLE);
+//                cookButton.setVisibility(View.VISIBLE);
             }
 
 
@@ -160,7 +160,7 @@ initialise();
 
     public static void updateView(){
         emptyView.setVisibility(View.VISIBLE);
-        cookButton.setVisibility(View.GONE);
+//        cookButton.setVisibility(View.GONE);
     }
 }
 

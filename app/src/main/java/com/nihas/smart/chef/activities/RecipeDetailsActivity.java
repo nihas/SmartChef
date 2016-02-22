@@ -32,6 +32,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
@@ -42,6 +43,7 @@ import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.customui.CircleImageView;
 import com.nihas.smart.chef.customui.GradientHalfoverImageDrawable;
+import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.fragments.ReviewDialog;
 import com.nihas.smart.chef.pojos.RecipesPojo;
 import com.nihas.smart.chef.pojos.ReviewPojo;
@@ -248,11 +250,13 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         }
 
                     }
+
                         JSONArray reviewarr = jobj.getJSONArray("reviews");
                         rvwList.clear();
                         for (int j = 0; j < reviewarr.length(); j++) {
                             JSONObject jobjrev = reviewarr.getJSONObject(j);
                             ReviewPojo rwpojo = new ReviewPojo();
+                            rwpojo.setRid(jobjrev.getString("rid"));
                             rwpojo.setUser(jobjrev.getString("user"));
                             rwpojo.setRating(jobjrev.getString("rating"));
                             rwpojo.setReview(jobjrev.getString("review"));
@@ -370,6 +374,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             } catch (android.content.ActivityNotFoundException ex) {
                 ex.printStackTrace();
             }
+        }else if(id== R.id.action_like){
+
+            SmartChefApp.showAToast("Under Construction");
         }
         return super.onOptionsItemSelected(item);
     }
