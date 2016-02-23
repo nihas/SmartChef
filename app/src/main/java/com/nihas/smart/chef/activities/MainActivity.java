@@ -1,6 +1,8 @@
 package com.nihas.smart.chef.activities;
 
 import android.animation.ValueAnimator;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     static TextView cupQty;
     static Toolbar toolbar;
     DrawerLayout drawerLayout;
-    ActionBarDrawerToggle drawerToggle;
+    static ActionBarDrawerToggle drawerToggle;
     public static boolean isOpen=false;
     private static SearchHistoryTable mHistoryDatabase;
     private List<SearchItem> mSuggestionsList;
@@ -235,8 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, CupActivity.class);
 //                startActivity(intent);
-                startActivityForResult(intent,2);
-
+                startActivity(intent);
 //                getSupportFragmentManager().beginTransaction()
 //                        .add(R.id.container_drawer,new CupFragment().newInstance(drawerLayout), "CupFragment")
 //                        .commit();
@@ -269,25 +270,25 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        // check if the request code is same as what is passed  here it is 2
-        if(resultCode==2)
-        {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.container,new RecipeFragment()).addToBackStack(null).commit();
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            Fragment fragment = RecipeFragment.newInstance(data.getExtras().getString("ING"));
-            transaction.replace(R.id.container, fragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }else{
-//            getSupportFragmentManager().beginTransaction().replace(R.id.container,new CategoryFragment()).addToBackStack(null).commit();
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+//    {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        // check if the request code is same as what is passed  here it is 2
+//        if(resultCode==2)
+//        {
+////            getSupportFragmentManager().beginTransaction().replace(R.id.container,new RecipeFragment()).addToBackStack(null).commit();
+//
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            FragmentTransaction transaction = fragmentManager.beginTransaction();
+//            Fragment fragment = RecipeFragment.newInstance(data.getExtras().getString("ING"));
+//            transaction.replace(R.id.container, fragment);
+//            transaction.addToBackStack(null);
+//            transaction.commit();
+//        }else{
+////            getSupportFragmentManager().beginTransaction().replace(R.id.container,new CategoryFragment()).addToBackStack(null).commit();
+//        }
+//    }
 
 
     public static void updateCupValue(int size) {
@@ -437,6 +438,14 @@ public static void showSnak(String msg,View v) {
 
     public static void setTitle(String msg) {
         toolbar.setTitle(msg);
+    }
+
+    public static void displayBack(){
+        drawerToggle.setDrawerIndicatorEnabled(false);
+    }
+
+    public static void displayHome(){
+        drawerToggle.setDrawerIndicatorEnabled(true);
     }
 
     public static void hideSearch(CharSequence text){

@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.adapters.CookBookAdapter;
 import com.nihas.smart.chef.adapters.CupAdapter;
 import com.nihas.smart.chef.adapters.RecipesAdapter;
 import com.nihas.smart.chef.db.MyDbHandler;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 public class CookBook extends AppCompatActivity {
     RecyclerView mRecyclerView;
     ArrayList<RecipesPojo> listIngredients;
-    RecipesAdapter recipeAdapter;
+    CookBookAdapter recipeAdapter;
     static LinearLayout emptyView;
 //    static Button cookButton,addIng;
     ProgressBar progressBar;
@@ -127,7 +128,7 @@ initialise();
             mRecyclerView=(RecyclerView)findViewById(R.id.rv);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-            recipeAdapter=new RecipesAdapter(CookBook.this,getIngredients());
+            recipeAdapter=new CookBookAdapter(CookBook.this,getIngredients());
             mRecyclerView.setAdapter(recipeAdapter);
 
             if (getIngredients().isEmpty()) {

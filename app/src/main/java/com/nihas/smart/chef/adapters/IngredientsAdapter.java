@@ -263,9 +263,9 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                if (img.getDrawable().getConstantState().equals
                        (activity.getResources().getDrawable(R.drawable.plus).getConstantState())){
 
-                   Animation anim= AnimationUtils.loadAnimation(activity,R.anim.wibble);
-                   img.setAnimation(anim);
-                   anim.start();
+//                   Animation anim= AnimationUtils.loadAnimation(activity,R.anim.wibble);
+//                   img.setAnimation(anim);
+//                   anim.start();
 
                    MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
 

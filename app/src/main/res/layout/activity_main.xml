@@ -37,16 +37,6 @@
     <include layout="@layout/content_main_fragment" />
 
 
-    <io.github.yavski.fabspeeddial.FabSpeedDial
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:fabGravity="bottom_end"
-        app:fabMenu="@menu/menu_fab"
-        android:id="@+id/fab_speed"
-        android:visibility="gone"
-        app:fabBackgroundTint="?attr/colorPrimaryDark"
-        app:miniFabTitleTextColor="?attr/colorPrimaryDark" />
 
 </android.support.design.widget.CoordinatorLayout>
 

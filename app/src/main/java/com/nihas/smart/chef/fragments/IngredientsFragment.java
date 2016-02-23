@@ -2,6 +2,8 @@ package com.nihas.smart.chef.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -48,10 +50,22 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (SmartChefApp.isNetworkAvailable()) {
+            new getAllCategories().execute();
+        } else {
+            SmartChefApp.showAToast("Network Unavailable");
+        }
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initialise(view);
-        MainActivity.setTitle(SmartChefApp.readFromPreferences(getContext(),"CAT",""));
+        MainActivity.setTitle(SmartChefApp.readFromPreferences(getContext(), "CAT", ""));
+
+
     }
     private void initialise(View rootView) {
         try {
@@ -59,7 +73,7 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
             if (SmartChefApp.isNetworkAvailable()) {
                 new getAllCategories().execute();
             } else {
-
+                SmartChefApp.showAToast("Network Unavailable");
             }
 
             mRecyclerView=(RecyclerView)rootView.findViewById(R.id.rv);

@@ -3,25 +3,14 @@ package com.nihas.smart.chef.adapters;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,11 +18,8 @@ import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.CookBook;
 import com.nihas.smart.chef.activities.MainActivity;
 import com.nihas.smart.chef.activities.RecipeDetailsActivity;
-import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.customui.GradientHalfoverImageDrawable;
 import com.nihas.smart.chef.db.MyDbHandler;
-import com.nihas.smart.chef.pojos.CupPojo;
-import com.nihas.smart.chef.pojos.IngredientsPojo;
 import com.nihas.smart.chef.pojos.RecipesPojo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -48,7 +34,7 @@ import java.util.List;
 /**
  * Created by snyxius on 10/14/2015.
  */
-public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
+public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.ViewHolder> {
 
     private List<RecipesPojo> mDataset;
     ImageLoader imageLoader;
@@ -67,7 +53,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             "Pieces"
     };
 
-    public RecipesAdapter(Activity activity, ArrayList<RecipesPojo> ingredients) {
+    public CookBookAdapter(Activity activity, ArrayList<RecipesPojo> ingredients) {
         mDataset = ingredients;
         this.activity=activity;
         imageLoader = ImageLoader.getInstance();
@@ -115,7 +101,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
     // Create new views (invoked by the layout manager)
 //    @Override
-    public RecipesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public CookBookAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
 
 
@@ -213,7 +199,10 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                     if (dbHandler.deletefromFav(mDataset.get(position).getId())) {
                         MainActivity.showSnak(mDataset.get(position).getName() + "Remov frm Fav", view);
                         holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav));
-
+                        notifyDataSetChanged();
+                        notifyItemChanged(position);
+                        notifyItemRemoved(position);
+                        mDataset.remove(position);
                         if(mDataset.isEmpty())
                             CookBook.updateView();
                     } else

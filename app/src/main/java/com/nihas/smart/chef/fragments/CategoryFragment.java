@@ -54,6 +54,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         initialise(view);
         MainActivity.setTitle("Smart Chef");
+        MainActivity.displayHome();
     }
     private void initialise(View rootView) {
         try {

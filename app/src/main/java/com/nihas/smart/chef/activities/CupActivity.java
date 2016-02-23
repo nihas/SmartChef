@@ -1,18 +1,23 @@
 package com.nihas.smart.chef.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -20,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.adapters.CupAdapter;
 import com.nihas.smart.chef.adapters.IngredientsAdapter;
@@ -117,7 +123,7 @@ initialise();
             addIng.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    finish();
                 }
             });
             emptyView=(LinearLayout)findViewById(R.id.empty_view);
@@ -158,9 +164,10 @@ initialise();
 //                    dbHandler.removeAll();
 //                    pojo.setCup_count(0);
 //                    MainActivity.updateCupValue(pojo.getCup_count());
-                    Intent intent=new Intent();
-                    intent.putExtra("ING",cook_ing);
-                    setResult(2,intent);
+                    Intent intent=new Intent(CupActivity.this,RecipeActivity.class);
+                    intent.putExtra("ingredients", cook_ing);
+//                    setResult(2,intent);
+                    startActivity(intent);
                     finish();//finishing activity
 //                    getSupportFragmentManager().beginTransaction().replace(R.id.container,new RecipeFragment()).addToBackStack(null).commit();
 //                    finish();
@@ -180,15 +187,58 @@ initialise();
 
     @Override
     public void onBackPressed() {
-        Intent intent=new Intent();
-        intent.putExtra("MESSAGE","msg");
-        setResult(1, intent);
+//        Intent intent=new Intent(CupActivity.this,MainActivity.class);
+//        intent.putExtra("MESSAGE","msg");
+//        setResult(1, intent);
+//        startActivity(intent);
         finish();
+
     }
 
     public static void updateView(){
         emptyView.setVisibility(View.VISIBLE);
         cookButton.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_delete, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_delete) {
+            final AlertDialog.Builder builder =
+                    new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
+            builder.setTitle("Delete");
+            builder.setMessage("Are you sure want to clear cup?");
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    MyDbHandler dbHandler = new MyDbHandler(CupActivity.this, null, null, 1);
+                    dbHandler.removeAll();
+                    dialogInterface.dismiss();
+                    Intent inten=new Intent(CupActivity.this,CupActivity.class);
+                    startActivity(inten);
+                    finish();
+                    MainActivity.updateCupValue(0);
+                }
+            });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            builder.show();
+
+
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

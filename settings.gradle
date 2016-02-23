@@ -1,1 +1,1 @@
-include ':app', ':fablibrary',':searchview'
+include ':app',':searchview'
