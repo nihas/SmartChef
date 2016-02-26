@@ -2,6 +2,9 @@ package com.nihas.smart.chef.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -42,11 +45,11 @@ import java.util.Collections;
  */
 public class IngredientsActivity extends AppCompatActivity{
 
-//    RecyclerView mRecyclerView;
-//    ArrayList<IngredientsPojo> listIngredients;
-//    IngredientsAdapter ingAdapter;
+    RecyclerView mRecyclerView;
+    ArrayList<IngredientsPojo> listIngredients;
+    IngredientsAdapter ingAdapter;
+    ProgressBar progressBar;
     static TextView cupQty;
-//    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,29 +59,89 @@ public class IngredientsActivity extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        progressBar=(ProgressBar)findViewById(R.id.pBar);
-//        if (SmartChefApp.isNetworkAvailable()) {
-//            new getAllCategories().execute();
-//        } else {
-//
-//        }
-//
-//        mRecyclerView=(RecyclerView)findViewById(R.id.rv);
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle("COMNG");
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
 
-//        ingAdapter=new IngredientsAdapter(this,getIngredients());
-//        mRecyclerView.setAdapter(ingAdapter);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        progressBar=(ProgressBar)findViewById(R.id.pBar);
+        if (SmartChefApp.isNetworkAvailable()) {
+            new getAllCategories().execute();
+        } else {
+            SmartChefApp.showAToast("Network Unavailable");
+        }
+
+        mRecyclerView=(RecyclerView)findViewById(R.id.rv);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+    }
+
+
+    private class getAllCategories extends AsyncTask<String, Void, JSONArray> {
+
+        @Override
+        protected JSONArray doInBackground(String... params) {
+            JSONArray jsonObject = null;
+            try {
+
+                return WebRequest.getDataJSONArray(WebServices.getIngredients(SmartChefApp.readFromPreferences(IngredientsActivity.this, "ID", 1)));
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+            return jsonObject;
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray jArray) {
+            super.onPostExecute(jArray);
+            progressBar.setVisibility(View.GONE);
+            onDone(jArray);
+        }
+    }
+
+
+    private void onDone(JSONArray jArray){
+        try {
+            if(jArray != null) {
+                listIngredients = new ArrayList<>();
+                if (jArray.length() > 0) {
+                    for (int i = 0; i < jArray.length(); i++) {
+//                            AllPojo cp = new AllPojo();
+////                            cp.setName(jArray.getString(i));
+                        listIngredients.add(new IngredientsPojo(jArray.getJSONObject(i).getString(Keys.name),
+                                jArray.getJSONObject(i).getString(Keys.image)));
+                    }
+                } else {
+                    SmartChefApp.showAToast("Something Went Wrong.");
+                }
+
+//                    final EstablishmentTypeAdapter adapter = new EstablishmentTypeAdapter(getContext(), estTypeListArray);
+//                    typeList.setAdapter(adapter);
+                ingAdapter=new IngredientsAdapter(IngredientsActivity.this,listIngredients);
+                mRecyclerView.setAdapter(ingAdapter);
 
 
 
 
-//        ingAdapter.setOnDataChangeListener(new IngredientsAdapter.OnDataChangeListener() {
-//            @Override
-//            public void onDataChanged(int size) {
-//                CupPojo pojo=new CupPojo();
-//                cupQty.setText(String.valueOf(pojo.getCup_count()));
-//            }
-//        });
+
+            }else{
+                SmartChefApp.showAToast("Something Went Wrong.");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -89,33 +152,53 @@ public class IngredientsActivity extends AppCompatActivity{
         MenuItem item = menu.findItem(R.id.action_cup);
         MenuItemCompat.setActionView(item, R.layout.cup_icon);
         View view = MenuItemCompat.getActionView(item);
+        cupQty=(TextView)view.findViewById(R.id.cup_qty);
         view.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 //do stuff here
+
                 Intent intent = new Intent(IngredientsActivity.this, CupActivity.class);
+//                startActivity(intent);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
+//                getSupportFragmentManager().beginTransaction()
+//                        .add(R.id.container_drawer,new CupFragment().newInstance(drawerLayout), "CupFragment")
+//                        .commit();
+//                if(isOpen) {
+//                    drawerLayout.closeDrawer(Gravity.RIGHT);
+//                    isOpen=false;
+//                } else {
+//                    drawerLayout.openDrawer(Gravity.RIGHT);
+//                    isOpen=true;
+//                }
+
+//                getSupportFragmentManager().beginTransaction().replace(R.id.container,new CupFragment()).addToBackStack(null).commit();
+
+//                getSupportFragmentManager().beginTransaction().replace(R.id.container,new CupFragment()).addToBackStack(null).commit();
+//                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
             }
         });
 
-
-
-        cupQty=(TextView)view.findViewById(R.id.cup_qty);
         MyDbHandler dbHandler = new MyDbHandler(this, null, null, 1);
         Cursor c=dbHandler.getAllCup();
         CupPojo pojo=new CupPojo();
-        if(c==null)
+        if(c==null) {
             pojo.setCup_count(0);
-        else
+        } else {
             pojo.setCup_count(c.getCount());
-
+        }
         cupQty.setText(String.valueOf(pojo.getCup_count()));
+
+
         return true;
     }
 
 
+
+    public static void updateCupValue(int size) {
+        cupQty.setText(String.valueOf(size));
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -126,13 +209,16 @@ public class IngredientsActivity extends AppCompatActivity{
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_cup) {
+
             return true;
         }else if(id==R.id.action_search){
-            Intent searchInten=new Intent(IngredientsActivity.this,SearchActivity.class);
-            startActivity(searchInten);
+//            showSearchView();
+//            Intent searchInten=new Intent(MainActivity.this,SearchActivity.class);
+//            startActivity(searchInten);
 //            return true;
 
         }
+
 
         return super.onOptionsItemSelected(item);
     }

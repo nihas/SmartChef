@@ -54,7 +54,6 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         initialise(view);
         MainActivity.setTitle("Smart Chef");
-        MainActivity.displayHome();
     }
     private void initialise(View rootView) {
         try {
@@ -62,7 +61,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
             if (SmartChefApp.isNetworkAvailable()) {
                 new getAllCategories().execute();
             } else {
-
+                SmartChefApp.showAToast("Internet Unavailable");
             }
             // Calling the RecyclerView
             mRecyclerView = (RecyclerView)rootView.findViewById(R.id.rv);
@@ -80,10 +79,10 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
 //                SmartChefApp.showAToast(String.valueOf(listCuisines.get(position).getId()));
                     SmartChefApp.saveToPreferences(getActivity().getApplicationContext(), "ID", listCuisines.get(position).getId());
                     SmartChefApp.saveToPreferences(getActivity().getApplicationContext(), "CAT", listCuisines.get(position).getTitle());
-                    getFragmentManager().beginTransaction().replace(R.id.container, new IngredientsFragment()).addToBackStack(null).commit();
-//                    Intent intent = new Intent(MainActivity.this, IngredientsActivity.class);
-//                    startActivity(intent);
-//                    overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
+//                    getFragmentManager().beginTransaction().replace(R.id.container, new IngredientsFragment()).addToBackStack(null).commit();
+                    Intent intent = new Intent(getActivity(), IngredientsActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
                 }
             }));
 

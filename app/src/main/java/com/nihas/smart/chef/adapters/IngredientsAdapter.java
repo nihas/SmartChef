@@ -282,6 +282,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                        else
                            pojo.setCup_count(c.getCount());
                        MainActivity.updateCupValue(pojo.getCup_count());
+                       IngredientsActivity.updateCupValue(pojo.getCup_count());
                        holder.addPlus.setImageResource(R.drawable.minus);
                    } else
                        Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
@@ -306,6 +307,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                                pojo.setCup_count(c.getCount());
                        }
                        MainActivity.updateCupValue(pojo.getCup_count());
+                       IngredientsActivity.updateCupValue(pojo.getCup_count());
                        holder.addPlus.setImageDrawable(activity.getResources().getDrawable(R.drawable.plus));
 
                    }
