@@ -340,8 +340,8 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }else if(id==R.id.action_search){
 //            showSearchView();
-//            Intent searchInten=new Intent(MainActivity.this,SearchActivity.class);
-//            startActivity(searchInten);
+            Intent searchInten=new Intent(MainActivity.this,SearchActivity.class);
+            startActivity(searchInten);
 //            return true;
 
         }else if(drawerToggle.onOptionsItemSelected(item)){

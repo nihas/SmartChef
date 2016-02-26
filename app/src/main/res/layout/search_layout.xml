@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
- <!--   <android.support.v7.widget.Toolbar
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -13,6 +13,7 @@
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
         <EditText
+            android:id="@+id/search_query"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Type to search..."
@@ -21,22 +22,28 @@
             android:textColor="#ffffff"
             android:padding="10dp"/>
 
-        </android.support.v7.widget.Toolbar>   -->
+        </android.support.v7.widget.Toolbar>
 
- <!--   <com.arlib.floatingsearchview.FloatingSearchView
-        android:id="@+id/floating_search_view"
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:floatingSearch_searchHint="Search..."
-        app:floatingSearch_showSearchKey="false"
-        app:floatingSearch_dismissOnOutsideTouch="true"
-        app:floatingSearch_leftActionMode="showHome"
-        app:floatingSearch_menu="@menu/menu_main"/> -->
+        android:id="@+id/rv"/>
 
-    <com.lapism.searchview.view.SearchView
+
+    <!--   <com.arlib.floatingsearchview.FloatingSearchView
+           android:id="@+id/floating_search_view"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           app:floatingSearch_searchHint="Search..."
+           app:floatingSearch_showSearchKey="false"
+           app:floatingSearch_dismissOnOutsideTouch="true"
+           app:floatingSearch_leftActionMode="showHome"
+           app:floatingSearch_menu="@menu/menu_main"/> -->
+
+   <!-- <com.lapism.searchview.view.SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" />-->
 
 
 </LinearLayout>
