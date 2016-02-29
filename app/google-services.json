@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_id": "smartchef-1211",
+    "project_number": "1013702867679",
+    "name": "SmartChef"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013702867679:android:55ce15046468e6b3",
+        "client_id": "android:com.nihas.smart.chef",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.nihas.smart.chef"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1013702867679-id3h0shj8d39ff4ia4ijqe7dnh9oar5f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nihas.smart.chef",
+            "certificate_hash": "019431956B25D63A7018A91301B43CF2A4D135AF"
+          }
+        },
+        {
+          "client_id": "1013702867679-ard7p9lfaa0p2ei120kitdjfp9mkm4fo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

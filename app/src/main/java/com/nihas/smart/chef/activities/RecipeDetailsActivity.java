@@ -413,6 +413,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Added to fav", Toast.LENGTH_SHORT).show();
 //                    MainActivity.showSnak(SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "") + " Added to Fav", item.getActionView());
                     item.setIcon(getApplicationContext().getResources().getDrawable(R.drawable.heart));
+                    isFav=true;
                 } else
                     Toast.makeText(getApplicationContext(), "FAILED ADD", Toast.LENGTH_SHORT).show();
 
@@ -421,6 +422,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 if (dbHandler.deletefromFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))) {
                     Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Removed from favourites", Toast.LENGTH_SHORT).show();
                     item.setIcon(getApplicationContext().getResources().getDrawable(R.drawable.fav));
+                    isFav=false;
 
                 } else
                     Toast.makeText(getApplicationContext(), "FAILED REMOV", Toast.LENGTH_SHORT).show();

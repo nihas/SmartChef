@@ -1,5 +1,6 @@
 package com.nihas.smart.chef.fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -22,6 +23,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.activities.RecipeActivity;
 import com.nihas.smart.chef.activities.RecipeDetailsActivity;
 import com.nihas.smart.chef.adapters.ReviewAdapter;
 import com.nihas.smart.chef.api.WebRequest;
@@ -43,6 +45,7 @@ public class FilterDialog extends AppCompatActivity {
     Toolbar toolbar;
     TextView veg,nonVeg;
     Boolean isVeg,isNonVeg;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,8 @@ public class FilterDialog extends AppCompatActivity {
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
         setSupportActionBar(toolbar);
+
+        bundle=getIntent().getExtras();
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -78,7 +83,12 @@ public class FilterDialog extends AppCompatActivity {
         apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(isVeg)
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_VEG",true);
+                else
+                    SmartChefApp.saveToPreferences(getApplicationContext(), "FILTER_VEG", false);
 
+                onBackPressed();
             }
         });
 
@@ -97,18 +107,34 @@ public class FilterDialog extends AppCompatActivity {
             public void onClick(View view) {
                 if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_VEG",false)){
                     veg.setBackgroundColor(Color.TRANSPARENT);
-                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_VEG",false);
+                    isVeg=false;
                 }else {
                     veg.setBackgroundColor(Color.GREEN);
-                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_VEG",true);
+                    isVeg=true;
                 }
             }
         });
         nonVeg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_NON_VEG",false)){
+                    nonVeg.setBackgroundColor(Color.TRANSPARENT);
+                    isNonVeg=false;
+                }else {
+                    nonVeg.setBackgroundColor(Color.GREEN);
+                    isNonVeg=true;
+                }
             }
         });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent backIntent=new Intent(FilterDialog.this, RecipeActivity.class);
+        backIntent.putExtra("ingredients", bundle.getString("ingredients"));
+        startActivity(backIntent);
+        finish();
     }
 }

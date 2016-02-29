@@ -145,6 +145,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                 .showImageOnLoading(R.drawable.empty_photo).build();
 
 
+
+
+
         return vh;
     }
 
@@ -158,7 +161,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         holder.title.setText(mDataset.get(position).getName());
         imageLoader.displayImage(mDataset.get(position).getMedia_url(), holder.thumbnail, options);
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
-    holder.serveTo.setText(mDataset.get(position).getServes()+"");
+    holder.serveTo.setText(mDataset.get(position).getServes() + "");
         holder.cusine.setText(mDataset.get(position).getCuisine());
         holder.timeTaken.setText(mDataset.get(position).getPreparation_time());
         if(Integer.parseInt(mDataset.get(position).getVeg())==1){
@@ -167,6 +170,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             holder.foodType.setImageResource(R.drawable.non_veg_icon);
         }
 
+
+
         holder.recipeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,6 +179,15 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                 intent.putExtra("RECIPE_ID",mDataset.get(position).getId());
                 activity.startActivity(intent);
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
+
+                SmartChefApp.saveToPreferences(activity, "RID", mDataset.get(position).getId());
+                SmartChefApp.saveToPreferences(activity,"RNAME",mDataset.get(position).getName());
+                SmartChefApp.saveToPreferences(activity,"RVEG",mDataset.get(position).getVeg());
+                SmartChefApp.saveToPreferences(activity,"RSERVE",mDataset.get(position).getServes());
+                SmartChefApp.saveToPreferences(activity,"RFOOD_KIND",mDataset.get(position).getFood_kind());
+                SmartChefApp.saveToPreferences(activity, "RCUISINE", mDataset.get(position).getCuisine());
+                SmartChefApp.saveToPreferences(activity, "RPREP_TIME", mDataset.get(position).getPreparation_time());
+                SmartChefApp.saveToPreferences(activity, "RMEDIA_URL", mDataset.get(position).getMedia_url());
             }
         });
 
@@ -204,16 +218,19 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                     recipesPojo.setPreparation_time(mDataset.get(position).getPreparation_time());
                     recipesPojo.setMedia_url(mDataset.get(position).getMedia_url());
 
-                    SmartChefApp.saveToPreferences(activity, "RID", mDataset.get(position).getId());
-                    SmartChefApp.saveToPreferences(activity,"RNAME",mDataset.get(position).getName());
-                    SmartChefApp.saveToPreferences(activity,"RVEG",mDataset.get(position).getVeg());
-                    SmartChefApp.saveToPreferences(activity,"RSERVE",mDataset.get(position).getServes());
-                    SmartChefApp.saveToPreferences(activity,"RFOOD_KIND",mDataset.get(position).getFood_kind());
-                    SmartChefApp.saveToPreferences(activity,"RCUISINE",mDataset.get(position).getCuisine());
-                    SmartChefApp.saveToPreferences(activity,"RPREP_TIME",mDataset.get(position).getPreparation_time());
-                    SmartChefApp.saveToPreferences(activity,"RMEDIA_URL",mDataset.get(position).getMedia_url());
 
                     if (dbHandler.addtoFav(recipesPojo)) {
+
+                        SmartChefApp.saveToPreferences(activity, "RID", mDataset.get(position).getId());
+                        SmartChefApp.saveToPreferences(activity,"RNAME",mDataset.get(position).getName());
+                        SmartChefApp.saveToPreferences(activity,"RVEG",mDataset.get(position).getVeg());
+                        SmartChefApp.saveToPreferences(activity,"RSERVE",mDataset.get(position).getServes());
+                        SmartChefApp.saveToPreferences(activity,"RFOOD_KIND",mDataset.get(position).getFood_kind());
+                        SmartChefApp.saveToPreferences(activity,"RCUISINE",mDataset.get(position).getCuisine());
+                        SmartChefApp.saveToPreferences(activity,"RPREP_TIME",mDataset.get(position).getPreparation_time());
+                        SmartChefApp.saveToPreferences(activity,"RMEDIA_URL",mDataset.get(position).getMedia_url());
+
+
                         MainActivity.showSnak(mDataset.get(position).getName() + " Added to Fav", view);
                         holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.heart));
                     } else

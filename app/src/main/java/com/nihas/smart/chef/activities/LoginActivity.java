@@ -30,6 +30,8 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -100,6 +102,16 @@ private ConnectionResult mConnectionResult;
     }
 
         private void initializeGooglePlus() {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
+
+
+//            mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                    .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+//                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+//                    .build();
+
             mGoogleApiClient = buildGoogleAPIClient();
         }
 
@@ -125,15 +137,15 @@ private ConnectionResult mConnectionResult;
         public void onStart() {
             super.onStart();
             // make sure to initiate connection
-            mGoogleApiClient.connect();
+//            mGoogleApiClient.connect();
         }
 
         @Override
         public void onStop() {
             super.onStop();
             // disconnect api if it is connected
-            if (mGoogleApiClient.isConnected())
-                mGoogleApiClient.disconnect();
+//            if (mGoogleApiClient.isConnected())
+//                mGoogleApiClient.disconnect();
         }
 
     /**
@@ -143,6 +155,13 @@ private ConnectionResult mConnectionResult;
     private void processSignIn() {
 
         if (!mGoogleApiClient.isConnecting()) {
+//            Intent shareIntent = new PlusShare.Builder(this)
+//                    .setType("text/plain")
+//                    .setText("Welcome to the Google+ platform.")
+//                    .setContentUrl(Uri.parse("https://developers.google.com/+/"))
+//                    .getIntent();
+
+//            startActivityForResult(shareIntent, 0);
             processSignInError();
             mSignInClicked = true;
         }
@@ -215,6 +234,12 @@ private ConnectionResult mConnectionResult;
     private void processUserInfoAndUpdateUI() {
         Person signedInUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
         if (signedInUser != null) {
+            if (signedInUser.hasId()) {
+                String userId = signedInUser.getId();
+
+                Log.d("UserId",userId);
+            }
+
 
             if (signedInUser.hasDisplayName()) {
                 String userName = signedInUser.getDisplayName();

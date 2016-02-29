@@ -164,7 +164,7 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.ViewHo
 
         MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
         if(dbHandler.isFav(mDataset.get(position).getId())){
-            holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav_fill));
+            holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.heart));
         }else{
             holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav));
         }
@@ -190,7 +190,7 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.ViewHo
                     recipesPojo.setMedia_url(mDataset.get(position).getMedia_url());
                     if (dbHandler.addtoFav(recipesPojo)) {
                         MainActivity.showSnak(mDataset.get(position).getName() + " Added to Fav", view);
-                        holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav_fill));
+                        holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.heart));
                     } else
                         Toast.makeText(activity, "FAILED ADD", Toast.LENGTH_SHORT).show();
 

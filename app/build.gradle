@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "chef.smart.nihas.com.smartchef"
+        applicationId "com.nihas.smart.chef"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
@@ -35,5 +35,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-plus:8.4.0'
     compile 'com.google.android.gms:play-services-identity:8.4.0'
     compile 'ch.acra:acra:4.3.0'
+    apply plugin: 'com.google.gms.google-services'
     compile files('libs/gson-2.4.jar')
 }

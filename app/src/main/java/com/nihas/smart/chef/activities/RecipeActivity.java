@@ -109,7 +109,9 @@ public class RecipeActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_filter) {
             Intent filterIntent=new Intent(RecipeActivity.this,FilterDialog.class);
+            filterIntent.putExtra("ingredients", bundle.getString("ingredients"));
             startActivity(filterIntent);
+            finish();
 //            FragmentManager fm = getSupportFragmentManager();
 //            FilterDialog dialogFragment = new FilterDialog();
 //            dialogFragment.show(fm, "Sample Fragment");
