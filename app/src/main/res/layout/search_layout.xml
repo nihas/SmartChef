@@ -12,6 +12,10 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <EditText
             android:id="@+id/search_query"
             android:layout_width="match_parent"
@@ -21,6 +25,15 @@
             android:textColorHint="@color/grey"
             android:textColor="#ffffff"
             android:padding="10dp"/>
+
+        <ProgressBar
+            android:id="@+id/pBar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:secondaryProgressTint="#ffffff"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+        </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
 

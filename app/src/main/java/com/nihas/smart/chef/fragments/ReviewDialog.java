@@ -1,5 +1,6 @@
 package com.nihas.smart.chef.fragments;
 
+import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -123,14 +124,25 @@ public class ReviewDialog extends DialogFragment {
         imageLoader.displayImage(SmartChefApp.readFromPreferences(getContext(), "profile_pic", ""), pro_pic, options);
     }
 
-    private class postReview extends AsyncTask<String, Void, String> {
+    private class postReview extends AsyncTask<String, Void, JSONObject> {
+
+
+        ProgressDialog pdialog=new ProgressDialog(getActivity());
 
         @Override
-        protected String doInBackground(String... params) {
-            String jsonObject = null;
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pdialog.setMessage("Posting Review");
+            pdialog.setCancelable(false);
+            pdialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            JSONObject jsonObject = null;
             try {
                 Log.e("data",String.valueOf(jsonPost));
-                return WebRequest.postDataParams("data", params[0],WebServices.postReview);
+                return WebRequest.postData(params[0], WebServices.postReview);
 
             } catch (Exception e) {
 
@@ -140,9 +152,19 @@ public class ReviewDialog extends DialogFragment {
         }
 
         @Override
-        protected void onPostExecute(String jArray) {
-            super.onPostExecute(jArray);
-            Log.e("REVIEW",jArray);
+        protected void onPostExecute(JSONObject jobj) {
+            super.onPostExecute(jobj);
+            pdialog.dismiss();
+            Log.e("REVIEW",jobj+"");
+            try {
+                if(jobj.getString("status").equals("true")){
+                    SmartChefApp.showAToast("Review Posted Successfully");
+                }else{
+                    SmartChefApp.showAToast("Failed");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
         }
     }

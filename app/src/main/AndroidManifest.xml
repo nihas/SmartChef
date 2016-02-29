@@ -55,6 +55,10 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".fragments.FilterDialog"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".activities.CookBook"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>

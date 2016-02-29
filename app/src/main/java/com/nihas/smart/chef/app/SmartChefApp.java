@@ -23,7 +23,8 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
         import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
         import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
-        import org.acra.ReportField;
+import org.acra.ACRA;
+import org.acra.ReportField;
         import org.acra.ReportingInteractionMode;
         import org.acra.annotation.ReportsCrashes;
 
@@ -54,7 +55,7 @@ public class SmartChefApp extends Application {
         super.onCreate();
         context = this;
         mInstance = this;
-        //  ACRA.init(this);
+          ACRA.init(this);
         initImageLoader(getApplicationContext());
     }
 

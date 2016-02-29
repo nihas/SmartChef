@@ -30,6 +30,7 @@ import com.nihas.smart.chef.activities.CookBook;
 import com.nihas.smart.chef.activities.MainActivity;
 import com.nihas.smart.chef.activities.RecipeDetailsActivity;
 import com.nihas.smart.chef.api.WebServices;
+import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.customui.GradientHalfoverImageDrawable;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.pojos.CupPojo;
@@ -178,7 +179,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
         MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
         if(dbHandler.isFav(mDataset.get(position).getId())){
-            holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav_fill));
+            holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.heart));
         }else{
             holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav));
         }
@@ -202,9 +203,19 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                     recipesPojo.setCuisine(mDataset.get(position).getCuisine());
                     recipesPojo.setPreparation_time(mDataset.get(position).getPreparation_time());
                     recipesPojo.setMedia_url(mDataset.get(position).getMedia_url());
+
+                    SmartChefApp.saveToPreferences(activity, "RID", mDataset.get(position).getId());
+                    SmartChefApp.saveToPreferences(activity,"RNAME",mDataset.get(position).getName());
+                    SmartChefApp.saveToPreferences(activity,"RVEG",mDataset.get(position).getVeg());
+                    SmartChefApp.saveToPreferences(activity,"RSERVE",mDataset.get(position).getServes());
+                    SmartChefApp.saveToPreferences(activity,"RFOOD_KIND",mDataset.get(position).getFood_kind());
+                    SmartChefApp.saveToPreferences(activity,"RCUISINE",mDataset.get(position).getCuisine());
+                    SmartChefApp.saveToPreferences(activity,"RPREP_TIME",mDataset.get(position).getPreparation_time());
+                    SmartChefApp.saveToPreferences(activity,"RMEDIA_URL",mDataset.get(position).getMedia_url());
+
                     if (dbHandler.addtoFav(recipesPojo)) {
                         MainActivity.showSnak(mDataset.get(position).getName() + " Added to Fav", view);
-                        holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav_fill));
+                        holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.heart));
                     } else
                         Toast.makeText(activity, "FAILED ADD", Toast.LENGTH_SHORT).show();
 

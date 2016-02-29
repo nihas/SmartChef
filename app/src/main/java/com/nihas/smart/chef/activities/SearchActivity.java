@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.pojos.CupPojo;
+import com.nihas.smart.chef.pojos.IngredientsPojo;
 import com.nihas.smart.chef.pojos.RecipesPojo;
 
 import org.json.JSONArray;
@@ -48,8 +50,9 @@ public class SearchActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     EditText searchQuery;
 //    private SearchHistoryTable mHistoryDatabase;
-    private List<String> mIngList;
+    private List<IngredientsPojo> mIngList;
     private List<RecipesPojo> mRecipeList;
+    ProgressBar pBar;
 //    private SearchView mSearchView;
 //    private int mVersion = SearchCodes.VERSION_MENU_ITEM;
 //    private int mStyle = SearchCodes.STYLE_MENU_ITEM_CLASSIC;
@@ -83,6 +86,9 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView=(RecyclerView)findViewById(R.id.rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        pBar=(ProgressBar)findViewById(R.id.pBar);
+        pBar.setVisibility(View.GONE);
+        pBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
 
         searchQuery=(EditText)findViewById(R.id.search_query);
         searchQuery.addTextChangedListener(new TextWatcher() {
@@ -94,8 +100,12 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(SmartChefApp.isNetworkAvailable()){
-                    if(charSequence.length()>0)
-                    new SearchRecipe().execute(charSequence.toString());
+                    if(charSequence.length()>0) {
+                        new SearchRecipe().execute(charSequence.toString());
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
+                    else
+                        recyclerView.setVisibility(View.GONE);
                 }else{
                     SmartChefApp.showAToast("Network Unavailable");
                 }
@@ -167,6 +177,12 @@ public class SearchActivity extends AppCompatActivity {
     private class SearchRecipe extends AsyncTask<String, Void, JSONObject> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         protected JSONObject doInBackground(String... params) {
             JSONObject jsonObject = null;
             try {
@@ -182,12 +198,15 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(JSONObject jobj) {
             super.onPostExecute(jobj);
+            pBar.setVisibility(View.GONE);
             try {
 //                JSONObject jobj2=jobj.getJSONObject("ingredients");
                 JSONArray jarray=jobj.getJSONArray("ingredients");
                 mIngList=new ArrayList<>();
                 for(int i=0;i<jarray.length();i++){
-                    mIngList.add(jarray.getString(i));
+                    IngredientsPojo po=new IngredientsPojo();
+                    po.setName(jarray.getString(i));
+                    mIngList.add(po);
                 }
                 JSONArray jarrayrec=jobj.getJSONArray("recipes");
                 mRecipeList = new ArrayList<>();

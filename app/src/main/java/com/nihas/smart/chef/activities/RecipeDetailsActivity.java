@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,6 +44,7 @@ import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.customui.CircleImageView;
 import com.nihas.smart.chef.customui.GradientHalfoverImageDrawable;
+import com.nihas.smart.chef.customui.GradientHalfoverImageDrawableTop;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.fragments.ReviewDialog;
 import com.nihas.smart.chef.pojos.RecipesPojo;
@@ -78,7 +80,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     LinearLayout IngView,fullView;
     TextView recipeName,cusineType,howToCook;
     ProgressBar pBar;
+    Drawable favIcon;
     RelativeLayout reviewLayout;
+    Boolean isFav;
     public static final ArrayList<ReviewPojo> rvwList=new ArrayList<>();
 
 
@@ -125,9 +129,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 .displayer(new BitmapDisplayer() {
                     @Override
                     public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
-                        int gradientStartColor = Color.parseColor("#00000000");//argb(0, 0, 0, 0);
-                        int gradientEndColor = Color.parseColor("#88000000");//argb(255, 0, 0, 0);
-                        GradientHalfoverImageDrawable gradientDrawable = new GradientHalfoverImageDrawable(getResources(), bitmap);
+                        int gradientStartColor = Color.parseColor("#88000000");//argb(0, 0, 0, 0);
+                        int gradientEndColor = Color.parseColor("#00000000");//argb(255, 0, 0, 0);
+                        GradientHalfoverImageDrawableTop gradientDrawable = new GradientHalfoverImageDrawableTop(getResources(), bitmap);
                         gradientDrawable.setGradientColors(gradientStartColor, gradientEndColor);
                         imageAware.setImageDrawable(gradientDrawable);
                     }
@@ -347,8 +351,20 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_fab, menu);
+        MenuItem item = menu.findItem(R.id.action_like);
+
+        MyDbHandler dbHandler = new MyDbHandler(RecipeDetailsActivity.this, null, null, 1);
+        if(dbHandler.isFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))){
+            item.setIcon(getResources().getDrawable(R.drawable.heart));
+            isFav=true;
+        }else{
+            item.setIcon(getResources().getDrawable(R.drawable.fav));
+            isFav=false;
+        }
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -376,7 +392,40 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             }
         }else if(id== R.id.action_like){
 
-            SmartChefApp.showAToast("Under Construction");
+
+            if (!isFav) {
+
+
+                MyDbHandler dbHandler = new MyDbHandler(getApplicationContext(), null, null, 1);
+
+                RecipesPojo recipesPojo = new RecipesPojo();
+                recipesPojo.setId(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""));
+                recipesPojo.setName(SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", ""));
+                recipesPojo.setVeg(SmartChefApp.readFromPreferences(getApplicationContext(), "RVEG", ""));
+                recipesPojo.setServes(SmartChefApp.readFromPreferences(getApplicationContext(), "RSERVE", ""));
+                recipesPojo.setFood_kind(SmartChefApp.readFromPreferences(getApplicationContext(), "RFOOD_KIND", ""));
+                recipesPojo.setCuisine(SmartChefApp.readFromPreferences(getApplicationContext(), "RCUISINE", ""));
+                recipesPojo.setPreparation_time(SmartChefApp.readFromPreferences(getApplicationContext(), "RPREP_TIME", ""));
+                recipesPojo.setMedia_url(SmartChefApp.readFromPreferences(getApplicationContext(), "RMEDIA_URL", ""));
+
+
+                if (dbHandler.addtoFav(recipesPojo)) {
+                    Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Added to fav", Toast.LENGTH_SHORT).show();
+//                    MainActivity.showSnak(SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "") + " Added to Fav", item.getActionView());
+                    item.setIcon(getApplicationContext().getResources().getDrawable(R.drawable.heart));
+                } else
+                    Toast.makeText(getApplicationContext(), "FAILED ADD", Toast.LENGTH_SHORT).show();
+
+            }else{
+                MyDbHandler dbHandler = new MyDbHandler(getApplicationContext(), null, null, 1);
+                if (dbHandler.deletefromFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))) {
+                    Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Removed from favourites", Toast.LENGTH_SHORT).show();
+                    item.setIcon(getApplicationContext().getResources().getDrawable(R.drawable.fav));
+
+                } else
+                    Toast.makeText(getApplicationContext(), "FAILED REMOV", Toast.LENGTH_SHORT).show();
+            }
+
         }
         return super.onOptionsItemSelected(item);
     }

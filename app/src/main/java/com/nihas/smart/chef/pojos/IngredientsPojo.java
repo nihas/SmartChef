@@ -13,6 +13,17 @@ public class IngredientsPojo {
         this.image_url=Image_url;
     }
 
+    public IngredientsPojo(){
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
     public String getName() {
         return name;
     }

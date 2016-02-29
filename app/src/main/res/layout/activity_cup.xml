@@ -26,12 +26,13 @@
         android:orientation="vertical">
 
 
-    <ImageView
+    <TextView
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:textColor="#000000"
         android:src="@drawable/cup_empty"
-        android:text="no data available"/>
+        android:text="Your cup is empty!"
+        android:gravity="center"/>
 
         <Button
             android:id="@+id/add_ing"
@@ -39,8 +40,8 @@
             android:layout_height="wrap_content"
             android:text="Add Ingredients"
             android:textColor="#ffffff"
-            android:layout_marginTop="5dp"
-            android:background="@color/colorPrimaryDark"
+            android:layout_marginTop="15dp"
+            android:background="@color/colorPrimary"
             />
 
     </LinearLayout>
