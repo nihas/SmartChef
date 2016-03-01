@@ -78,7 +78,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     DisplayImageOptions options;
     Bundle extras;
     LinearLayout IngView,fullView;
-    TextView recipeName,cusineType,howToCook;
+    TextView recipeName,cusineType,howToCook,timeTaken,serves,food_kind,refer;
     ProgressBar pBar;
     Drawable favIcon;
     RelativeLayout reviewLayout;
@@ -105,7 +105,11 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         recipeName=(TextView)findViewById(R.id.recipe_name);
         cusineType=(TextView)findViewById(R.id.cuisine_type);
         howToCook=(TextView)findViewById(R.id.how_to_cook);
+        timeTaken=(TextView)findViewById(R.id.time_taken);
         isVeg=(ImageView)findViewById(R.id.is_veg);
+        serves=(TextView)findViewById(R.id.serves);
+        food_kind=(TextView)findViewById(R.id.food_kind);
+        refer=(TextView)findViewById(R.id.reference);
 //        getSupportActionBar().setTitle("Rasperry Ice");
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -235,6 +239,15 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     howToCook.setText(jobj.getString("how_to_cook"));
                     if(!jobj.isNull("cuisine"))
                         cusineType.setText(jobj.getString("cuisine"));
+                    if(!jobj.isNull("serves"))
+                        serves.setText("Serves: "+jobj.getString("serves"));
+                    if(!jobj.isNull("food_kind"))
+                        food_kind.setText("TYPE: "+jobj.getString("food_kind"));
+                    if(!jobj.isNull("reference"))
+                        food_kind.setText("reference: "+jobj.getString("reference"));
+
+                    if(!jobj.isNull("preparation_time"))
+                        timeTaken.setText(jobj.getString("preparation_time"));
                     if(!jobj.isNull("veg")) {
                         if(Integer.parseInt(jobj.getString("veg"))==1){
                             isVeg.setImageResource(R.drawable.veg_icon);
@@ -355,10 +368,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         MyDbHandler dbHandler = new MyDbHandler(RecipeDetailsActivity.this, null, null, 1);
         if(dbHandler.isFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))){
-            item.setIcon(getResources().getDrawable(R.drawable.heart));
+            item.setIcon(getResources().getDrawable(R.drawable.heart_white));
             isFav=true;
         }else{
-            item.setIcon(getResources().getDrawable(R.drawable.fav));
+            item.setIcon(getResources().getDrawable(R.drawable.fav_white));
             isFav=false;
         }
         return true;
@@ -412,7 +425,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 if (dbHandler.addtoFav(recipesPojo)) {
                     Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Added to fav", Toast.LENGTH_SHORT).show();
 //                    MainActivity.showSnak(SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "") + " Added to Fav", item.getActionView());
-                    item.setIcon(getApplicationContext().getResources().getDrawable(R.drawable.heart));
+                    item.setIcon(getApplicationContext().getResources().getDrawable(R.drawable.heart_white));
                     isFav=true;
                 } else
                     Toast.makeText(getApplicationContext(), "FAILED ADD", Toast.LENGTH_SHORT).show();
@@ -421,7 +434,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 MyDbHandler dbHandler = new MyDbHandler(getApplicationContext(), null, null, 1);
                 if (dbHandler.deletefromFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))) {
                     Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Removed from favourites", Toast.LENGTH_SHORT).show();
-                    item.setIcon(getApplicationContext().getResources().getDrawable(R.drawable.fav));
+                    item.setIcon(getApplicationContext().getResources().getDrawable(R.drawable.fav_white));
                     isFav=false;
 
                 } else

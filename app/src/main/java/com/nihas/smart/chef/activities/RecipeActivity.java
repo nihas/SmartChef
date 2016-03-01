@@ -51,7 +51,7 @@ public class RecipeActivity extends AppCompatActivity {
     ArrayList<RecipesPojo> listRecipes;
     RecipesAdapter recipAdapter;
     RecyclerView mRecyclerView;
-    TextView cupQty;
+    TextView cupQty,emptyView;
     ProgressBar progressBar;
     Toolbar toolbar;
     Bundle bundle;
@@ -82,7 +82,8 @@ public class RecipeActivity extends AppCompatActivity {
         progressBar=(ProgressBar)findViewById(R.id.pBar);
 
 
-
+        emptyView=(TextView)findViewById(R.id.empty_view);
+        emptyView.setVisibility(View.GONE);
         mRecyclerView=(RecyclerView)findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         bundle=getIntent().getExtras();
@@ -177,7 +178,9 @@ public class RecipeActivity extends AppCompatActivity {
 
                                 if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_VEG",false)) {
                                     RecipesAdapter recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterList(listRecipes,true));
-                                    Log.e("SIZEEE " ,getfilterList(listRecipes,true).size()+"");
+                                    mRecyclerView.setAdapter(recipAdapter);
+                                }else if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_NON_VEG",false)) {
+                                    RecipesAdapter recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterList(listRecipes,false));
                                     mRecyclerView.setAdapter(recipAdapter);
                                 }else{
                                     recipAdapter = new RecipesAdapter(RecipeActivity.this, listRecipes);
@@ -192,6 +195,8 @@ public class RecipeActivity extends AppCompatActivity {
                     e.printStackTrace();
                     SmartChefApp.showAToast("SOMETHNG WRONG");
                 }
+            }else{
+                emptyView.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -235,7 +240,7 @@ public class RecipeActivity extends AppCompatActivity {
             }
         }else{
             for (int i = 0; i < original.size(); i++) {
-                if(original.get(i).getVeg()=="0"){
+                if(original.get(i).getVeg().equals("0")){
                     RecipesPojo pojo=new RecipesPojo();
                     pojo.setId(original.get(i).getId());
                     pojo.setName(original.get(i).getName());

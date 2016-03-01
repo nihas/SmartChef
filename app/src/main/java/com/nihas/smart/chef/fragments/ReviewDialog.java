@@ -90,14 +90,20 @@ public class ReviewDialog extends DialogFragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 try {
                     jsonPost = new JSONObject();
                     jsonPost.accumulate("rid", RecipeDetailsActivity.rvwList.get(0).getRid());
                     jsonPost.accumulate("user",SmartChefApp.readFromPreferences(getActivity(), "user_id", ""));
-                    jsonPost.accumulate("review",review.getText().toString().trim());
+                    if(review.getText().length()>0)
+                        jsonPost.accumulate("review",review.getText().toString().trim());
+                    else
+                        jsonPost.accumulate("review","");
                     jsonPost.accumulate("rating",String.valueOf(ratingBar.getRating()));
                     if(SmartChefApp.isNetworkAvailable()){
                         new postReview().execute(String.valueOf(jsonPost));
+                    }else{
+                        SmartChefApp.showAToast("Internet Unavailable");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -132,6 +138,7 @@ public class ReviewDialog extends DialogFragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            getDialog().dismiss();
             pdialog.setMessage("Posting Review");
             pdialog.setCancelable(false);
             pdialog.show();

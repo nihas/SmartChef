@@ -1,6 +1,8 @@
 package com.nihas.smart.chef.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.IngredientsActivity;
 import com.nihas.smart.chef.activities.MainActivity;
+import com.nihas.smart.chef.activities.RecipeDetailsActivity;
 import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.db.MyDbHandler;
@@ -46,8 +49,10 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     List<RecipesPojo> recipeData;
     private static final int TYPE_ITEM_ING=1;
     private static final int TYPE_ITEM_REC=2;
+    private static final int TYPE_ITEM_HEAD1=3;
+    private static final int TYPE_ITEM_HEAD2=4;
     private LayoutInflater inflater;
-    private Context context;
+    private Activity context;
     public Boolean isAllAmenitiesShowing=false;
     static Double Latitude,Longitude;
 
@@ -56,7 +61,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
 
-    public SearchAdapter(Context context,  List<IngredientsPojo> INGData, List<RecipesPojo> RecipeData) {
+    public SearchAdapter(Activity context,  List<IngredientsPojo> INGData, List<RecipesPojo> RecipeData) {
         this.context=context;
         inflater=LayoutInflater.from(context);
         this.ingData=INGData;
@@ -84,6 +89,14 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             View view=inflater.inflate(R.layout.search_item_recipe, parent,false);
             ItemHolder holder=new ItemHolder(view);
             return holder;
+        }else if(viewType==TYPE_ITEM_HEAD1){
+            View view=inflater.inflate(R.layout.search_item_header, parent,false);
+            HeadHolderIng holder=new HeadHolderIng(view);
+            return holder;
+        }else if(viewType==TYPE_ITEM_HEAD2){
+            View view=inflater.inflate(R.layout.search_item_header_rec, parent,false);
+            HeadHolderRec holder=new HeadHolderRec(view);
+            return holder;
         }
         else{
             return null;
@@ -91,87 +104,115 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        if(holder instanceof HeaderHolder ) {
-            if (position < ingData.size()){
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int pos) {
+        if (pos > 0){
+            final int position=pos-1;
+            if (holder instanceof HeaderHolder) {
                 final HeaderHolder headerHolder = (HeaderHolder) holder;
-            headerHolder.textView_Ing.setText(String.valueOf(ingData.get(position).getName()));
-            MyDbHandler dbHandler = new MyDbHandler(context, null, null, 1);
-            if (dbHandler.isIngredients(ingData.get(position).getName())) {
-                headerHolder.addPlus.setImageDrawable(context.getResources().getDrawable(R.drawable.minus));
-            } else {
-                headerHolder.addPlus.setImageDrawable(context.getResources().getDrawable(R.drawable.plus));
-            }
-            headerHolder.addPlus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ImageView img = (ImageView) v;
-                    if (img.getDrawable().getConstantState().equals
-                            (context.getResources().getDrawable(R.drawable.plus).getConstantState())) {
+                headerHolder.textView_Ing.setText(String.valueOf(ingData.get(position).getName()));
+                MyDbHandler dbHandler = new MyDbHandler(context, null, null, 1);
+                if (dbHandler.isIngredients(ingData.get(position).getName())) {
+                    headerHolder.addPlus.setImageDrawable(context.getResources().getDrawable(R.drawable.minus));
+                } else {
+                    headerHolder.addPlus.setImageDrawable(context.getResources().getDrawable(R.drawable.plus));
+                }
+                headerHolder.addPlus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ImageView img = (ImageView) v;
+                        if (img.getDrawable().getConstantState().equals
+                                (context.getResources().getDrawable(R.drawable.plus).getConstantState())) {
 
 //                   Animation anim= AnimationUtils.loadAnimation(activity,R.anim.wibble);
 //                   img.setAnimation(anim);
 //                   anim.start();
 
-                        MyDbHandler dbHandler = new MyDbHandler(context, null, null, 1);
+                            MyDbHandler dbHandler = new MyDbHandler(context, null, null, 1);
 
-                        CupPojo product =
-                                new CupPojo(ingData.get(position).getName(), "http://collegemix.ca/img/placeholder.png");
-                        if (!dbHandler.isIngredients(ingData.get(position).getName())) {
-                            if (dbHandler.addProduct(product)) {
-                                MainActivity.showSnak(ingData.get(position).getName() + " Added to Cup", v);
-                                Cursor c = dbHandler.getAllCup();
-                                CupPojo pojo = new CupPojo();
-                                if (c == null)
-                                    pojo.setCup_count(0);
-                                else
-                                    pojo.setCup_count(c.getCount());
-                                MainActivity.updateCupValue(pojo.getCup_count());
+                            CupPojo product =
+                                    new CupPojo(ingData.get(position).getName(), "http://collegemix.ca/img/placeholder.png");
+                            if (!dbHandler.isIngredients(ingData.get(position).getName())) {
+                                if (dbHandler.addProduct(product)) {
+                                    MainActivity.showSnak(ingData.get(position).getName() + " Added to Cup", v);
+                                    Cursor c = dbHandler.getAllCup();
+                                    CupPojo pojo = new CupPojo();
+                                    if (c == null)
+                                        pojo.setCup_count(0);
+                                    else
+                                        pojo.setCup_count(c.getCount());
+                                    MainActivity.updateCupValue(pojo.getCup_count());
 //                                IngredientsActivity.updateCupValue(pojo.getCup_count());
-                                headerHolder.addPlus.setImageDrawable(context.getResources().getDrawable(R.drawable.minus));
-                            } else
-                                Toast.makeText(context, "FAILED", Toast.LENGTH_SHORT).show();
+                                    headerHolder.addPlus.setImageDrawable(context.getResources().getDrawable(R.drawable.minus));
+                                } else
+                                    Toast.makeText(context, "FAILED", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                MainActivity.showSnak(ingData.get(position).getName() + " Already in Cup", v);
+
+                            }
 
                         } else {
-                            MainActivity.showSnak(ingData.get(position).getName() + " Already in Cup", v);
+                            MyDbHandler dbHandler = new MyDbHandler(context, null, null, 1);
+                            if (dbHandler.deleteProduct(headerHolder.textView_Ing.getText().toString())) {
+                                Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
+                                notifyDataSetChanged();
+                                Cursor c = dbHandler.getAllCup();
+                                CupPojo pojo = new CupPojo();
+                                if (c == null) {
+                                    pojo.setCup_count(0);
+                                } else {
 
+                                    pojo.setCup_count(c.getCount());
+                                }
+                                MainActivity.updateCupValue(pojo.getCup_count());
+                                IngredientsActivity.updateCupValue(pojo.getCup_count());
+                                headerHolder.addPlus.setImageDrawable(context.getResources().getDrawable(R.drawable.plus));
+
+                            } else
+                                Toast.makeText(context, "FAILED Delete", Toast.LENGTH_SHORT).show();
                         }
 
-                    } else {
-                        MyDbHandler dbHandler = new MyDbHandler(context, null, null, 1);
-                        if (dbHandler.deleteProduct(headerHolder.textView_Ing.getText().toString())) {
-                            Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
-                            notifyDataSetChanged();
-                            Cursor c = dbHandler.getAllCup();
-                            CupPojo pojo = new CupPojo();
-                            if (c == null) {
-                                pojo.setCup_count(0);
-                            } else {
 
-                                pojo.setCup_count(c.getCount());
-                            }
-                            MainActivity.updateCupValue(pojo.getCup_count());
-                            IngredientsActivity.updateCupValue(pojo.getCup_count());
-                            headerHolder.addPlus.setImageDrawable(context.getResources().getDrawable(R.drawable.plus));
-
-                        } else
-                            Toast.makeText(context, "FAILED Delete", Toast.LENGTH_SHORT).show();
                     }
+                });
 
 
+            } else if (holder instanceof ItemHolder) {
+                ItemHolder itemHolder = (ItemHolder) holder;
+                final int posi = pos - (ingData.size() + 2);
+                if (posi < recipeData.size() && posi > -1) {
+                    itemHolder.text_rec.setText(String.valueOf(recipeData.get(posi).getName()));
+                    imageLoader.displayImage(recipeData.get(posi).getMedia_url(), ((ItemHolder) holder).imageView_rec, options);
+                    itemHolder.searchViewItem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, RecipeDetailsActivity.class);
+                            intent.putExtra("RECIPE_ID", recipeData.get(posi).getId());
+                            context.startActivity(intent);
+                            context.overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
+                            context.finish();
+
+                            SmartChefApp.saveToPreferences(context, "RID", recipeData.get(posi).getId());
+                            SmartChefApp.saveToPreferences(context,"RNAME",recipeData.get(posi).getName());
+                            SmartChefApp.saveToPreferences(context,"RVEG",recipeData.get(posi).getVeg());
+                            SmartChefApp.saveToPreferences(context,"RSERVE",recipeData.get(posi).getServes());
+                            SmartChefApp.saveToPreferences(context,"RFOOD_KIND",recipeData.get(posi).getFood_kind());
+                            SmartChefApp.saveToPreferences(context, "RCUISINE", recipeData.get(posi).getCuisine());
+                            SmartChefApp.saveToPreferences(context, "RPREP_TIME", recipeData.get(posi).getPreparation_time());
+                            SmartChefApp.saveToPreferences(context, "RMEDIA_URL", recipeData.get(posi).getMedia_url());
+                        }
+                    });
                 }
-            });
-
-        }
-        }
-        else if(holder instanceof ItemHolder ){
-            ItemHolder itemHolder= (ItemHolder) holder;
-            int pos=position-ingData.size();
-    itemHolder.text_rec.setText(String.valueOf(recipeData.get(pos).getName()));
-    imageLoader.displayImage(recipeData.get(pos).getMedia_url(), ((ItemHolder) holder).imageView_rec, options);
 
 
-        }
+            } else if (holder instanceof HeadHolderIng) {
+                HeadHolderIng headHolderIng = (HeadHolderIng) holder;
+
+            } else if (holder instanceof HeadHolderRec) {
+                HeadHolderRec headHolderRec = (HeadHolderRec) holder;
+            }
+
+    }
 
     }
 
@@ -179,26 +220,46 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        return  ingData.size()+recipeData.size();
+        return  ingData.size()+recipeData.size()+2;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(position > ingData.size()-1){
-            return TYPE_ITEM_REC;
-        }else{
-             return TYPE_ITEM_ING;
-        }
+        if(position==0){
+            return TYPE_ITEM_HEAD1;
+        }else if(position==ingData.size()+1) {
+            return TYPE_ITEM_HEAD2;
+        }else if(position > ingData.size()){
+                return TYPE_ITEM_REC;
+            }else{
+                return TYPE_ITEM_ING;
+            }
+
     }
 
-    class FooterHolder extends RecyclerView.ViewHolder{
-        MapView mapView;
-        TextView noMap;
+    class HeadHolderIng extends RecyclerView.ViewHolder{
+        TextView header;
 
-        public FooterHolder(View itemView) {
+        public HeadHolderIng(View itemView) {
             super(itemView);
 //            mapView = (MapView) itemView.findViewById(R.id.map);
-//            noMap=(TextView)itemView.findViewById(R.id.no_map);
+            header=(TextView)itemView.findViewById(R.id.header);
+
+
+
+
+        }
+
+
+    }
+
+    class HeadHolderRec extends RecyclerView.ViewHolder{
+        TextView header;
+
+        public HeadHolderRec(View itemView) {
+            super(itemView);
+//            mapView = (MapView) itemView.findViewById(R.id.map);
+            header=(TextView)itemView.findViewById(R.id.header);
 
 
 
@@ -214,12 +275,14 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         TextView text_rec;
         ImageView imageView_rec;
+        LinearLayout searchViewItem;
 
         public ItemHolder(View itemView) {
             super(itemView);
 
             text_rec = (TextView) itemView.findViewById(R.id.textView_item_text);
             imageView_rec = (ImageView) itemView.findViewById(R.id.imageView_item_icon_left);
+            searchViewItem=(LinearLayout)itemView.findViewById(R.id.search_view_item);
         }
     }
 

@@ -51,7 +51,7 @@ public class FilterDialog extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.filter_dialog);
-        overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
+        overridePendingTransition(R.anim.push_up_in, R.anim.fade_out);
 
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
@@ -88,41 +88,58 @@ public class FilterDialog extends AppCompatActivity {
                 else
                     SmartChefApp.saveToPreferences(getApplicationContext(), "FILTER_VEG", false);
 
+                if(isNonVeg)
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_NON_VEG",true);
+                else
+                    SmartChefApp.saveToPreferences(getApplicationContext(), "FILTER_NON_VEG", false);
+
                 onBackPressed();
             }
         });
 
-        if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_VEG",false))
+        if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_VEG",false)) {
             veg.setBackgroundColor(Color.GREEN);
-        else
+            isVeg=true;
+        }
+        else {
             veg.setBackgroundColor(Color.TRANSPARENT);
+            isVeg=false;
+        }
 
-        if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_NON_VEG",false))
+        if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_NON_VEG",false)) {
             nonVeg.setBackgroundColor(Color.GREEN);
-        else
+            isNonVeg=true;
+        }
+        else {
             nonVeg.setBackgroundColor(Color.TRANSPARENT);
+            isNonVeg=false;
+        }
 
         veg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_VEG",false)){
+                if(isVeg){
                     veg.setBackgroundColor(Color.TRANSPARENT);
                     isVeg=false;
                 }else {
                     veg.setBackgroundColor(Color.GREEN);
                     isVeg=true;
+                    nonVeg.setBackgroundColor(Color.TRANSPARENT);
+                    isNonVeg=false;
                 }
             }
         });
         nonVeg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_NON_VEG",false)){
+                if(isNonVeg){
                     nonVeg.setBackgroundColor(Color.TRANSPARENT);
                     isNonVeg=false;
                 }else {
                     nonVeg.setBackgroundColor(Color.GREEN);
                     isNonVeg=true;
+                    veg.setBackgroundColor(Color.TRANSPARENT);
+                    isVeg=false;
                 }
             }
         });

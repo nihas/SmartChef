@@ -218,7 +218,7 @@ public class SearchActivity extends AppCompatActivity {
                     pojo.setMedia_url(jarrayrec.getJSONObject(j).getString("media_url"));
                     mRecipeList.add(pojo);
                 }
-                com.nihas.smart.chef.adapters.SearchAdapter searchAdapter=new com.nihas.smart.chef.adapters.SearchAdapter(getApplicationContext(),mIngList,mRecipeList);
+                com.nihas.smart.chef.adapters.SearchAdapter searchAdapter=new com.nihas.smart.chef.adapters.SearchAdapter(SearchActivity.this,mIngList,mRecipeList);
                 recyclerView.setAdapter(searchAdapter);
 //                mSearchAdapter = new SearchAdapter(SearchActivity.this, mResultsList, mSuggestionsList, mSuggestionsRecipe, SearchCodes.THEME_LIGHT);
 //                mSearchView.setAdapter(mSearchAdapter);

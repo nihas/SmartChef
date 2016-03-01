@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -29,6 +31,7 @@ import com.nihas.smart.chef.api.WebRequest;
 import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.db.MyDbHandler;
+import com.nihas.smart.chef.fragments.DrawerFragment;
 import com.nihas.smart.chef.pojos.AllPojo;
 import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.pojos.IngredientsPojo;
@@ -61,7 +64,7 @@ public class IngredientsActivity extends AppCompatActivity{
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle(SmartChefApp.readFromPreferences(getApplicationContext(),"CAT",""));
+        toolbar.setTitle(SmartChefApp.readFromPreferences(getApplicationContext(), "CAT", ""));
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
 
         final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
@@ -73,6 +76,11 @@ public class IngredientsActivity extends AppCompatActivity{
                 onBackPressed();
             }
         });
+
+        DrawerLayout drawerLayout=(DrawerLayout)findViewById(R.id.drawerlayout);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container_drawer,new DrawerFragment().newInstance(drawerLayout), "CupFragment")
+                .commit();
 
         progressBar=(ProgressBar)findViewById(R.id.pBar);
         if (SmartChefApp.isNetworkAvailable()) {
@@ -213,8 +221,8 @@ public class IngredientsActivity extends AppCompatActivity{
             return true;
         }else if(id==R.id.action_search){
 //            showSearchView();
-//            Intent searchInten=new Intent(MainActivity.this,SearchActivity.class);
-//            startActivity(searchInten);
+            Intent searchInten=new Intent(IngredientsActivity.this,SearchActivity.class);
+            startActivity(searchInten);
 //            return true;
 
         }

@@ -3,21 +3,16 @@
     android:id="@+id/search_view_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
+    android:background="#CCCCCC"
     android:clickable="true"
+    android:padding="8dp"
     android:gravity="start|center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/search_key_line">
 
-    <ImageView
-        android:id="@+id/imageView_item_icon_left"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/empty_photo"
-        android:contentDescription="@string/search_cont_desc" />
 
     <TextView
-        android:id="@+id/textView_item_text"
+        android:id="@+id/header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical"
@@ -26,8 +21,8 @@
         android:layout_marginRight="@dimen/search_item_margin_text"
         android:layout_marginStart="@dimen/search_item_margin_text"
         android:layout_weight="1"
-        android:text="Hiiiiiiiiiiiii"
         android:textColor="#000000"
+        android:text="INGRADIENTS"
         android:gravity="start|center_vertical"
         android:singleLine="true"
         android:textSize="@dimen/search_text_small" />

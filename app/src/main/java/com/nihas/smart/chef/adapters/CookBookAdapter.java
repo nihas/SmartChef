@@ -146,7 +146,7 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.ViewHo
     holder.serveTo.setText(mDataset.get(position).getServes()+"");
         holder.cusine.setText(mDataset.get(position).getCuisine());
         holder.timeTaken.setText(mDataset.get(position).getPreparation_time());
-        if(Integer.parseInt(mDataset.get(position).getVeg())==1){
+        if(mDataset.get(position).getVeg().equals("1")){
             holder.foodType.setImageResource(R.drawable.veg_icon);
         }else{
             holder.foodType.setImageResource(R.drawable.non_veg_icon);

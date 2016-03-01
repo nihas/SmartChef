@@ -1,10 +1,12 @@
 package com.nihas.smart.chef.activities;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -42,6 +44,8 @@ import com.google.android.gms.plus.model.people.Person;
 import com.nihas.smart.chef.Constants;
 import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.api.WebRequest;
+import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.utils.CirclePageIndicator;
 
@@ -432,10 +436,32 @@ private ConnectionResult mConnectionResult;
             uid = token.getUserId();
             access_token = token.getToken();
 
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
-            finish();
+            /*{"id":"1234271433254379",
+                    "name":"Nihas Nizar",
+                    "type":"fb/google",
+                    "gender":"male",
+                    "email":"nihasnizar@gmail.com",
+                    "profile_pic": "https://graph.facebook.com/1234271433254379/picture?width=200&height=150"
+            }*/
+
+            JSONObject jsonPost = new JSONObject();
+            try {
+                jsonPost.accumulate("id", SmartChefApp.readFromPreferences(LoginActivity.this, "user_id", ""));
+            jsonPost.accumulate("name", SmartChefApp.readFromPreferences(LoginActivity.this, "user_name", ""));
+            jsonPost.accumulate("type", "fb");
+            jsonPost.accumulate("gender", SmartChefApp.readFromPreferences(LoginActivity.this, "gender", ""));
+                jsonPost.accumulate("email", SmartChefApp.readFromPreferences(LoginActivity.this, Keys.email, ""));
+                jsonPost.accumulate("profile_pic", SmartChefApp.readFromPreferences(LoginActivity.this, "profile_pic", ""));
+            if(SmartChefApp.isNetworkAvailable()){
+                new postReview().execute(String.valueOf(jsonPost));
+            }else{
+                SmartChefApp.showAToast("Internet Unavailable");
+            }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
         }
 
 
@@ -444,6 +470,55 @@ private ConnectionResult mConnectionResult;
 
 
     }
+
+    private class postReview extends AsyncTask<String, Void, JSONObject> {
+
+
+        ProgressDialog pdialog=new ProgressDialog(LoginActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pdialog.setMessage("Verifying User");
+            pdialog.setCancelable(false);
+            pdialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            JSONObject jsonObject = null;
+            try {
+                return WebRequest.postData(params[0], WebServices.registerUser);
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+            return jsonObject;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jobj) {
+            super.onPostExecute(jobj);
+            pdialog.dismiss();
+            Log.e("REVIEW",jobj+"");
+            try {
+                if(jobj.getString("status").equals("true") || jobj.getString("status").equals("exists")){
+                    SmartChefApp.showAToast("Success");
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
+                    finish();
+                }else{
+                    SmartChefApp.showAToast("Problem with login Please try again");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
 
 
     @Override

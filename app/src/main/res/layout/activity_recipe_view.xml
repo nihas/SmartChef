@@ -35,8 +35,8 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textColor="#000000"
-        android:visibility="gone"
-        android:text="no data available" />
+        android:textStyle="bold"
+        android:text="No Recipes available" />
 </RelativeLayout>
 
 
