@@ -42,23 +42,23 @@ import org.json.JSONObject;
 
 public class ReviewDialog extends DialogFragment {
 
-    CircleImageView pro_pic;
+//    CircleImageView pro_pic;
     RatingBar ratingBar;
     EditText review;
     Button submitButton;
-    RecyclerView recyclerView;
-    ProgressBar pBar;
-    ImageLoader imageLoader;
-    DisplayImageOptions options;
-    TextView emptyView;
+//    RecyclerView recyclerView;
+//    ProgressBar pBar;
+//    ImageLoader imageLoader;
+//    DisplayImageOptions options;
+//    TextView emptyView;
     String review_detail;
-    float rating_value;
+//    float rating_value;
     JSONObject jsonPost;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.review_dialog, container, false);
-        imageLoader = ImageLoader.getInstance();
+        View rootView = inflater.inflate(R.layout.post_review_dialog, container, false);
+//        imageLoader = ImageLoader.getInstance();
         return rootView;
     }
 
@@ -66,34 +66,34 @@ public class ReviewDialog extends DialogFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getDialog().setTitle("Reviews");
-        pro_pic=(CircleImageView)view.findViewById(R.id.profile);
+//        pro_pic=(CircleImageView)view.findViewById(R.id.profile);
 //        title=(TextView)view.findViewById(R.id.title);
-        recyclerView=(RecyclerView)view.findViewById(R.id.rv);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        recyclerView=(RecyclerView)view.findViewById(R.id.rv);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        emptyView=(TextView)view.findViewById(R.id.empty_view);
+//        emptyView=(TextView)view.findViewById(R.id.empty_view);
 
-        emptyView.setVisibility(View.GONE);
-        if(!RecipeDetailsActivity.rvwList.isEmpty()) {
-
-            ReviewAdapter rAdapter=new ReviewAdapter(getContext(), RecipeDetailsActivity.rvwList);
-            recyclerView.setAdapter(rAdapter);
-        }else{
-            emptyView.setVisibility(View.VISIBLE);
-        }
+//        emptyView.setVisibility(View.GONE);
+//        if(!RecipeDetailsActivity.rvwList.isEmpty()) {
+//
+//            ReviewAdapter rAdapter=new ReviewAdapter(getContext(), RecipeDetailsActivity.rvwList);
+//            recyclerView.setAdapter(rAdapter);
+//        }else{
+//            emptyView.setVisibility(View.VISIBLE);
+//        }
 
         ratingBar=(RatingBar)view.findViewById(R.id.ratingBar);
         review=(EditText)view.findViewById(R.id.review);
         submitButton=(Button)view.findViewById(R.id.submit_button);
-        pBar=(ProgressBar)view.findViewById(R.id.progressBar);
-        review_detail=review.getText().toString().trim();
+//        pBar=(ProgressBar)view.findViewById(R.id.progressBar);
+//        review_detail=review.getText().toString().trim();
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 try {
                     jsonPost = new JSONObject();
-                    jsonPost.accumulate("rid", RecipeDetailsActivity.rvwList.get(0).getRid());
+                    jsonPost.accumulate("rid", getArguments().getString("rid"));
                     jsonPost.accumulate("user",SmartChefApp.readFromPreferences(getActivity(), "user_id", ""));
                     if(review.getText().length()>0)
                         jsonPost.accumulate("review",review.getText().toString().trim());
@@ -110,7 +110,7 @@ public class ReviewDialog extends DialogFragment {
                 }
             }
         });
-        options = new DisplayImageOptions.Builder().cacheInMemory(true)
+//        options = new DisplayImageOptions.Builder().cacheInMemory(true)
 //                .displayer(new BitmapDisplayer() {
 //            @Override
 //            public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
@@ -121,13 +121,13 @@ public class ReviewDialog extends DialogFragment {
 //                imageAware.setImageDrawable(gradientDrawable);
 //            }
 //        })
-                .cacheOnDisc(true).resetViewBeforeLoading(true)
-                .showImageForEmptyUri(R.drawable.empty_photo)
-                .showImageOnFail(R.drawable.empty_photo)
-                .showImageOnLoading(R.drawable.empty_photo).build();
+//                .cacheOnDisc(true).resetViewBeforeLoading(true)
+//                .showImageForEmptyUri(R.drawable.empty_photo)
+//                .showImageOnFail(R.drawable.empty_photo)
+//                .showImageOnLoading(R.drawable.empty_photo).build();
 
 
-        imageLoader.displayImage(SmartChefApp.readFromPreferences(getContext(), "profile_pic", ""), pro_pic, options);
+//        imageLoader.displayImage(SmartChefApp.readFromPreferences(getContext(), "profile_pic", ""), pro_pic, options);
     }
 
     private class postReview extends AsyncTask<String, Void, JSONObject> {
@@ -166,6 +166,7 @@ public class ReviewDialog extends DialogFragment {
             try {
                 if(jobj.getString("status").equals("true")){
                     SmartChefApp.showAToast("Review Posted Successfully");
+//                    getDialog().dismiss();
                 }else{
                     SmartChefApp.showAToast("Failed");
                 }

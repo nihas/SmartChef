@@ -94,7 +94,7 @@ Response
         return baseUrl2 + "one_recipe.php?rid="+recipe_id+"&key="+SECRET_KEY;
     }
 
-    public static final String getRecipeReviews(int recipe_id){
+    public static final String getRecipeReviews(String recipe_id){
         return baseUrl2 + "revws.php?rid="+recipe_id+"&key="+SECRET_KEY;
     }
     public static final String postReview=baseUrl2+"review_in.php?key="+SECRET_KEY;

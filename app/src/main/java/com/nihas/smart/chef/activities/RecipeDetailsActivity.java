@@ -46,6 +46,7 @@ import com.nihas.smart.chef.customui.CircleImageView;
 import com.nihas.smart.chef.customui.GradientHalfoverImageDrawable;
 import com.nihas.smart.chef.customui.GradientHalfoverImageDrawableTop;
 import com.nihas.smart.chef.db.MyDbHandler;
+import com.nihas.smart.chef.fragments.ReviewActivity;
 import com.nihas.smart.chef.fragments.ReviewDialog;
 import com.nihas.smart.chef.pojos.RecipesPojo;
 import com.nihas.smart.chef.pojos.ReviewPojo;
@@ -152,9 +153,13 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         reviewLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fm = getSupportFragmentManager();
-                ReviewDialog dialogFragment = new ReviewDialog();
-                dialogFragment.show(fm, "Sample Fragment");
+//                FragmentManager fm = getSupportFragmentManager();
+//                ReviewDialog dialogFragment = new ReviewDialog();
+//                dialogFragment.show(fm, "Sample Fragment");
+
+                Intent review=new Intent(RecipeDetailsActivity.this, ReviewActivity.class);
+                review.putExtra("rid",extras.getString("RECIPE_ID"));
+                startActivity(review);
             }
         });
 

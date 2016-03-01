@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -99,6 +100,11 @@ public class ReviewActivity extends AppCompatActivity {
         emptyView=(TextView)findViewById(R.id.empty_view);
 
         emptyView.setVisibility(View.GONE);
+        if(SmartChefApp.isNetworkAvailable()){
+            new getReviews().execute(bundle.getString("rid"));
+        }else{
+            SmartChefApp.showAToast("Internet Unavailable");
+        }
         if(!RecipeDetailsActivity.rvwList.isEmpty()) {
 
 
@@ -125,14 +131,17 @@ public class ReviewActivity extends AppCompatActivity {
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                FragmentManager fm = getSupportFragmentManager();
+                ReviewDialog dialogFragment = new ReviewDialog();
+                dialogFragment.setArguments(bundle);
+                dialogFragment.show(fm, "Sample Fragment");
             }
         });
 
     }
 
 
-    private class getRecipe extends AsyncTask<String, Void, JSONArray> {
+    private class getReviews extends AsyncTask<String, Void, JSONArray> {
 
         ProgressDialog pDialog=new ProgressDialog(ReviewActivity.this);
 
@@ -151,7 +160,7 @@ public class ReviewActivity extends AppCompatActivity {
             JSONArray jsonObject = null;
             try {
 
-                return WebRequest.getDataJSONArray(WebServices.getRecipeReviews(Integer.parseInt(params[0])));
+                return WebRequest.getDataJSONArray(WebServices.getRecipeReviews(params[0]));
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -193,7 +202,7 @@ pDialog.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }
+        }
 //            progressBar.setVisibility(View.GONE);
 //            onDone(jArray);
 
@@ -203,9 +212,6 @@ pDialog.dismiss();
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent backIntent=new Intent(ReviewActivity.this, RecipeActivity.class);
-        backIntent.putExtra("ingredients", bundle.getString("ingredients"));
-        startActivity(backIntent);
         finish();
     }
 }

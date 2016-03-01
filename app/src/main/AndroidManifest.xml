@@ -72,6 +72,10 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".fragments.ReviewActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".activities.CupActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"/>
