@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.CookBook;
@@ -50,7 +51,6 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
     TextView logOut,userName,eMail,myCookBook;
     CircleImageView proPic;
     ImageLoader imageLoader;
-
 
 
     @Override
@@ -97,6 +97,9 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        SmartChefApp.saveToPreferences(getActivity(), "isGplusLogin", false);
+                        LoginActivity.signOutFromGplus();
+
                         LoginManager.getInstance().logOut();
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
                         startActivity(intent);

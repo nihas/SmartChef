@@ -5,12 +5,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
 import com.nihas.smart.chef.Constants;
 import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
@@ -27,6 +31,8 @@ public class SplashActivity extends AppCompatActivity {
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
     private String fbId = null,emailid,uid,access_token;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +68,11 @@ public class SplashActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
             finish();
+        }else if(SmartChefApp.readFromPreferences(SplashActivity.this,"isGplusLogin",false)) {
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
+            finish();
         }else{
             Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
             startActivity(intent);
@@ -75,4 +86,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
     }
+
+
+
 }

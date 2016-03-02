@@ -69,7 +69,7 @@ private ProfileTracker profileTracker;
 private String fbId = null,emailid,uid,access_token;
 boolean loggedIn;
 private SignInButton signinButton;
-private GoogleApiClient mGoogleApiClient;
+private static GoogleApiClient mGoogleApiClient;
 private boolean mIntentInProgress;
 
 private boolean mSignInClicked;
@@ -222,12 +222,35 @@ private ConnectionResult mConnectionResult;
      * API to update signed in user information
      */
     private void processUserInfoAndUpdateUI() {
+        JSONObject jobj=new JSONObject();
         Person signedInUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
         if (signedInUser != null) {
+
+
+
+
+
+            SmartChefApp.saveToPreferences(LoginActivity.this, "login_type","google");
+
+            if (signedInUser.hasId()) {
+                String id = signedInUser.getId();
+                Log.d("id",id);
+                SmartChefApp.saveToPreferences(LoginActivity.this, "user_id", id);
+            }
 
             if (signedInUser.hasDisplayName()) {
                 String userName = signedInUser.getDisplayName();
                 Log.d("UserName",userName);
+                SmartChefApp.saveToPreferences(LoginActivity.this, "user_name", userName);
+            }
+
+            if(signedInUser.hasGender()){
+                int gendr = signedInUser.getGender();
+                Log.d("gender",gendr+"");
+                if(gendr==0)
+                    SmartChefApp.saveToPreferences(LoginActivity.this, "gender", "male");
+                else
+                    SmartChefApp.saveToPreferences(LoginActivity.this, "gender", "female");
             }
 
             if (signedInUser.hasTagline()) {
@@ -252,6 +275,8 @@ private ConnectionResult mConnectionResult;
 
             String userEmail = Plus.AccountApi.getAccountName(mGoogleApiClient);
             Log.d("userEmail",userEmail);
+            SmartChefApp.saveToPreferences(LoginActivity.this, Keys.email, userEmail);
+
 
             if (signedInUser.hasImage()) {
                 String userProfilePicUrl = signedInUser.getImage().getUrl();
@@ -261,7 +286,27 @@ private ConnectionResult mConnectionResult;
                 userProfilePicUrl = userProfilePicUrl.substring(0,
                         userProfilePicUrl.length() - 2) + profilePicRequestSize;
                 Log.d("userProfilePicUrl",userProfilePicUrl);
+                SmartChefApp.saveToPreferences(LoginActivity.this, "profile_pic", userProfilePicUrl);
             }
+
+            try {
+                jobj.accumulate("id", SmartChefApp.readFromPreferences(LoginActivity.this, "user_id", ""));
+                jobj.accumulate("name", SmartChefApp.readFromPreferences(LoginActivity.this, "user_name", ""));
+                jobj.accumulate("type", "fb");
+                jobj.accumulate("gender", SmartChefApp.readFromPreferences(LoginActivity.this, "gender", ""));
+                jobj.accumulate("email", SmartChefApp.readFromPreferences(LoginActivity.this, Keys.email, ""));
+                jobj.accumulate("profile_pic", SmartChefApp.readFromPreferences(LoginActivity.this, "profile_pic", ""));
+                SmartChefApp.saveToPreferences(LoginActivity.this, "isGplusLogin", true);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            if(SmartChefApp.isNetworkAvailable()){
+                new postReview().execute(String.valueOf(jobj));
+            }else{
+                SmartChefApp.showAToast("Internet Unavailable");
+            }
+
 
         }
     }
@@ -515,6 +560,12 @@ private ConnectionResult mConnectionResult;
         }
     }
 
+    public static void signOutFromGplus() {
+        if (mGoogleApiClient.isConnected()) {
+            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+            mGoogleApiClient.disconnect();
+        }
+    }
 
     public class ViewPagerAdapter extends PagerAdapter {
 
