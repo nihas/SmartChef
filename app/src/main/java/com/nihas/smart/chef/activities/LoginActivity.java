@@ -1,5 +1,6 @@
 package com.nihas.smart.chef.activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -105,52 +106,44 @@ private ConnectionResult mConnectionResult;
         mIndicator.setViewPager(viewPager);
     }
 
-        private void initializeGooglePlus() {
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestEmail()
-                    .build();
+    private void initializeGooglePlus() {
+        mGoogleApiClient = buildGoogleAPIClient();
+    }
 
 
-//            mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                    .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-//                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-//                    .build();
 
-            mGoogleApiClient = buildGoogleAPIClient();
-        }
-
-
-        public boolean isFacebookLoggedIn(){
+    public boolean isFacebookLoggedIn(){
             return AccessToken.getCurrentAccessToken() != null;
         }
 
-        /**
-         * API to return GoogleApiClient Make sure to create new after revoking
-         * access or for first time sign in
-         *
-         * @return
-         */
-        private GoogleApiClient buildGoogleAPIClient() {
-            return new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(Plus.API, Plus.PlusOptions.builder().build())
-                    .addScope(Plus.SCOPE_PLUS_LOGIN).build();
-        }
 
-        @Override
-        public void onStart() {
-            super.onStart();
-            // make sure to initiate connection
-//            mGoogleApiClient.connect();
-        }
+    /**
+     * API to return GoogleApiClient Make sure to create new after revoking
+     * access or for first time sign in
+     *
+     * @return
+     */
+    private GoogleApiClient buildGoogleAPIClient() {
+        return new GoogleApiClient.Builder(LoginActivity.this).addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API, Plus.PlusOptions.builder().build())
+                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
+    }
 
-        @Override
-        public void onStop() {
-            super.onStop();
-            // disconnect api if it is connected
-//            if (mGoogleApiClient.isConnected())
-//                mGoogleApiClient.disconnect();
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // make sure to initiate connection
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // disconnect api if it is connected
+        if (mGoogleApiClient.isConnected())
+            mGoogleApiClient.disconnect();
+    }
 
     /**
      * API to handler sign in of user If error occurs while connecting process
@@ -159,13 +152,6 @@ private ConnectionResult mConnectionResult;
     private void processSignIn() {
 
         if (!mGoogleApiClient.isConnecting()) {
-//            Intent shareIntent = new PlusShare.Builder(this)
-//                    .setType("text/plain")
-//                    .setText("Welcome to the Google+ platform.")
-//                    .setContentUrl(Uri.parse("https://developers.google.com/+/"))
-//                    .getIntent();
-
-//            startActivityForResult(shareIntent, 0);
             processSignInError();
             mSignInClicked = true;
         }
@@ -179,7 +165,7 @@ private ConnectionResult mConnectionResult;
         if (mConnectionResult != null && mConnectionResult.hasResolution()) {
             try {
                 mIntentInProgress = true;
-                mConnectionResult.startResolutionForResult(this,
+                mConnectionResult.startResolutionForResult(LoginActivity.this,
                         SIGN_IN_REQUEST_CODE);
             } catch (IntentSender.SendIntentException e) {
                 mIntentInProgress = false;
@@ -194,7 +180,7 @@ private ConnectionResult mConnectionResult;
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         if (!result.hasResolution()) {
-            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this,
+            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), LoginActivity.this,
                     ERROR_DIALOG_REQUEST_CODE).show();
             return;
         }
@@ -238,16 +224,10 @@ private ConnectionResult mConnectionResult;
     private void processUserInfoAndUpdateUI() {
         Person signedInUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
         if (signedInUser != null) {
-            if (signedInUser.hasId()) {
-                String userId = signedInUser.getId();
-
-                Log.d("UserId",userId);
-            }
-
 
             if (signedInUser.hasDisplayName()) {
                 String userName = signedInUser.getDisplayName();
-                Log.d("UserName", userName);
+                Log.d("UserName",userName);
             }
 
             if (signedInUser.hasTagline()) {
@@ -294,7 +274,7 @@ private ConnectionResult mConnectionResult;
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == SIGN_IN_REQUEST_CODE) {
-            if (resultCode != this.RESULT_OK) {
+            if (resultCode != Activity.RESULT_OK) {
                 mSignInClicked = false;
             }
 
@@ -306,12 +286,12 @@ private ConnectionResult mConnectionResult;
         } else if (requestCode == PICK_MEDIA_REQUEST_CODE) {
             // If picking media is success, create share post using
             // PlusShare.Builder
-            if (resultCode == this.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 Uri selectedImage = data.getData();
-                ContentResolver cr = this.getContentResolver();
+                ContentResolver cr = getApplicationContext().getContentResolver();
                 String mime = cr.getType(selectedImage);
 
-                PlusShare.Builder share = new PlusShare.Builder(this);
+                PlusShare.Builder share = new PlusShare.Builder(LoginActivity.this);
                 share.setText("Hello from AndroidSRC.net");
                 share.addStream(selectedImage);
                 share.setType(mime);
