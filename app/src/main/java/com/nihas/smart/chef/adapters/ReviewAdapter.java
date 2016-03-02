@@ -19,6 +19,7 @@ import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.MainActivity;
 import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
+import com.nihas.smart.chef.customui.CircleImageView;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.pojos.IngredientsPojo;
@@ -65,6 +66,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         // each data item is just a string in this case
         public TextView user,review;
         RatingBar rBar;
+        CircleImageView pro;
         public ViewHolder(View v) {
             super(v);
 
@@ -72,6 +74,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             user=(TextView)v.findViewById(R.id.userTitle);
             review=(TextView)v.findViewById(R.id.review);
             rBar=(RatingBar)v.findViewById(R.id.ratingBar);
+            pro=(CircleImageView)v.findViewById(R.id.pro_pic);
         }
     }
 
@@ -122,6 +125,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         holder.user.setText(mDataset.get(position).getUser());
         holder.review.setText(mDataset.get(position).getReview());
         holder.rBar.setRating(Float.parseFloat(mDataset.get(position).getRating()));
+        imageLoader.displayImage(SmartChefApp.readFromPreferences(activity, "profile_pic", ""), holder.pro, options);
 
 
     }
