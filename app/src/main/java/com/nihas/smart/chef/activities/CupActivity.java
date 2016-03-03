@@ -168,7 +168,7 @@ initialise();
                     intent.putExtra("ingredients", cook_ing);
 //                    setResult(2,intent);
                     startActivity(intent);
-                    finish();//finishing activity
+//                    finish();//finishing activity
 //                    getSupportFragmentManager().beginTransaction().replace(R.id.container,new RecipeFragment()).addToBackStack(null).commit();
 //                    finish();
 

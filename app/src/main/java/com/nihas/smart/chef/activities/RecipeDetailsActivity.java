@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +36,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nihas.smart.chef.Constants;
 import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.adapters.RecipesAdapter;
@@ -50,6 +52,8 @@ import com.nihas.smart.chef.fragments.ReviewActivity;
 import com.nihas.smart.chef.fragments.ReviewDialog;
 import com.nihas.smart.chef.pojos.RecipesPojo;
 import com.nihas.smart.chef.pojos.ReviewPojo;
+import com.nihas.smart.chef.utils.AutoScrollViewPager;
+import com.nihas.smart.chef.utils.CirclePageIndicator;
 import com.nihas.smart.chef.utils.RecyclerItemClickListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -97,6 +101,25 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         extras=getIntent().getExtras();
         fullView=(LinearLayout)findViewById(R.id.full_layout);
         fullView.setVisibility(View.GONE);
+
+        AutoScrollViewPager viewPager = (AutoScrollViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new ViewPagerAdapter(R.array.icons));
+
+        viewPager.setInterval(Constants.SPLASH_TIME_OUT);
+        viewPager.startAutoScroll();
+
+
+        CirclePageIndicator mIndicator  = (CirclePageIndicator) findViewById(R.id.indicator);
+        mIndicator.setViewPager(viewPager);
+
+        viewPager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent=new Intent(RecipeDetailsActivity.this,ActivityGallery.class);
+                startActivity(galleryIntent);
+
+            }
+        });
 
         reviewLayout=(RelativeLayout)findViewById(R.id.review_layout);
         thumb=(ImageView)findViewById(R.id.thumb);
@@ -448,6 +471,56 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    public class ViewPagerAdapter extends PagerAdapter {
+
+        private int iconResId;
+
+        public ViewPagerAdapter(int iconResId) {
+
+            this.iconResId = iconResId;
+//            this.hintArrayResId = hintArrayResId;
+        }
+
+
+        @Override
+        public int getCount() {
+            return getResources().getIntArray(iconResId).length;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+
+            Drawable icon = getResources().obtainTypedArray(iconResId).getDrawable(position);
+//            String hint = getResources().getStringArray(hintArrayResId)[position];
+
+            View itemView = getLayoutInflater().inflate(R.layout.viewpager_item, container, false);
+
+            ImageView iconView = (ImageView) itemView.findViewById(R.id.landing_img_slide);
+            TextView hintView = (TextView)itemView.findViewById(R.id.landing_txt_hint);
+
+
+            iconView.setImageDrawable(icon);
+//            hintView.setText(hint);
+
+            container.addView(itemView);
+
+            return itemView;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((RelativeLayout) object);
+
+        }
     }
 }
 

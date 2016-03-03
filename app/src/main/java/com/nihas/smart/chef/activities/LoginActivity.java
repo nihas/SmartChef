@@ -564,6 +564,7 @@ private ConnectionResult mConnectionResult;
         if (mGoogleApiClient.isConnected()) {
             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
             mGoogleApiClient.disconnect();
+            mGoogleApiClient.connect();
         }
     }
 

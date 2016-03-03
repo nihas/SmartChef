@@ -22,7 +22,9 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:expandedTitleMarginBottom="72dp">
 
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="300dp">
 
             <ImageView
                 android:id="@+id/thumb"
@@ -30,7 +32,26 @@
                 android:layout_height="300dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/empty_photo"
+                android:visibility="gone"
                 app:layout_collapseMode="parallax"/>
+
+    <com.nihas.smart.chef.utils.AutoScrollViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@null"
+        />
+
+    <com.nihas.smart.chef.utils.CirclePageIndicator
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:fillColor="#ffffff"
+        android:padding="@dimen/padding_normal"/>
+
+</RelativeLayout>
 
 
             <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
