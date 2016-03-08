@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.nihas.smart.chef.Constants;
 import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.adapters.IngredientsAdapter;
@@ -56,6 +57,7 @@ public class RecipeActivity extends AppCompatActivity {
     Toolbar toolbar;
     Bundle bundle;
     ArrayList<RecipesPojo> filterList;
+    ArrayList<RecipesPojo> filterTypeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,17 +89,24 @@ public class RecipeActivity extends AppCompatActivity {
         mRecyclerView=(RecyclerView)findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         bundle=getIntent().getExtras();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+
         if (SmartChefApp.isNetworkAvailable()) {
             new getRecipe().execute();
         } else {
             SmartChefApp.showAToast("Internet not Connected");
         }
     }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        if (SmartChefApp.isNetworkAvailable()) {
+//            new getRecipe().execute();
+//        } else {
+//            SmartChefApp.showAToast("Internet not Connected");
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -175,15 +184,32 @@ public class RecipeActivity extends AppCompatActivity {
                                 }
 
 
-
                                 if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_VEG",false)) {
-                                    RecipesAdapter recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterList(listRecipes,true));
+                                    RecipesAdapter recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterList( //filterng for veg nonveg
+                                            getfilterTypeList(// filtering for brakfast snack lunch dinner desert
+                                            listRecipes,SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST,false),
+                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_SNACK,false),
+                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_LUNCH,false),
+                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DINNER,false),
+                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DESERT,false)),true));
+
                                     mRecyclerView.setAdapter(recipAdapter);
                                 }else if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_NON_VEG",false)) {
-                                    RecipesAdapter recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterList(listRecipes,false));
+                                    RecipesAdapter recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterList( //filterng for veg nonveg
+                                            getfilterTypeList(// filtering for brakfast snack lunch dinner desert
+                                                    listRecipes,SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST,false),
+                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_SNACK,false),
+                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_LUNCH,false),
+                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DINNER,false),
+                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DESERT,false)),false));
                                     mRecyclerView.setAdapter(recipAdapter);
                                 }else{
-                                    recipAdapter = new RecipesAdapter(RecipeActivity.this, listRecipes);
+                                    recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterTypeList(// filtering for brakfast snack lunch dinner desert
+                                            listRecipes,SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST,false),
+                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_SNACK,false),
+                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_LUNCH,false),
+                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DINNER,false),
+                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DESERT,false)));
                                     mRecyclerView.setAdapter(recipAdapter);
                                 }
                             } else {
@@ -264,6 +290,146 @@ public class RecipeActivity extends AppCompatActivity {
             }
 
         }
+        if(filterList.size()>0)
         return filterList;
+        else
+            return original;
+    }
+
+
+
+    public ArrayList<RecipesPojo> getfilterTypeList(ArrayList<RecipesPojo> original,boolean breakfast,boolean snack,boolean lunch,boolean dinner,boolean dessert){
+        filterTypeList=new ArrayList<>();
+        if(breakfast) {
+            for (int i = 0; i < original.size(); i++) {
+                if(original.get(i).getFood_kind().equals("breakfast")){
+                    RecipesPojo pojo=new RecipesPojo();
+                    pojo.setId(original.get(i).getId());
+                    pojo.setName(original.get(i).getName());
+                    pojo.setVeg(original.get(i).getVeg());
+                    pojo.setServes(original.get(i).getServes());
+                    if (!original.get(i).getFood_kind().isEmpty())
+                        pojo.setFood_kind(original.get(i).getFood_kind());
+                    if (!original.get(i).getCuisine().isEmpty())
+                        pojo.setCuisine(original.get(i).getCuisine());
+                    if (!original.get(i).getPreparation_time().isEmpty())
+                        pojo.setPreparation_time(original.get(i).getPreparation_time());
+                    if (!original.get(i).getMedia_url().isEmpty())
+                        pojo.setMedia_url(original.get(i).getMedia_url());
+                    else
+                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                    if (!original.get(i).getMedia_type().isEmpty())
+                        pojo.setMedia_type(original.get(i).getMedia_type());
+
+                    filterTypeList.add(pojo);
+                }
+            }
+        }
+        if(snack) {
+            for (int i = 0; i < original.size(); i++) {
+                if(original.get(i).getFood_kind().equals("snack")){
+                    RecipesPojo pojo=new RecipesPojo();
+                    pojo.setId(original.get(i).getId());
+                    pojo.setName(original.get(i).getName());
+                    pojo.setVeg(original.get(i).getVeg());
+                    pojo.setServes(original.get(i).getServes());
+                    if (!original.get(i).getFood_kind().isEmpty())
+                        pojo.setFood_kind(original.get(i).getFood_kind());
+                    if (!original.get(i).getCuisine().isEmpty())
+                        pojo.setCuisine(original.get(i).getCuisine());
+                    if (!original.get(i).getPreparation_time().isEmpty())
+                        pojo.setPreparation_time(original.get(i).getPreparation_time());
+                    if (!original.get(i).getMedia_url().isEmpty())
+                        pojo.setMedia_url(original.get(i).getMedia_url());
+                    else
+                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                    if (!original.get(i).getMedia_type().isEmpty())
+                        pojo.setMedia_type(original.get(i).getMedia_type());
+
+                    filterTypeList.add(pojo);
+                }
+            }
+        }
+        if(lunch) {
+            for (int i = 0; i < original.size(); i++) {
+                if(original.get(i).getFood_kind().equals("lunch")){
+                    RecipesPojo pojo=new RecipesPojo();
+                    pojo.setId(original.get(i).getId());
+                    pojo.setName(original.get(i).getName());
+                    pojo.setVeg(original.get(i).getVeg());
+                    pojo.setServes(original.get(i).getServes());
+                    if (!original.get(i).getFood_kind().isEmpty())
+                        pojo.setFood_kind(original.get(i).getFood_kind());
+                    if (!original.get(i).getCuisine().isEmpty())
+                        pojo.setCuisine(original.get(i).getCuisine());
+                    if (!original.get(i).getPreparation_time().isEmpty())
+                        pojo.setPreparation_time(original.get(i).getPreparation_time());
+                    if (!original.get(i).getMedia_url().isEmpty())
+                        pojo.setMedia_url(original.get(i).getMedia_url());
+                    else
+                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                    if (!original.get(i).getMedia_type().isEmpty())
+                        pojo.setMedia_type(original.get(i).getMedia_type());
+
+                    filterTypeList.add(pojo);
+                }
+            }
+        }
+        if(dinner) {
+            for (int i = 0; i < original.size(); i++) {
+                if(original.get(i).getFood_kind().equals("dinner")){
+                    RecipesPojo pojo=new RecipesPojo();
+                    pojo.setId(original.get(i).getId());
+                    pojo.setName(original.get(i).getName());
+                    pojo.setVeg(original.get(i).getVeg());
+                    pojo.setServes(original.get(i).getServes());
+                    if (!original.get(i).getFood_kind().isEmpty())
+                        pojo.setFood_kind(original.get(i).getFood_kind());
+                    if (!original.get(i).getCuisine().isEmpty())
+                        pojo.setCuisine(original.get(i).getCuisine());
+                    if (!original.get(i).getPreparation_time().isEmpty())
+                        pojo.setPreparation_time(original.get(i).getPreparation_time());
+                    if (!original.get(i).getMedia_url().isEmpty())
+                        pojo.setMedia_url(original.get(i).getMedia_url());
+                    else
+                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                    if (!original.get(i).getMedia_type().isEmpty())
+                        pojo.setMedia_type(original.get(i).getMedia_type());
+
+                    filterTypeList.add(pojo);
+                }
+            }
+        }
+        if(dessert) {
+            for (int i = 0; i < original.size(); i++) {
+                if(original.get(i).getFood_kind().equals("dessert")){
+                    RecipesPojo pojo=new RecipesPojo();
+                    pojo.setId(original.get(i).getId());
+                    pojo.setName(original.get(i).getName());
+                    pojo.setVeg(original.get(i).getVeg());
+                    pojo.setServes(original.get(i).getServes());
+                    if (!original.get(i).getFood_kind().isEmpty())
+                        pojo.setFood_kind(original.get(i).getFood_kind());
+                    if (!original.get(i).getCuisine().isEmpty())
+                        pojo.setCuisine(original.get(i).getCuisine());
+                    if (!original.get(i).getPreparation_time().isEmpty())
+                        pojo.setPreparation_time(original.get(i).getPreparation_time());
+                    if (!original.get(i).getMedia_url().isEmpty())
+                        pojo.setMedia_url(original.get(i).getMedia_url());
+                    else
+                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                    if (!original.get(i).getMedia_type().isEmpty())
+                        pojo.setMedia_type(original.get(i).getMedia_type());
+
+                    filterTypeList.add(pojo);
+                }
+            }
+        }
+
+
+        if(filterTypeList.size()>0)
+        return filterTypeList;
+        else
+            return original;
     }
 }

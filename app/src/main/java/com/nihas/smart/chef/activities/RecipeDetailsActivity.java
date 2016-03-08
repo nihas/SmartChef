@@ -1,15 +1,18 @@
 package com.nihas.smart.chef.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -54,19 +57,31 @@ import com.nihas.smart.chef.pojos.RecipesPojo;
 import com.nihas.smart.chef.pojos.ReviewPojo;
 import com.nihas.smart.chef.utils.AutoScrollViewPager;
 import com.nihas.smart.chef.utils.CirclePageIndicator;
+import com.nihas.smart.chef.utils.PicassoImageLoader;
 import com.nihas.smart.chef.utils.RecyclerItemClickListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.veinhorn.scrollgalleryview.MediaInfo;
+import com.veinhorn.scrollgalleryview.ScrollGalleryView;
+import com.veinhorn.scrollgalleryview.loader.DefaultImageLoader;
+import com.veinhorn.scrollgalleryview.loader.DefaultVideoLoader;
+import com.veinhorn.scrollgalleryview.loader.MediaLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -83,18 +98,40 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     DisplayImageOptions options;
     Bundle extras;
     LinearLayout IngView,fullView;
-    TextView recipeName,cusineType,howToCook,timeTaken,serves,food_kind,refer;
+    TextView recipeName,cusineType,howToCook,timeTaken,serves,food_kind,refer,prepTime,cookTime;
     ProgressBar pBar;
     Drawable favIcon;
     RelativeLayout reviewLayout;
     Boolean isFav;
+    AutoScrollViewPager viewPager;
+    private ImageLoadingListener imageListener;
+//    private ScrollGalleryView scrollGalleryView;
     public static final ArrayList<ReviewPojo> rvwList=new ArrayList<>();
+    private static final ArrayList<String> images = new ArrayList<>(Arrays.asList(
+            "http://img1.goodfon.ru/original/1920x1080/d/f5/aircraft-jet-su-47-berkut.jpg",
+            "http://www.dishmodels.ru/picture/glr/13/13312/g13312_7657277.jpg",
+            "http://img2.goodfon.ru/original/1920x1080/b/c9/su-47-berkut-c-37-firkin.jpg",
+            "http://www.avsimrus.com/file_images/15/img4951_1.jpg",
+            "http://www.avsimrus.com/file_images/15/img4951_3.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/0/07/Sukhoi_Su-47_in_2008.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/b/b4/Sukhoi_Su-47_Berkut_%28S-37%29_in_2001.jpg",
+            "http://testpilot.ru/russia/sukhoi/s/37/images/s37333-4.jpg",
+            "http://testpilot.ru/russia/sukhoi/s/37/images/s37-0.jpg",
+            "http://testpilot.ru/russia/sukhoi/s/37/images/s37-6.jpg",
+            "http://testpilot.ru/russia/sukhoi/s/37/images/s37-9.jpg",
+            "http://testpilot.ru/russia/sukhoi/s/37/images/s37-2.jpg",
+            "http://testpilot.ru/russia/sukhoi/s/37/images/s37-1.jpg"
+    ));
 
+    private Bitmap convertDrawableToBitmap(int image) {
+        return ((BitmapDrawable) getResources().getDrawable(image)).getBitmap();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
+
 //        initializeRecylceView();
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -102,24 +139,17 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         fullView=(LinearLayout)findViewById(R.id.full_layout);
         fullView.setVisibility(View.GONE);
 
-        AutoScrollViewPager viewPager = (AutoScrollViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(new ViewPagerAdapter(R.array.icons));
-
-        viewPager.setInterval(Constants.SPLASH_TIME_OUT);
-        viewPager.startAutoScroll();
 
 
-        CirclePageIndicator mIndicator  = (CirclePageIndicator) findViewById(R.id.indicator);
-        mIndicator.setViewPager(viewPager);
+//        scrollGalleryView = (ScrollGalleryView) findViewById(R.id.scroll_gallery_view);
+//        Bitmap bitmap = convertDrawableToBitmap(R.drawable.wallpaper7);
+//        scrollGalleryView
+//                .setThumbnailSize(100)
+//                .setZoom(false)
+//                .setFragmentManager(getSupportFragmentManager());
 
-        viewPager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent galleryIntent=new Intent(RecipeDetailsActivity.this,ActivityGallery.class);
-                startActivity(galleryIntent);
+        imageListener = new ImageDisplayListener();
 
-            }
-        });
 
         reviewLayout=(RelativeLayout)findViewById(R.id.review_layout);
         thumb=(ImageView)findViewById(R.id.thumb);
@@ -134,6 +164,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         serves=(TextView)findViewById(R.id.serves);
         food_kind=(TextView)findViewById(R.id.food_kind);
         refer=(TextView)findViewById(R.id.reference);
+        prepTime=(TextView)findViewById(R.id.prep_time);
+        cookTime=(TextView)findViewById(R.id.cook_time);
 //        getSupportActionBar().setTitle("Rasperry Ice");
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -257,12 +289,15 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             fullView.setVisibility(View.VISIBLE);
             thumb.setVisibility(View.VISIBLE);
 
-            for(int i=0;i<jArray.length();i++){
+            ArrayList<RecipesPojo> attachArray=new ArrayList<>();
+//            for(int i=0;i<jArray.length();i++){
 
                 try {
-                    JSONObject jobj=jArray.getJSONObject(i);
+                    JSONObject jobj=jArray.getJSONObject(0);
                     if(!jobj.isNull(Keys.name))
                     recipeName.setText(jobj.getString("name"));
+
+
                     if(!jobj.isNull("how_to_cook"))
                     howToCook.setText(jobj.getString("how_to_cook"));
                     if(!jobj.isNull("cuisine"))
@@ -270,12 +305,15 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     if(!jobj.isNull("serves"))
                         serves.setText("Serves: "+jobj.getString("serves"));
                     if(!jobj.isNull("food_kind"))
-                        food_kind.setText("TYPE: "+jobj.getString("food_kind"));
+                        food_kind.setText("Type: "+jobj.getString("food_kind"));
                     if(!jobj.isNull("reference"))
-                        food_kind.setText("reference: "+jobj.getString("reference"));
-
+                        refer.setText("reference: "+jobj.getString("reference"));
                     if(!jobj.isNull("preparation_time"))
-                        timeTaken.setText(jobj.getString("preparation_time"));
+                        prepTime.setText(jobj.getString("preparation_time"));
+                    if(!jobj.isNull("cook_time"))
+                        cookTime.setText(jobj.getString("cook_time"));
+                    if(!jobj.isNull("total_time"))
+                        timeTaken.setText(jobj.getString("total_time"));
                     if(!jobj.isNull("veg")) {
                         if(Integer.parseInt(jobj.getString("veg"))==1){
                             isVeg.setImageResource(R.drawable.veg_icon);
@@ -284,17 +322,30 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         }
                     }
                     JSONArray attachmentarr=jobj.getJSONArray("attachments");
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"ATTACHMENTS",attachmentarr+"");
+                    List<MediaInfo> infos = new ArrayList<>(images.size());
                     for(int j=0;j<attachmentarr.length();j++) {
                         JSONObject jobj2=attachmentarr.getJSONObject(j);
+                        RecipesPojo pojo=new RecipesPojo();
                         if((!jobj2.isNull("media_type"))&&(!jobj2.isNull("media_url"))){
+
                             if(jobj2.getString("media_type").equals("video")){
-                                imageLoader.displayImage("http://collegemix.ca/img/placeholder.png", thumb, options);
+                                pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+//                                scrollGalleryView.addMedia(MediaInfo.mediaLoader(
+//                                        new DefaultVideoLoader(jobj2.getString("media_url"), R.drawable.default_video)));
+//                                imageLoader.displayImage("http://collegemix.ca/img/placeholder.png", thumb, options);
                             }else{
-                                imageLoader.displayImage(jobj2.getString("media_url"), thumb, options);
+                                pojo.setMedia_url(jobj2.getString("media_url"));
+//                                for (String url : images) {
+//                                    infos.add(MediaInfo.mediaLoader(new PicassoImageLoader(jobj2.getString("media_url"))));
+//                                scrollGalleryView.addMedia(infos);
+//                                }
+//                                imageLoader.displayImage(jobj2.getString("media_url"), thumb, options);
                             }
                         }
-
+                        attachArray.add(pojo);
                     }
+
 
                         JSONArray reviewarr = jobj.getJSONArray("reviews");
                         rvwList.clear();
@@ -343,8 +394,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         mValue.setGravity(Gravity.LEFT | Gravity.CENTER);
 
                         mType.setText(jobj2.getString("name"));
-                        if(!jobj.isNull("qty"))
-                            mValue.setText(jobj2.getString("qty")+" "+jobj2.getString("qty_type"));
+                        if(!jobj2.isNull("qty"))
+                            mValue.setText(jobj2.getString("qty"));
                         else
                             mValue.setText("0 "+jobj2.getString("qty_type"));
 
@@ -382,9 +433,37 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }
+//            }
+
+            viewPager = (AutoScrollViewPager) findViewById(R.id.pager);
+
+            viewPager.setInterval(Constants.SPLASH_TIME_OUT);
+            viewPager.startAutoScroll();
+            viewPager.setAdapter(new ViewPagerAdapter(attachArray));
+            CirclePageIndicator mIndicator  = (CirclePageIndicator) findViewById(R.id.indicator);
+            mIndicator.setViewPager(viewPager);
 //            progressBar.setVisibility(View.GONE);
 //            onDone(jArray);
+        }
+    }
+
+    private static class ImageDisplayListener extends
+            SimpleImageLoadingListener {
+
+        static final List<String> displayedImages = Collections
+                .synchronizedList(new LinkedList<String>());
+
+        @Override
+        public void onLoadingComplete(String imageUri, View view,
+                                      Bitmap loadedImage) {
+            if (loadedImage != null) {
+                ImageView imageView = (ImageView) view;
+                boolean firstDisplay = !displayedImages.contains(imageUri);
+                if (firstDisplay) {
+                    FadeInBitmapDisplayer.animate(imageView, 500);
+                    displayedImages.add(imageUri);
+                }
+            }
         }
     }
 
@@ -477,9 +556,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
     public class ViewPagerAdapter extends PagerAdapter {
 
-        private int iconResId;
+        private ArrayList<RecipesPojo> iconResId;
 
-        public ViewPagerAdapter(int iconResId) {
+        public ViewPagerAdapter(ArrayList<RecipesPojo> iconResId) {
 
             this.iconResId = iconResId;
 //            this.hintArrayResId = hintArrayResId;
@@ -488,7 +567,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return getResources().getIntArray(iconResId).length;
+            return iconResId.size();
         }
 
         @Override
@@ -499,17 +578,28 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
 
-            Drawable icon = getResources().obtainTypedArray(iconResId).getDrawable(position);
+//            Drawable icon = getResources().obtainTypedArray(iconResId).getDrawable(position);
 //            String hint = getResources().getStringArray(hintArrayResId)[position];
 
-            View itemView = getLayoutInflater().inflate(R.layout.viewpager_item, container, false);
+
+
+            View itemView = getLayoutInflater().inflate(R.layout.gallery_item, container, false);
 
             ImageView iconView = (ImageView) itemView.findViewById(R.id.landing_img_slide);
-            TextView hintView = (TextView)itemView.findViewById(R.id.landing_txt_hint);
+//            TextView hintView = (TextView)itemView.findViewById(R.id.landing_txt_hint);
 
-
-            iconView.setImageDrawable(icon);
+            imageLoader.displayImage(iconResId.get(position).getMedia_url(), iconView, options,imageListener);
+//            iconView.setImageDrawable(icon);
 //            hintView.setText(hint);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent galleryIntent = new Intent(RecipeDetailsActivity.this, ActivityGallery.class);
+                    startActivity(galleryIntent);
+
+                }
+            });
 
             container.addView(itemView);
 

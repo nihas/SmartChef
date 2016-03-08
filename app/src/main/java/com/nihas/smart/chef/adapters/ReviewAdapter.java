@@ -125,7 +125,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         holder.user.setText(mDataset.get(position).getUser());
         holder.review.setText(mDataset.get(position).getReview());
         holder.rBar.setRating(Float.parseFloat(mDataset.get(position).getRating()));
-        imageLoader.displayImage(SmartChefApp.readFromPreferences(activity, "profile_pic", ""), holder.pro, options);
+        imageLoader.displayImage(mDataset.get(position).getPic(), holder.pro, options);
 
 
     }

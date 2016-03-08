@@ -23,8 +23,11 @@
             app:expandedTitleMarginBottom="72dp">
 
 <RelativeLayout
+    android:id="@+id/gallery_view"
     android:layout_width="match_parent"
-    android:layout_height="300dp">
+    android:layout_height="300dp"
+    android:clickable="true"
+    android:focusable="true">
 
             <ImageView
                 android:id="@+id/thumb"
@@ -67,7 +70,7 @@
             <!--<TextView-->
             <!--android:id="@+id/title"-->
             <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_height="wrapdp_content"-->
             <!--android:text="hii"-->
             <!--android:layout_centerHorizontal="true"-->
             <!--android:textStyle="bold"-->

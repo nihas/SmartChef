@@ -8,12 +8,18 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.ImageView;
 
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.app.SmartChefApp;
+import com.nihas.smart.chef.pojos.RecipesPojo;
 import com.nihas.smart.chef.utils.PicassoImageLoader;
 import com.veinhorn.scrollgalleryview.MediaInfo;
 import com.veinhorn.scrollgalleryview.ScrollGalleryView;
 import com.veinhorn.scrollgalleryview.loader.DefaultImageLoader;
 import com.veinhorn.scrollgalleryview.loader.DefaultVideoLoader;
 import com.veinhorn.scrollgalleryview.loader.MediaLoader;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,8 +46,8 @@ public class ActivityGallery extends FragmentActivity {
             "http://testpilot.ru/russia/sukhoi/s/37/images/s37-1.jpg"
     ));
     private ScrollGalleryView scrollGalleryView;
-
-
+    JSONArray attachmentarr= null;
+    List<MediaInfo> infos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,40 +56,70 @@ public class ActivityGallery extends FragmentActivity {
 
         Bitmap bitmap = convertDrawableToBitmap(R.drawable.wallpaper7);
 
-        List<MediaInfo> infos = new ArrayList<>(images.size());
-        for (String url : images) {
-            infos.add(MediaInfo.mediaLoader(new PicassoImageLoader(url)));
+
+        try {
+            attachmentarr = new JSONArray(SmartChefApp.readFromPreferences(getApplicationContext(), "ATTACHMENTS", ""));
+            infos = new ArrayList<>(attachmentarr.length());
+        for(int j=0;j<attachmentarr.length();j++) {
+            JSONObject jobj2=attachmentarr.getJSONObject(j);
+            RecipesPojo pojo=new RecipesPojo();
+            if((!jobj2.isNull("media_type"))&&(!jobj2.isNull("media_url"))){
+
+                if(jobj2.getString("media_type").equals("video")){
+//                    pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                    infos.add(MediaInfo.mediaLoader(new PicassoImageLoader("http://collegemix.ca/img/placeholder.png")));
+//                                scrollGalleryView.addMedia(MediaInfo.mediaLoader(
+//                                        new DefaultVideoLoader(jobj2.getString("media_url"), R.drawable.default_video)));
+//                                imageLoader.displayImage("http://collegemix.ca/img/placeholder.png", thumb, options);
+                }else{
+//                    pojo.setMedia_url(jobj2.getString("media_url"));
+                    infos.add(MediaInfo.mediaLoader(new PicassoImageLoader(jobj2.getString("media_url"))));
+//                                for (String url : images) {
+//                                    infos.add(MediaInfo.mediaLoader(new PicassoImageLoader(jobj2.getString("media_url"))));
+//                                scrollGalleryView.addMedia(infos);
+//                                }
+//                                imageLoader.displayImage(jobj2.getString("media_url"), thumb, options);
+                }
+            }
+//            attachArray.add(pojo);
         }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
 
         scrollGalleryView = (ScrollGalleryView) findViewById(R.id.scroll_gallery_view);
         scrollGalleryView
                 .setThumbnailSize(100)
                 .setZoom(true)
                 .setFragmentManager(getSupportFragmentManager())
-                .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.wallpaper1)))
-                .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(bitmap)))
-                .addMedia(MediaInfo.mediaLoader(new MediaLoader() {
-                    @Override
-                    public boolean isImage() {
-                        return true;
-                    }
-
-                    @Override
-                    public void loadMedia(Context context, ImageView imageView, MediaLoader.SuccessCallback callback) {
-                        Bitmap bitmap = convertDrawableToBitmap(R.drawable.wallpaper3);
-                        imageView.setImageBitmap(bitmap);
-                        callback.onSuccess();
-                    }
-
-                    @Override
-                    public void loadThumbnail(Context context, ImageView thumbnailView, MediaLoader.SuccessCallback callback) {
-                        Bitmap bitmap = convertDrawableToBitmap(R.drawable.wallpaper3);
-                        thumbnailView.setImageBitmap(bitmap);
-                        callback.onSuccess();
-                    }
-                }))
-                .addMedia(MediaInfo.mediaLoader(
-                        new DefaultVideoLoader("http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4", R.drawable.default_video)))
+//                .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(R.drawable.wallpaper1)))
+//                .addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(bitmap)))
+//                .addMedia(MediaInfo.mediaLoader(new MediaLoader() {
+//                    @Override
+//                    public boolean isImage() {
+//                        return true;
+//                    }
+//
+//                    @Override
+//                    public void loadMedia(Context context, ImageView imageView, MediaLoader.SuccessCallback callback) {
+//                        Bitmap bitmap = convertDrawableToBitmap(R.drawable.wallpaper3);
+//                        imageView.setImageBitmap(bitmap);
+//                        callback.onSuccess();
+//                    }
+//
+//                    @Override
+//                    public void loadThumbnail(Context context, ImageView thumbnailView, MediaLoader.SuccessCallback callback) {
+//                        Bitmap bitmap = convertDrawableToBitmap(R.drawable.wallpaper3);
+//                        thumbnailView.setImageBitmap(bitmap);
+//                        callback.onSuccess();
+//                    }
+//                }))
+//                .addMedia(MediaInfo.mediaLoader(
+//                        new DefaultVideoLoader("http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4", R.drawable.default_video)))
                 .addMedia(infos);
     }
 

@@ -17,11 +17,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.nihas.smart.chef.Constants;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.RecipeActivity;
 import com.nihas.smart.chef.activities.RecipeDetailsActivity;
@@ -46,6 +50,7 @@ public class FilterDialog extends AppCompatActivity {
     TextView veg,nonVeg;
     Boolean isVeg,isNonVeg;
     Bundle bundle;
+    CheckBox breakfast,snack,lunch,dinner,desert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +84,35 @@ public class FilterDialog extends AppCompatActivity {
 
         veg=(TextView)findViewById(R.id.veg);
         nonVeg=(TextView)findViewById(R.id.non_veg);
+
+        breakfast=(CheckBox)findViewById(R.id.breakfast);
+        snack=(CheckBox)findViewById(R.id.snack);
+        lunch=(CheckBox)findViewById(R.id.lunch);
+        dinner=(CheckBox)findViewById(R.id.dinner);
+        desert=(CheckBox)findViewById(R.id.desert);
+
+        breakfast.setChecked(false);
+        snack.setChecked(false);
+        lunch.setChecked(false);
+        dinner.setChecked(false);
+        desert.setChecked(false);
+
+        if(SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST, false)){
+            breakfast.setChecked(true);
+        }
+        if(SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_SNACK, false)){
+            snack.setChecked(true);
+        }
+        if(SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_LUNCH, false)){
+            lunch.setChecked(true);
+        }
+        if(SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_DINNER, false)){
+            dinner.setChecked(true);
+        }
+        if(SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_DESERT, false)){
+            desert.setChecked(true);
+        }
+
         Button apply=(Button)findViewById(R.id.apply);
         apply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +126,36 @@ public class FilterDialog extends AppCompatActivity {
                     SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_NON_VEG",true);
                 else
                     SmartChefApp.saveToPreferences(getApplicationContext(), "FILTER_NON_VEG", false);
+
+                if(breakfast.isChecked()){
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_BREAKFAST",true);
+                }else{
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_BREAKFAST",false);
+                }
+
+                if(snack.isChecked()){
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_SNACK",true);
+                }else{
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_SNACK",false);
+                }
+
+                if(lunch.isChecked()){
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_LUNCH",true);
+                }else{
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_LUNCH",false);
+                }
+
+                if(dinner.isChecked()){
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_DINNER",true);
+                }else{
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_DINNER",false);
+                }
+
+                if(desert.isChecked()){
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_DESERT",true);
+                }else{
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_DESERT",false);
+                }
 
 
 
