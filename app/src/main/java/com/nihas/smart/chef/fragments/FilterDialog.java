@@ -93,6 +93,8 @@ public class FilterDialog extends AppCompatActivity {
                 else
                     SmartChefApp.saveToPreferences(getApplicationContext(), "FILTER_NON_VEG", false);
 
+
+
                 onBackPressed();
             }
         });
