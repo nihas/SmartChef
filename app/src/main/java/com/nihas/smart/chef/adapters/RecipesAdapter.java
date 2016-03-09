@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.CookBook;
 import com.nihas.smart.chef.activities.MainActivity;
+import com.nihas.smart.chef.activities.RecipeActivity;
 import com.nihas.smart.chef.activities.RecipeDetailsActivity;
 import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
@@ -156,7 +157,11 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-
+        if(mDataset.isEmpty()){
+            RecipeActivity.showEmptyView();
+        }else {
+            RecipeActivity.hideEmptyView();
+        }
 
         holder.title.setText(mDataset.get(position).getName());
         imageLoader.displayImage(mDataset.get(position).getMedia_url(), holder.thumbnail, options);

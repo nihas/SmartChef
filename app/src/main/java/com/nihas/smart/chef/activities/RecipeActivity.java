@@ -52,7 +52,8 @@ public class RecipeActivity extends AppCompatActivity {
     ArrayList<RecipesPojo> listRecipes;
     RecipesAdapter recipAdapter;
     RecyclerView mRecyclerView;
-    TextView cupQty,emptyView;
+    TextView cupQty;
+    static TextView emptyView;
     ProgressBar progressBar;
     Toolbar toolbar;
     Bundle bundle;
@@ -85,7 +86,6 @@ public class RecipeActivity extends AppCompatActivity {
 
 
         emptyView=(TextView)findViewById(R.id.empty_view);
-        emptyView.setVisibility(View.GONE);
         mRecyclerView=(RecyclerView)findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         bundle=getIntent().getExtras();
@@ -138,7 +138,11 @@ public class RecipeActivity extends AppCompatActivity {
             try {
                 String param=bundle.getString("ingredients");
                 String encodedpara = URLEncoder.encode(param, "UTF-8");
-                return WebRequest.getData(WebServices.searchRecipe(encodedpara, 1));
+                if(SmartChefApp.readFromPreferences(getApplicationContext(),"SORT_RATING", false)) {
+                    return WebRequest.getData(WebServices.searchRecipeSortRating(encodedpara, 1));
+                }else{
+                    return WebRequest.getData(WebServices.searchRecipe(encodedpara, 1));
+                }
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -156,6 +160,7 @@ public class RecipeActivity extends AppCompatActivity {
                 try {
                     if (jobj.length() != 0) {
                         if (!jobj.isNull("results")) {
+
                             if (Integer.parseInt(jobj.getString("results")) > 0) {
                                 listRecipes = new ArrayList<>();
                                 for (int i = 0; i < Integer.parseInt(jobj.getString("results")); i++) {
@@ -169,16 +174,24 @@ public class RecipeActivity extends AppCompatActivity {
                                     pojo.setServes(innerjobj.getString(Keys.serves));
                                     if (!innerjobj.isNull(Keys.food_kind))
                                         pojo.setFood_kind(innerjobj.getString(Keys.food_kind));
+                                    else
+                                        pojo.setFood_kind("");
                                     if (!innerjobj.isNull(Keys.cuisine))
                                         pojo.setCuisine(innerjobj.getString(Keys.cuisine));
+                                    else
+                                        pojo.setCuisine("");
                                     if (!innerjobj.isNull(Keys.preparation_time))
                                         pojo.setPreparation_time(innerjobj.getString(Keys.preparation_time));
+                                    else
+                                        pojo.setPreparation_time("");
                                     if (!innerjobj.isNull(Keys.media_url))
                                         pojo.setMedia_url(innerjobj.getString(Keys.media_url));
                                     else
                                         pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
                                     if (!innerjobj.isNull(Keys.media_type))
                                         pojo.setMedia_type(innerjobj.getString(Keys.media_type));
+                                    else
+                                        pojo.setMedia_type("");
 
                                     listRecipes.add(pojo);
                                 }
@@ -222,7 +235,7 @@ public class RecipeActivity extends AppCompatActivity {
                     SmartChefApp.showAToast("SOMETHNG WRONG");
                 }
             }else{
-                emptyView.setVisibility(View.VISIBLE);
+                showEmptyView();
             }
         }
     }
@@ -248,18 +261,26 @@ public class RecipeActivity extends AppCompatActivity {
                     pojo.setName(original.get(i).getName());
                     pojo.setVeg(original.get(i).getVeg());
                     pojo.setServes(original.get(i).getServes());
-                    if (!original.get(i).getFood_kind().isEmpty())
+                    if (original.get(i).getFood_kind()!=null)
                         pojo.setFood_kind(original.get(i).getFood_kind());
-                    if (!original.get(i).getCuisine().isEmpty())
+                    else
+                        pojo.setFood_kind("");
+                    if (original.get(i).getCuisine()!=null)
                         pojo.setCuisine(original.get(i).getCuisine());
-                    if (!original.get(i).getPreparation_time().isEmpty())
+                    else
+                        pojo.setCuisine("");
+                    if (original.get(i).getPreparation_time()!=null)
                         pojo.setPreparation_time(original.get(i).getPreparation_time());
-                    if (!original.get(i).getMedia_url().isEmpty())
+                    else
+                        pojo.setPreparation_time("");
+                    if (original.get(i).getMedia_url()!=null)
                         pojo.setMedia_url(original.get(i).getMedia_url());
                     else
                         pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
-                    if (!original.get(i).getMedia_type().isEmpty())
+                    if (original.get(i).getMedia_type()!=null)
                         pojo.setMedia_type(original.get(i).getMedia_type());
+                    else
+                        pojo.setMedia_type("");
 
                     filterList.add(pojo);
                 }
@@ -272,18 +293,26 @@ public class RecipeActivity extends AppCompatActivity {
                     pojo.setName(original.get(i).getName());
                     pojo.setVeg(original.get(i).getVeg());
                     pojo.setServes(original.get(i).getServes());
-                    if (!original.get(i).getFood_kind().isEmpty())
+                    if (original.get(i).getFood_kind()!=null)
                         pojo.setFood_kind(original.get(i).getFood_kind());
-                    if (!original.get(i).getCuisine().isEmpty())
+                    else
+                        pojo.setFood_kind("");
+                    if (original.get(i).getCuisine()!=null)
                         pojo.setCuisine(original.get(i).getCuisine());
-                    if (!original.get(i).getPreparation_time().isEmpty())
+                    else
+                        pojo.setCuisine("");
+                    if (original.get(i).getPreparation_time()!=null)
                         pojo.setPreparation_time(original.get(i).getPreparation_time());
-                    if (!original.get(i).getMedia_url().isEmpty())
+                    else
+                        pojo.setPreparation_time("");
+                    if (original.get(i).getMedia_url()!=null)
                         pojo.setMedia_url(original.get(i).getMedia_url());
                     else
                         pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
-                    if (!original.get(i).getMedia_type().isEmpty())
+                    if (original.get(i).getMedia_type()!=null)
                         pojo.setMedia_type(original.get(i).getMedia_type());
+                    else
+                        pojo.setMedia_type("");
 
                     filterList.add(pojo);
                 }
@@ -299,137 +328,187 @@ public class RecipeActivity extends AppCompatActivity {
 
 
     public ArrayList<RecipesPojo> getfilterTypeList(ArrayList<RecipesPojo> original,boolean breakfast,boolean snack,boolean lunch,boolean dinner,boolean dessert){
-        filterTypeList=new ArrayList<>();
-        if(breakfast) {
-            for (int i = 0; i < original.size(); i++) {
-                if(original.get(i).getFood_kind().equals("breakfast")){
-                    RecipesPojo pojo=new RecipesPojo();
-                    pojo.setId(original.get(i).getId());
-                    pojo.setName(original.get(i).getName());
-                    pojo.setVeg(original.get(i).getVeg());
-                    pojo.setServes(original.get(i).getServes());
-                    if (!original.get(i).getFood_kind().isEmpty())
-                        pojo.setFood_kind(original.get(i).getFood_kind());
-                    if (!original.get(i).getCuisine().isEmpty())
-                        pojo.setCuisine(original.get(i).getCuisine());
-                    if (!original.get(i).getPreparation_time().isEmpty())
-                        pojo.setPreparation_time(original.get(i).getPreparation_time());
-                    if (!original.get(i).getMedia_url().isEmpty())
-                        pojo.setMedia_url(original.get(i).getMedia_url());
-                    else
-                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
-                    if (!original.get(i).getMedia_type().isEmpty())
-                        pojo.setMedia_type(original.get(i).getMedia_type());
+        if(breakfast || snack || lunch || dinner || dessert) {
+            filterTypeList = new ArrayList<>();
+            if (breakfast) {
+                for (int i = 0; i < original.size(); i++) {
+                    if (original.get(i).getFood_kind().equals("breakfast")) {
+                        RecipesPojo pojo = new RecipesPojo();
+                        pojo.setId(original.get(i).getId());
+                        pojo.setName(original.get(i).getName());
+                        pojo.setVeg(original.get(i).getVeg());
+                        pojo.setServes(original.get(i).getServes());
+                        if (original.get(i).getFood_kind() != null)
+                            pojo.setFood_kind(original.get(i).getFood_kind());
+                        else
+                            pojo.setFood_kind("");
+                        if (original.get(i).getCuisine() != null)
+                            pojo.setCuisine(original.get(i).getCuisine());
+                        else
+                            pojo.setCuisine("");
+                        if (original.get(i).getPreparation_time() != null)
+                            pojo.setPreparation_time(original.get(i).getPreparation_time());
+                        else
+                            pojo.setPreparation_time("");
+                        if (original.get(i).getMedia_url() != null)
+                            pojo.setMedia_url(original.get(i).getMedia_url());
+                        else
+                            pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                        if (original.get(i).getMedia_type() != null)
+                            pojo.setMedia_type(original.get(i).getMedia_type());
+                        else
+                            pojo.setMedia_type("");
 
-                    filterTypeList.add(pojo);
+                        filterTypeList.add(pojo);
+                    }
                 }
             }
-        }
-        if(snack) {
-            for (int i = 0; i < original.size(); i++) {
-                if(original.get(i).getFood_kind().equals("snack")){
-                    RecipesPojo pojo=new RecipesPojo();
-                    pojo.setId(original.get(i).getId());
-                    pojo.setName(original.get(i).getName());
-                    pojo.setVeg(original.get(i).getVeg());
-                    pojo.setServes(original.get(i).getServes());
-                    if (!original.get(i).getFood_kind().isEmpty())
-                        pojo.setFood_kind(original.get(i).getFood_kind());
-                    if (!original.get(i).getCuisine().isEmpty())
-                        pojo.setCuisine(original.get(i).getCuisine());
-                    if (!original.get(i).getPreparation_time().isEmpty())
-                        pojo.setPreparation_time(original.get(i).getPreparation_time());
-                    if (!original.get(i).getMedia_url().isEmpty())
-                        pojo.setMedia_url(original.get(i).getMedia_url());
-                    else
-                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
-                    if (!original.get(i).getMedia_type().isEmpty())
-                        pojo.setMedia_type(original.get(i).getMedia_type());
+            if (snack) {
+                for (int i = 0; i < original.size(); i++) {
+                    if (original.get(i).getFood_kind().equals("snack")) {
+                        RecipesPojo pojo = new RecipesPojo();
+                        pojo.setId(original.get(i).getId());
+                        pojo.setName(original.get(i).getName());
+                        pojo.setVeg(original.get(i).getVeg());
+                        pojo.setServes(original.get(i).getServes());
+                        if (original.get(i).getFood_kind() != null)
+                            pojo.setFood_kind(original.get(i).getFood_kind());
+                        else
+                            pojo.setFood_kind("");
+                        if (original.get(i).getCuisine() != null)
+                            pojo.setCuisine(original.get(i).getCuisine());
+                        else
+                            pojo.setCuisine("");
+                        if (original.get(i).getPreparation_time() != null)
+                            pojo.setPreparation_time(original.get(i).getPreparation_time());
+                        else
+                            pojo.setPreparation_time("");
+                        if (original.get(i).getMedia_url() != null)
+                            pojo.setMedia_url(original.get(i).getMedia_url());
+                        else
+                            pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                        if (original.get(i).getMedia_type() != null)
+                            pojo.setMedia_type(original.get(i).getMedia_type());
+                        else
+                            pojo.setMedia_type("");
 
-                    filterTypeList.add(pojo);
+                        filterTypeList.add(pojo);
+                    }
                 }
             }
-        }
-        if(lunch) {
-            for (int i = 0; i < original.size(); i++) {
-                if(original.get(i).getFood_kind().equals("lunch")){
-                    RecipesPojo pojo=new RecipesPojo();
-                    pojo.setId(original.get(i).getId());
-                    pojo.setName(original.get(i).getName());
-                    pojo.setVeg(original.get(i).getVeg());
-                    pojo.setServes(original.get(i).getServes());
-                    if (!original.get(i).getFood_kind().isEmpty())
-                        pojo.setFood_kind(original.get(i).getFood_kind());
-                    if (!original.get(i).getCuisine().isEmpty())
-                        pojo.setCuisine(original.get(i).getCuisine());
-                    if (!original.get(i).getPreparation_time().isEmpty())
-                        pojo.setPreparation_time(original.get(i).getPreparation_time());
-                    if (!original.get(i).getMedia_url().isEmpty())
-                        pojo.setMedia_url(original.get(i).getMedia_url());
-                    else
-                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
-                    if (!original.get(i).getMedia_type().isEmpty())
-                        pojo.setMedia_type(original.get(i).getMedia_type());
+            if (lunch) {
+                for (int i = 0; i < original.size(); i++) {
+                    if (original.get(i).getFood_kind().equals("lunch")) {
+                        RecipesPojo pojo = new RecipesPojo();
+                        pojo.setId(original.get(i).getId());
+                        pojo.setName(original.get(i).getName());
+                        pojo.setVeg(original.get(i).getVeg());
+                        pojo.setServes(original.get(i).getServes());
+                        if (original.get(i).getFood_kind() != null)
+                            pojo.setFood_kind(original.get(i).getFood_kind());
+                        else
+                            pojo.setFood_kind("");
+                        if (original.get(i).getCuisine() != null)
+                            pojo.setCuisine(original.get(i).getCuisine());
+                        else
+                            pojo.setCuisine("");
+                        if (original.get(i).getPreparation_time() != null)
+                            pojo.setPreparation_time(original.get(i).getPreparation_time());
+                        else
+                            pojo.setPreparation_time("");
+                        if (original.get(i).getMedia_url() != null)
+                            pojo.setMedia_url(original.get(i).getMedia_url());
+                        else
+                            pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                        if (original.get(i).getMedia_type() != null)
+                            pojo.setMedia_type(original.get(i).getMedia_type());
+                        else
+                            pojo.setMedia_type("");
 
-                    filterTypeList.add(pojo);
+                        filterTypeList.add(pojo);
+                    }
                 }
             }
-        }
-        if(dinner) {
-            for (int i = 0; i < original.size(); i++) {
-                if(original.get(i).getFood_kind().equals("dinner")){
-                    RecipesPojo pojo=new RecipesPojo();
-                    pojo.setId(original.get(i).getId());
-                    pojo.setName(original.get(i).getName());
-                    pojo.setVeg(original.get(i).getVeg());
-                    pojo.setServes(original.get(i).getServes());
-                    if (!original.get(i).getFood_kind().isEmpty())
-                        pojo.setFood_kind(original.get(i).getFood_kind());
-                    if (!original.get(i).getCuisine().isEmpty())
-                        pojo.setCuisine(original.get(i).getCuisine());
-                    if (!original.get(i).getPreparation_time().isEmpty())
-                        pojo.setPreparation_time(original.get(i).getPreparation_time());
-                    if (!original.get(i).getMedia_url().isEmpty())
-                        pojo.setMedia_url(original.get(i).getMedia_url());
-                    else
-                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
-                    if (!original.get(i).getMedia_type().isEmpty())
-                        pojo.setMedia_type(original.get(i).getMedia_type());
+            if (dinner) {
+                for (int i = 0; i < original.size(); i++) {
+                    if (original.get(i).getFood_kind().equals("dinner")) {
+                        RecipesPojo pojo = new RecipesPojo();
+                        pojo.setId(original.get(i).getId());
+                        pojo.setName(original.get(i).getName());
+                        pojo.setVeg(original.get(i).getVeg());
+                        pojo.setServes(original.get(i).getServes());
+                        if (original.get(i).getFood_kind() != null)
+                            pojo.setFood_kind(original.get(i).getFood_kind());
+                        else
+                            pojo.setFood_kind("");
+                        if (original.get(i).getCuisine() != null)
+                            pojo.setCuisine(original.get(i).getCuisine());
+                        else
+                            pojo.setCuisine("");
+                        if (original.get(i).getPreparation_time() != null)
+                            pojo.setPreparation_time(original.get(i).getPreparation_time());
+                        else
+                            pojo.setPreparation_time("");
+                        if (original.get(i).getMedia_url() != null)
+                            pojo.setMedia_url(original.get(i).getMedia_url());
+                        else
+                            pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                        if (original.get(i).getMedia_type() != null)
+                            pojo.setMedia_type(original.get(i).getMedia_type());
+                        else
+                            pojo.setMedia_type("");
 
-                    filterTypeList.add(pojo);
+                        filterTypeList.add(pojo);
+                    }
                 }
             }
-        }
-        if(dessert) {
-            for (int i = 0; i < original.size(); i++) {
-                if(original.get(i).getFood_kind().equals("dessert")){
-                    RecipesPojo pojo=new RecipesPojo();
-                    pojo.setId(original.get(i).getId());
-                    pojo.setName(original.get(i).getName());
-                    pojo.setVeg(original.get(i).getVeg());
-                    pojo.setServes(original.get(i).getServes());
-                    if (!original.get(i).getFood_kind().isEmpty())
-                        pojo.setFood_kind(original.get(i).getFood_kind());
-                    if (!original.get(i).getCuisine().isEmpty())
-                        pojo.setCuisine(original.get(i).getCuisine());
-                    if (!original.get(i).getPreparation_time().isEmpty())
-                        pojo.setPreparation_time(original.get(i).getPreparation_time());
-                    if (!original.get(i).getMedia_url().isEmpty())
-                        pojo.setMedia_url(original.get(i).getMedia_url());
-                    else
-                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
-                    if (!original.get(i).getMedia_type().isEmpty())
-                        pojo.setMedia_type(original.get(i).getMedia_type());
+            if (dessert) {
+                for (int i = 0; i < original.size(); i++) {
+                    if (original.get(i).getFood_kind().equals("dessert")) {
+                        RecipesPojo pojo = new RecipesPojo();
+                        pojo.setId(original.get(i).getId());
+                        pojo.setName(original.get(i).getName());
+                        pojo.setVeg(original.get(i).getVeg());
+                        pojo.setServes(original.get(i).getServes());
+                        if (original.get(i).getFood_kind() != null)
+                            pojo.setFood_kind(original.get(i).getFood_kind());
+                        else
+                            pojo.setFood_kind("");
+                        if (original.get(i).getCuisine() != null)
+                            pojo.setCuisine(original.get(i).getCuisine());
+                        else
+                            pojo.setCuisine("");
+                        if (original.get(i).getPreparation_time() != null)
+                            pojo.setPreparation_time(original.get(i).getPreparation_time());
+                        else
+                            pojo.setPreparation_time("");
+                        if (original.get(i).getMedia_url() != null)
+                            pojo.setMedia_url(original.get(i).getMedia_url());
+                        else
+                            pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                        if (original.get(i).getMedia_type() != null)
+                            pojo.setMedia_type(original.get(i).getMedia_type());
+                        else
+                            pojo.setMedia_type("");
 
-                    filterTypeList.add(pojo);
+                        filterTypeList.add(pojo);
+                    }
                 }
             }
-        }
 
 
-        if(filterTypeList.size()>0)
-        return filterTypeList;
-        else
+            return filterTypeList;
+        }else{
             return original;
+        }
+    }
+
+
+    public static void showEmptyView(){
+        emptyView.setVisibility(View.VISIBLE);
+    }
+
+    public static void hideEmptyView(){
+        emptyView.setVisibility(View.GONE);
     }
 }

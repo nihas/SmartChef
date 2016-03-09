@@ -78,6 +78,10 @@ Response
         return baseUrl2 + "searchit.php?ins="+ingredients+"&key="+SECRET_KEY+"&page="+page;
     }
 
+    public static final String searchRecipeSortRating(String ingredients,int page){
+        return baseUrl2 + "searchit.php?ins="+ingredients+"&key="+SECRET_KEY+"&sort=rating&page="+page;
+    }
+
     public static String getImagePath(String path){
         return imageUrl+path;
     }
@@ -93,6 +97,8 @@ Response
     public static final String getRecipeById(int recipe_id){
         return baseUrl2 + "one_recipe.php?rid="+recipe_id+"&key="+SECRET_KEY;
     }
+
+
 
     public static final String getRecipeReviews(String recipe_id){
         return baseUrl2 + "revws.php?rid="+recipe_id+"&key="+SECRET_KEY;

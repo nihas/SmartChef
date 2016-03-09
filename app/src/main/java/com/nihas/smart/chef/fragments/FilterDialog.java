@@ -50,7 +50,7 @@ public class FilterDialog extends AppCompatActivity {
     TextView veg,nonVeg;
     Boolean isVeg,isNonVeg;
     Bundle bundle;
-    CheckBox breakfast,snack,lunch,dinner,desert;
+    CheckBox breakfast,snack,lunch,dinner,desert,rating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +90,14 @@ public class FilterDialog extends AppCompatActivity {
         lunch=(CheckBox)findViewById(R.id.lunch);
         dinner=(CheckBox)findViewById(R.id.dinner);
         desert=(CheckBox)findViewById(R.id.desert);
+        rating=(CheckBox)findViewById(R.id.rating);
 
         breakfast.setChecked(false);
         snack.setChecked(false);
         lunch.setChecked(false);
         dinner.setChecked(false);
         desert.setChecked(false);
+        rating.setChecked(false);
 
         if(SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST, false)){
             breakfast.setChecked(true);
@@ -111,6 +113,9 @@ public class FilterDialog extends AppCompatActivity {
         }
         if(SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_DESERT, false)){
             desert.setChecked(true);
+        }
+        if(SmartChefApp.readFromPreferences(getApplicationContext(),"SORT_RATING", false)){
+         rating.setChecked(true);
         }
 
         Button apply=(Button)findViewById(R.id.apply);
@@ -157,6 +162,12 @@ public class FilterDialog extends AppCompatActivity {
                     SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_DESERT",false);
                 }
 
+                if(rating.isChecked()){
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"SORT_RATING",true);
+                }else{
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"SORT_RATING",false);
+                }
+
 
 
                 onBackPressed();
@@ -184,14 +195,14 @@ public class FilterDialog extends AppCompatActivity {
         veg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isVeg){
+                if (isVeg) {
                     veg.setBackgroundColor(Color.TRANSPARENT);
-                    isVeg=false;
-                }else {
+                    isVeg = false;
+                } else {
                     veg.setBackgroundColor(Color.GREEN);
-                    isVeg=true;
+                    isVeg = true;
                     nonVeg.setBackgroundColor(Color.TRANSPARENT);
-                    isNonVeg=false;
+                    isNonVeg = false;
                 }
             }
         });
