@@ -3,6 +3,7 @@ package com.nihas.smart.chef.activities;
 import android.animation.ValueAnimator;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -12,8 +13,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -64,9 +67,11 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     static ActionBarDrawerToggle drawerToggle;
     public static boolean isOpen=false;
-    RecyclerView mRecyclerView;
+//    RecyclerView mRecyclerView;
     ArrayList<AllPojo> listCuisines;
     ProgressBar progressBar;
+    private static TabLayout tabLayout;
+    private static ViewPager viewPager;
 
 
     @Override
@@ -107,28 +112,36 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 SmartChefApp.showAToast("Internet Unavailable");
             }
+
+
+
+            viewPager = (ViewPager) findViewById(R.id.pager);
+            setupViewPager(viewPager);
+
+            tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout.setupWithViewPager(viewPager);
             // Calling the RecyclerView
-            mRecyclerView = (RecyclerView)findViewById(R.id.rv);
-            mRecyclerView.setHasFixedSize(true);
+//            mRecyclerView = (RecyclerView)findViewById(R.id.rv);
+//            mRecyclerView.setHasFixedSize(true);
 
             // The number of Columns
-            GridLayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-            mRecyclerView.setLayoutManager(mLayoutManager);
+//            GridLayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+//            mRecyclerView.setLayoutManager(mLayoutManager);
 
 
 
-            mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-//                SmartChefApp.showAToast(String.valueOf(listCuisines.get(position).getId()));
-                    SmartChefApp.saveToPreferences(getApplicationContext(), "ID", listCuisines.get(position).getId());
-                    SmartChefApp.saveToPreferences(getApplicationContext(), "CAT", listCuisines.get(position).getTitle());
-//                    getFragmentManager().beginTransaction().replace(R.id.container, new IngredientsFragment()).addToBackStack(null).commit();
-                    Intent intent = new Intent(MainActivity.this, IngredientsActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
-                }
-            }));
+//            mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(View view, int position) {
+////                SmartChefApp.showAToast(String.valueOf(listCuisines.get(position).getId()));
+//                    SmartChefApp.saveToPreferences(getApplicationContext(), "ID", listCuisines.get(position).getId());
+//                    SmartChefApp.saveToPreferences(getApplicationContext(), "CAT", listCuisines.get(position).getTitle());
+////                    getFragmentManager().beginTransaction().replace(R.id.container, new IngredientsFragment()).addToBackStack(null).commit();
+//                    Intent intent = new Intent(MainActivity.this, IngredientsActivity.class);
+//                    startActivity(intent);
+//                    overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
+//                }
+//            }));
 
 
         }catch (Exception e){
@@ -137,7 +150,47 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setupViewPager(ViewPager viewPager) {
 
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+//        adapter.addFragment(new MyRewardFragment(), "MY REWARDS");
+//        adapter.addFragment(new WalletFragment(), "WALLET");
+//        adapter.addFragment(new OffersFragment(), "OFFERS");
+//        adapter.addFragment(new SwapFragments(), "SWAP");
+
+        viewPager.setAdapter(adapter);
+    }
+
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+
+    }
 
     private class getAllCategories extends AsyncTask<String, Void, JSONArray> {
 
@@ -170,9 +223,10 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < jArray.length(); i++) {
 //                            AllPojo cp = new AllPojo();
 ////                            cp.setName(jArray.getString(i));
-                        listCuisines.add(new AllPojo(jArray.getJSONObject(i).getInt(Keys.id),
-                                jArray.getJSONObject(i).getString(Keys.name),
-                                jArray.getJSONObject(i).getString(Keys.image)));
+//                        listCuisines.add(new AllPojo(jArray.getJSONObject(i).getInt(Keys.id),
+//                                jArray.getJSONObject(i).getString(Keys.name),
+//                                jArray.getJSONObject(i).getString(Keys.image)));
+
                     }
                 } else {
                     SmartChefApp.showAToast("Something Went Wrong.");
@@ -181,8 +235,8 @@ public class MainActivity extends AppCompatActivity {
 //                    final EstablishmentTypeAdapter adapter = new EstablishmentTypeAdapter(getContext(), estTypeListArray);
 //                    typeList.setAdapter(adapter);
 
-                CategoryAdapter mAdapter = new CategoryAdapter(getApplicationContext(),listCuisines);
-                mRecyclerView.setAdapter(mAdapter);
+//                CategoryAdapter mAdapter = new CategoryAdapter(getApplicationContext(),listCuisines);
+//                mRecyclerView.setAdapter(mAdapter);
 
 
 
@@ -388,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
                     pojo.setId(job.getString("id"));
                     pojo.setName(job.getString("name"));
                     pojo.setMedia_type("media_type");
-                    if(pojo.getMedia_type()=="image")
+                    if(pojo.getMedia_type().equals("image"))
                         pojo.setMedia_url("media_url");
                     else
                         pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
