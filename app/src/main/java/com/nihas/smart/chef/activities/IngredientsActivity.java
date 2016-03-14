@@ -9,7 +9,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -32,6 +37,7 @@ import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.fragments.DrawerFragment;
+import com.nihas.smart.chef.fragments.IngredientsFragment;
 import com.nihas.smart.chef.pojos.AllPojo;
 import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.pojos.IngredientsPojo;
@@ -42,22 +48,27 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by snyxius on 10/23/2015.
  */
 public class IngredientsActivity extends AppCompatActivity{
 
-    RecyclerView mRecyclerView;
+//    RecyclerView mRecyclerView;
     ArrayList<IngredientsPojo> listIngredients;
+    static ArrayList<AllPojo> listCats;
     IngredientsAdapter ingAdapter;
-    ProgressBar progressBar;
+//    ProgressBar progressBar;
     static TextView cupQty;
+    Bundle extras;
+    TabLayout tabLayout;
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.ingredients_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,15 +93,24 @@ public class IngredientsActivity extends AppCompatActivity{
                 .add(R.id.container_drawer,new DrawerFragment().newInstance(drawerLayout), "CupFragment")
                 .commit();
 
-        progressBar=(ProgressBar)findViewById(R.id.pBar);
-        if (SmartChefApp.isNetworkAvailable()) {
-            new getAllCategories().execute();
-        } else {
-            SmartChefApp.showAToast("Network Unavailable");
-        }
 
-        mRecyclerView=(RecyclerView)findViewById(R.id.rv);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        viewPager=(ViewPager)findViewById(R.id.viewpager);
+        tabLayout=(TabLayout)findViewById(R.id.tabs);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+        extras=getIntent().getExtras();
+
+//        progressBar=(ProgressBar)findViewById(R.id.pBar);
+//        if (SmartChefApp.isNetworkAvailable()) {
+//            new getAllCategories().execute();
+//        } else {
+//            SmartChefApp.showAToast("Network Unavailable");
+//        }
+
+//        mRecyclerView=(RecyclerView)findViewById(R.id.rv);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
 
@@ -113,7 +133,7 @@ public class IngredientsActivity extends AppCompatActivity{
         @Override
         protected void onPostExecute(JSONArray jArray) {
             super.onPostExecute(jArray);
-            progressBar.setVisibility(View.GONE);
+//            progressBar.setVisibility(View.GONE);
             onDone(jArray);
         }
     }
@@ -130,14 +150,16 @@ public class IngredientsActivity extends AppCompatActivity{
                         listIngredients.add(new IngredientsPojo(jArray.getJSONObject(i).getString(Keys.name),
                                 jArray.getJSONObject(i).getString(Keys.image)));
                     }
+
+
                 } else {
                     SmartChefApp.showAToast("Something Went Wrong.");
                 }
 
 //                    final EstablishmentTypeAdapter adapter = new EstablishmentTypeAdapter(getContext(), estTypeListArray);
 //                    typeList.setAdapter(adapter);
-                ingAdapter=new IngredientsAdapter(IngredientsActivity.this,listIngredients);
-                mRecyclerView.setAdapter(ingAdapter);
+//                ingAdapter=new IngredientsAdapter(IngredientsActivity.this,listIngredients);
+//                mRecyclerView.setAdapter(ingAdapter);
 
 
 
@@ -148,6 +170,38 @@ public class IngredientsActivity extends AppCompatActivity{
             }
         }catch (Exception e){
             e.printStackTrace();
+        }
+
+    }
+
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+//        private final List<Fragment> mFragmentList = new ArrayList<>();
+//        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            return new IngredientsFragment(IngredientsActivity.this,position,listIngredients,listCats.get(position).getId());
+        }
+
+        @Override
+        public int getCount() {
+            return listCats.size();
+        }
+
+//        public void addFragment(Fragment fragment, String title) {
+//            mFragmentList.add(fragment);
+//            mFragmentTitleList.add(title);
+//        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return listCats.get(position).getTitle();
         }
 
     }
@@ -233,7 +287,9 @@ public class IngredientsActivity extends AppCompatActivity{
 
 
 
-
+public static void equateCats(ArrayList<AllPojo> listCa){
+    listCats=listCa;
+}
 
 
 

@@ -1,6 +1,7 @@
 package com.nihas.smart.chef.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -17,11 +18,13 @@ import android.widget.ProgressBar;
 
 import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
+import com.nihas.smart.chef.activities.IngredientsActivity;
 import com.nihas.smart.chef.activities.MainActivity;
 import com.nihas.smart.chef.adapters.IngredientsAdapter;
 import com.nihas.smart.chef.api.WebRequest;
 import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
+import com.nihas.smart.chef.pojos.AllPojo;
 import com.nihas.smart.chef.pojos.IngredientsPojo;
 
 import org.json.JSONArray;
@@ -34,10 +37,31 @@ import java.util.ArrayList;
 public class IngredientsFragment extends Fragment implements View.OnClickListener {
 
     RecyclerView mRecyclerView;
-    ArrayList<IngredientsPojo> listIngredients;
+    ArrayList<IngredientsPojo> mlistIngredients;
     IngredientsAdapter ingAdapter;
     ProgressBar progressBar;
+    Context mcontext;
+    int position;
+    int ID;
 
+
+
+    public IngredientsFragment(Context context, int position, ArrayList<IngredientsPojo> listIng, int id) {
+        super();
+        this.mcontext = context;
+        this.position = position;
+        this.mlistIngredients = listIng;
+        this.ID=id;
+    }
+
+
+//    public static IngredientsFragment newInstance(int index) {
+//        IngredientsFragment f = new IngredientsFragment();
+//        Bundle args = new Bundle();
+//        args.putInt("index", index);
+//        f.setArguments(args);
+//        return f;
+//    }
 
 
 
@@ -49,21 +73,17 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (SmartChefApp.isNetworkAvailable()) {
-            new getAllCategories().execute();
-        } else {
-            SmartChefApp.showAToast("Network Unavailable");
-        }
-    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initialise(view);
-        MainActivity.setTitle(SmartChefApp.readFromPreferences(getContext(), "CAT", ""));
+        MainActivity.setTitle("SmartChef");
+        if (SmartChefApp.isNetworkAvailable()) {
+            new getAllCategories().execute(String.valueOf(ID));
+        } else {
+            SmartChefApp.showAToast("Network Unavailable");
+        }
 
 
     }
@@ -101,7 +121,7 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
             JSONArray jsonObject = null;
             try {
 
-                return WebRequest.getDataJSONArray(WebServices.getIngredients(SmartChefApp.readFromPreferences(getActivity().getApplicationContext(), "ID", 1)));
+                return WebRequest.getDataJSONArray(WebServices.getIngredients(Integer.parseInt(params[0])));
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -121,12 +141,12 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
     private void onDone(JSONArray jArray){
         try {
             if(jArray != null) {
-                listIngredients = new ArrayList<>();
+                mlistIngredients = new ArrayList<>();
                 if (jArray.length() > 0) {
                     for (int i = 0; i < jArray.length(); i++) {
 //                            AllPojo cp = new AllPojo();
 ////                            cp.setName(jArray.getString(i));
-                        listIngredients.add(new IngredientsPojo(jArray.getJSONObject(i).getString(Keys.name),
+                        mlistIngredients.add(new IngredientsPojo(jArray.getJSONObject(i).getString(Keys.name),
                                 jArray.getJSONObject(i).getString(Keys.image)));
                     }
                 } else {
@@ -135,7 +155,7 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
 
 //                    final EstablishmentTypeAdapter adapter = new EstablishmentTypeAdapter(getContext(), estTypeListArray);
 //                    typeList.setAdapter(adapter);
-                ingAdapter=new IngredientsAdapter(getContext(),listIngredients);
+                ingAdapter=new IngredientsAdapter(getContext(),mlistIngredients);
                 mRecyclerView.setAdapter(ingAdapter);
 
 
@@ -143,7 +163,7 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
 
 
             }else{
-                SmartChefApp.showAToast("Something Went Wrong.");
+//                SmartChefApp.showAToast("Something Went Wrong.");
             }
         }catch (Exception e){
             e.printStackTrace();

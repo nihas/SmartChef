@@ -26,6 +26,13 @@ public class AllPojo {
 //        this.img_drawable=ImgDraw;
     }
 
+    public AllPojo(int id,String titl){
+        this.title=titl;
+        this.id=id;
+//        this.subTitle=subTitl;
+//        this.img_drawable=ImgDraw;
+    }
+
     public AllPojo(String titl, String urll){
         this.title=titl;
         this.url=urll;

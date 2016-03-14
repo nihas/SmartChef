@@ -45,6 +45,7 @@ import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.fragments.CategoryFragment;
 import com.nihas.smart.chef.fragments.DrawerFragment;
+import com.nihas.smart.chef.fragments.IngredientsFragment;
 import com.nihas.smart.chef.fragments.RecipeFragment;
 import com.nihas.smart.chef.pojos.AllPojo;
 import com.nihas.smart.chef.pojos.CupPojo;
@@ -67,11 +68,12 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     static ActionBarDrawerToggle drawerToggle;
     public static boolean isOpen=false;
-//    RecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
     ArrayList<AllPojo> listCuisines;
     ProgressBar progressBar;
-    private static TabLayout tabLayout;
-    private static ViewPager viewPager;
+//    private static TabLayout tabLayout;
+//    private static ViewPager viewPager;
+//    ViewPagerAdapter adapter;
 
 
     @Override
@@ -115,33 +117,33 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            viewPager = (ViewPager) findViewById(R.id.pager);
-            setupViewPager(viewPager);
+//            viewPager = (ViewPager) findViewById(R.id.pager);
+//            setupViewPager(viewPager);
 
-            tabLayout = (TabLayout) findViewById(R.id.tabs);
-            tabLayout.setupWithViewPager(viewPager);
+
             // Calling the RecyclerView
-//            mRecyclerView = (RecyclerView)findViewById(R.id.rv);
-//            mRecyclerView.setHasFixedSize(true);
+            mRecyclerView = (RecyclerView)findViewById(R.id.rv);
+            mRecyclerView.setHasFixedSize(true);
 
             // The number of Columns
-//            GridLayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-//            mRecyclerView.setLayoutManager(mLayoutManager);
+            GridLayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+            mRecyclerView.setLayoutManager(mLayoutManager);
 
 
 
-//            mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(View view, int position) {
-////                SmartChefApp.showAToast(String.valueOf(listCuisines.get(position).getId()));
-//                    SmartChefApp.saveToPreferences(getApplicationContext(), "ID", listCuisines.get(position).getId());
-//                    SmartChefApp.saveToPreferences(getApplicationContext(), "CAT", listCuisines.get(position).getTitle());
-////                    getFragmentManager().beginTransaction().replace(R.id.container, new IngredientsFragment()).addToBackStack(null).commit();
-//                    Intent intent = new Intent(MainActivity.this, IngredientsActivity.class);
-//                    startActivity(intent);
-//                    overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
-//                }
-//            }));
+            mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+//                SmartChefApp.showAToast(String.valueOf(listCuisines.get(position).getId()));
+                    SmartChefApp.saveToPreferences(getApplicationContext(), "ID", listCuisines.get(position).getId());
+                    SmartChefApp.saveToPreferences(getApplicationContext(), "CAT", listCuisines.get(position).getTitle());
+//                    getFragmentManager().beginTransaction().replace(R.id.container, new IngredientsFragment()).addToBackStack(null).commit();
+                    Intent intent = new Intent(MainActivity.this, IngredientsActivity.class);
+                    intent.putExtra("POSITION",position);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
+                }
+            }));
 
 
         }catch (Exception e){
@@ -152,45 +154,40 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-//        adapter.addFragment(new MyRewardFragment(), "MY REWARDS");
-//        adapter.addFragment(new WalletFragment(), "WALLET");
-//        adapter.addFragment(new OffersFragment(), "OFFERS");
-//        adapter.addFragment(new SwapFragments(), "SWAP");
-
-        viewPager.setAdapter(adapter);
-    }
-
-
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
 
     }
+
+
+//    class ViewPagerAdapter extends FragmentPagerAdapter {
+//        private final List<Fragment> mFragmentList = new ArrayList<>();
+//        private  List<AllPojo> mFragmentTitleList = new ArrayList<>();
+//
+//        public ViewPagerAdapter(FragmentManager manager) {
+//            super(manager);
+//        }
+//
+//        @Override
+//        public Fragment getItem(int position) {
+//            return new IngredientsFragment(MainActivity.this,position,listCuisines);
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return mFragmentTitleList.size();
+//        }
+//
+//        public void addFragment( List<AllPojo> mFragmentList) {
+////            mFragmentList.add(fragment);
+////            AllPojo pojo=new AllPojo(id,title);
+//            this.mFragmentTitleList=mFragmentList;
+//        }
+//
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            return mFragmentTitleList.get(position).getTitle();
+//        }
+//
+//    }
 
     private class getAllCategories extends AsyncTask<String, Void, JSONArray> {
 
@@ -219,15 +216,24 @@ public class MainActivity extends AppCompatActivity {
         try {
             if(jArray != null) {
                 listCuisines = new ArrayList<>();
+//                adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
                 if (jArray.length() > 0) {
                     for (int i = 0; i < jArray.length(); i++) {
 //                            AllPojo cp = new AllPojo();
 ////                            cp.setName(jArray.getString(i));
-//                        listCuisines.add(new AllPojo(jArray.getJSONObject(i).getInt(Keys.id),
-//                                jArray.getJSONObject(i).getString(Keys.name),
-//                                jArray.getJSONObject(i).getString(Keys.image)));
+                        listCuisines.add(new AllPojo(jArray.getJSONObject(i).getInt(Keys.id),
+                                jArray.getJSONObject(i).getString(Keys.name),
+                                jArray.getJSONObject(i).getString(Keys.image)));
+
 
                     }
+                    IngredientsActivity.equateCats(listCuisines);
+//                    ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+//                    adapter.addFragment(listCuisines);
+//                    viewPager.setAdapter(adapter);
+//                    tabLayout = (TabLayout) findViewById(R.id.tabs);
+//                    tabLayout.setupWithViewPager(viewPager);
                 } else {
                     SmartChefApp.showAToast("Something Went Wrong.");
                 }
@@ -235,8 +241,8 @@ public class MainActivity extends AppCompatActivity {
 //                    final EstablishmentTypeAdapter adapter = new EstablishmentTypeAdapter(getContext(), estTypeListArray);
 //                    typeList.setAdapter(adapter);
 
-//                CategoryAdapter mAdapter = new CategoryAdapter(getApplicationContext(),listCuisines);
-//                mRecyclerView.setAdapter(mAdapter);
+                CategoryAdapter mAdapter = new CategoryAdapter(getApplicationContext(),listCuisines);
+                mRecyclerView.setAdapter(mAdapter);
 
 
 
