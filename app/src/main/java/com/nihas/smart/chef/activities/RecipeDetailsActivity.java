@@ -137,7 +137,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         extras=getIntent().getExtras();
         fullView=(LinearLayout)findViewById(R.id.full_layout);
-        fullView.setVisibility(View.GONE);
+//        fullView.setVisibility(View.GONE);
 
 
 
@@ -301,11 +301,11 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     if(!jobj.isNull("how_to_cook"))
                     howToCook.setText(jobj.getString("how_to_cook"));
                     if(!jobj.isNull("cuisine"))
-                        cusineType.setText(jobj.getString("cuisine"));
+                        cusineType.setText(jobj.getString("cuisine") +" CUISINE");
                     if(!jobj.isNull("serves"))
                         serves.setText("Serves: "+jobj.getString("serves"));
                     if(!jobj.isNull("food_kind"))
-                        food_kind.setText("Type: "+jobj.getString("food_kind"));
+                        food_kind.setText(", "+jobj.getString("food_kind"));
                     if(!jobj.isNull("reference"))
                         refer.setText("reference: "+jobj.getString("reference"));
                     if(!jobj.isNull("preparation_time"))
@@ -376,22 +376,24 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         TextView mType = new TextView(RecipeDetailsActivity.this);
                         TextView mValue = new TextView(RecipeDetailsActivity.this);
 
-                        mType.setLayoutParams(new TableLayout.LayoutParams(
-                                0,
-                                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-                        mValue.setLayoutParams(new TableLayout.LayoutParams(
-                                0,
-                                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+//                        mType.setLayoutParams(new TableLayout.LayoutParams(
+//                                0,
+//                                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        mType.setLayoutParams(new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT));
 
-                        mType.setTextSize(17);
-                        mType.setPadding(5, 3, 0, 3);
-                        mType.setTypeface(Typeface.DEFAULT_BOLD);
-                        mType.setGravity(Gravity.LEFT | Gravity.CENTER);
+                        mValue.setLayoutParams(new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT));
 
-                        mValue.setTextSize(16);
-                        mValue.setPadding(5, 3, 0, 3);
-                        mValue.setTypeface(null, Typeface.ITALIC);
-                        mValue.setGravity(Gravity.LEFT | Gravity.CENTER);
+//                        mType.setTextSize(17);
+                        mType.setPadding(0, 8, 0, 8);
+                        mType.setTypeface(Typeface.DEFAULT);
+
+//                        mValue.setTextSize(16);
+                        mValue.setPadding(0, 8, 0, 8);
+                        mValue.setTypeface(Typeface.DEFAULT);
 
                         mType.setText(jobj2.getString("name"));
                         if(!jobj2.isNull("qty"))
@@ -400,8 +402,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                             mValue.setText("0 "+jobj2.getString("qty_type"));
 
 
-                        childLayout.addView(mType);
                         childLayout.addView(mValue);
+                        childLayout.addView(mType);
 
                         IngView.addView(childLayout);
 

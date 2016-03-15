@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/full_layout"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#ededed">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/colorPrimary">
 
 
 
@@ -17,9 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Rasperry Ice"
-            android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
@@ -36,12 +37,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cuisine: Indian"
-            android:textColor="#000000"/>
+            android:textSize="12dp"
+            android:textAllCaps="true"
+            android:textColor="#ffffff"/>
+
+            <TextView
+                android:id="@+id/food_kind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="123"
+                android:textSize="12dp"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center"/>
 
             <ImageView
                 android:id="@+id/is_veg"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
+                android:visibility="gone"
                 android:layout_marginLeft="5dp"
                 android:src="@drawable/non_veg_icon"
                 android:layout_alignParentRight="true"/>
@@ -73,6 +87,12 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#ffffff"
+            android:layout_below="@+id/time_layout"/>
+
 
 
         <LinearLayout
@@ -80,6 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:gravity="center_vertical"
             android:layout_marginTop="6dp"
             android:layout_below="@+id/time_layout">
@@ -99,7 +120,6 @@
             android:gravity="right">
 
             <TextView
-                android:id="@+id/food_kind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -114,6 +134,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:visibility="gone"
     android:layout_below="@+id/serve_layout">
         <LinearLayout
             android:layout_width="0dp"
@@ -176,8 +197,120 @@
             android:layout_alignParentRight="true"
             android:id="@+id/fav_button" />
 
+
+        <LinearLayout
+            android:layout_below="@+id/time_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/delete_icon"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 MINS"
+                    android:textSize="12dp"
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="9dp"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/delete_icon"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 MINS"
+                    android:textSize="12dp"
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="9dp"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/delete_icon"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 MINS"
+                    android:textSize="12dp"
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="9dp"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/delete_icon"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 MINS"
+                    android:textSize="12dp"
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="9dp"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
     </RelativeLayout>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:layout_margin="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -190,7 +323,8 @@
             android:id="@+id/ing_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="INGREDIENTS"
+            android:text="YOU NEED"
+            android:textColor="@color/colorPrimary"
             android:textStyle="bold"/>
 
         <View
@@ -270,6 +404,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="METHOD"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"/>
 
         <TextView
@@ -323,6 +458,8 @@
                 android:textColor="@color/colorPrimary"/>
         </LinearLayout>
     </RelativeLayout>
+
+    </LinearLayout>
 
 
 </LinearLayout>
