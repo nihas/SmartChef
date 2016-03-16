@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -85,6 +86,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         public TextView title,serveTo,timeTaken,cusine;
         ImageView thumbnail,foodType,fav;
         CardView recipeView;
+        RatingBar ratingBar;
 //        LinearLayout addLayout,plusMinusLayout;
         public ViewHolder(View v) {
             super(v);
@@ -97,6 +99,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             foodType=(ImageView)v.findViewById(R.id.food_type);
             fav=(ImageView)v.findViewById(R.id.fav);
             recipeView=(CardView)v.findViewById(R.id.recipe_card);
+            ratingBar=(RatingBar)v.findViewById(R.id.ratingBar);
 //            addPlus=(TextView)v.findViewById(R.id.addPlus);
 //            addLayout=(LinearLayout)v.findViewById(R.id.add_layout);
 //            addLayout.setVisibility(View.VISIBLE);
@@ -174,6 +177,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         }else{
             holder.foodType.setImageResource(R.drawable.non_veg_icon);
         }
+        holder.ratingBar.setRating(mDataset.get(position).getRating());
 
 
 
@@ -193,6 +197,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                 SmartChefApp.saveToPreferences(activity, "RCUISINE", mDataset.get(position).getCuisine());
                 SmartChefApp.saveToPreferences(activity, "RPREP_TIME", mDataset.get(position).getPreparation_time());
                 SmartChefApp.saveToPreferences(activity, "RMEDIA_URL", mDataset.get(position).getMedia_url());
+                SmartChefApp.saveToPreferences(activity,"R_RATING",String.valueOf(mDataset.get(position).getRating()));
             }
         });
 
@@ -222,6 +227,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                     recipesPojo.setCuisine(mDataset.get(position).getCuisine());
                     recipesPojo.setPreparation_time(mDataset.get(position).getPreparation_time());
                     recipesPojo.setMedia_url(mDataset.get(position).getMedia_url());
+                    recipesPojo.setRating(mDataset.get(position).getRating());
 
 
                     if (dbHandler.addtoFav(recipesPojo)) {
@@ -234,6 +240,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                         SmartChefApp.saveToPreferences(activity,"RCUISINE",mDataset.get(position).getCuisine());
                         SmartChefApp.saveToPreferences(activity,"RPREP_TIME",mDataset.get(position).getPreparation_time());
                         SmartChefApp.saveToPreferences(activity,"RMEDIA_URL",mDataset.get(position).getMedia_url());
+                        SmartChefApp.saveToPreferences(activity,"R_RATING",String.valueOf(mDataset.get(position).getRating()));
 
 
                         MainActivity.showSnak(mDataset.get(position).getName() + " Added to Fav", view);

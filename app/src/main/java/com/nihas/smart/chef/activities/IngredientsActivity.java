@@ -75,7 +75,7 @@ public class IngredientsActivity extends AppCompatActivity{
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle(SmartChefApp.readFromPreferences(getApplicationContext(), "CAT", ""));
+        toolbar.setTitle("SmartChef");
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
 
         final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);

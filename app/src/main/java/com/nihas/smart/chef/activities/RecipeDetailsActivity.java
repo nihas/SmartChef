@@ -99,7 +99,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     DisplayImageOptions options;
     Bundle extras;
     LinearLayout IngView,fullView;
-    TextView recipeName,cusineType,howToCook,timeTaken,serves,food_kind,refer,prepTime,cookTime;
+    TextView recipeName,cusineType,howToCook,timeTaken,serves,food_kind,refer,prepTime,cookTime,rate_text;
     ProgressBar pBar;
     Drawable favIcon;
     RelativeLayout reviewLayout;
@@ -138,8 +138,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         extras=getIntent().getExtras();
         fullView=(LinearLayout)findViewById(R.id.full_layout);
-
-
+        rate_text=(TextView)findViewById(R.id.review_text);
+        String rate=SmartChefApp.readFromPreferences(getApplicationContext(), "R_RATING", "");
+        rate_text.setText(String.valueOf(rate));
         final FloatingActionButton fab=(FloatingActionButton)findViewById(R.id.fab);
 
         MyDbHandler dbHandler = new MyDbHandler(RecipeDetailsActivity.this, null, null, 1);
@@ -150,6 +151,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             fab.setImageDrawable(getResources().getDrawable(R.drawable.fav));
             isFav=false;
         }
+
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

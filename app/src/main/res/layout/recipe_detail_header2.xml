@@ -194,7 +194,7 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/serves"
+                    android:src="@drawable/ic_serve_white"
                     android:layout_gravity="center"/>
 
 
@@ -219,7 +219,7 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/total_time"
+                    android:src="@drawable/ic_total_time_white"
                     android:layout_gravity="center"/>
 
                 <TextView
@@ -243,7 +243,7 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/cook_time"
+                    android:src="@drawable/ic_cooking_time_white"
                     android:layout_gravity="center"/>
 
                 <TextView
@@ -275,16 +275,29 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/delete_icon"
-                android:layout_gravity="center"/>
+                android:background="@drawable/circle_stroke"/>
+                <TextView
+                    android:id="@+id/review_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5.1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="#ffffff"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2 MINS"
+                android:text="Reviews"
                 android:textSize="12dp"
                 android:textColor="#ffffff"
                 android:layout_marginTop="9dp"
@@ -430,9 +443,53 @@
     android:focusable="true"
     android:background="?selectableItemBackground"
     android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#808080"
+            android:layout_marginBottom="10dp"/>
+
+    <com.nihas.smart.chef.customui.CircleImageView
+        android:id="@+id/pro_pic"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:tint="#808080"
+        android:background="@drawable/com_facebook_profile_picture_blank_portrait"
+        android:layout_centerVertical="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nihas Nizar"
+            android:textColor="#000000"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"/>
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ratingBar"
+            android:max="5"
+            android:layout_gravity="center"
+            android:stepSize="1"
+            android:numStars="5"
+            />
+
+
+    </LinearLayout>
+
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="35dp"
+        android:visibility="gone"
         android:background="@drawable/square_border"
         android:layout_centerVertical="true"/>
 
@@ -440,6 +497,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:visibility="gone"
         android:layout_centerInParent="true"
         android:gravity="center">
 

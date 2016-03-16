@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.pojos.AllPojo;
 import com.nihas.smart.chef.pojos.IngredientsPojo;
+import com.nihas.smart.chef.utils.GridSpacingItemDecoration;
 
 import org.json.JSONArray;
 
@@ -90,6 +92,7 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
     private void initialise(View rootView) {
         try {
             progressBar=(ProgressBar)rootView.findViewById(R.id.pBar);
+            progressBar.setVisibility(View.VISIBLE);
             if (SmartChefApp.isNetworkAvailable()) {
                 new getAllCategories().execute();
             } else {
@@ -97,7 +100,11 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
             }
 
             mRecyclerView=(RecyclerView)rootView.findViewById(R.id.rv);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+            int spanCount = 3;
+            int spacing = 5;
+            boolean includeEdge = true;
+            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
 
 
         }catch (Exception e){
@@ -133,6 +140,7 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
         protected void onPostExecute(JSONArray jArray) {
             super.onPostExecute(jArray);
             progressBar.setVisibility(View.GONE);
+
             onDone(jArray);
         }
     }

@@ -19,6 +19,15 @@ public class RecipesPojo {
     String preparation_time;
     String media_url;
     String media_type;
+    float rating;
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
 
     public String getId() {
         return id;

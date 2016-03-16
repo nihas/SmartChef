@@ -97,7 +97,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         // each data item is just a string in this case
         public TextView addToCup,minusToCup,mIngredient,quantity_text,ingMeasure;
         ImageView thumbnail,addPlus;
-        LinearLayout addLayout,plusMinusLayout;
+//        LinearLayout addLayout,plusMinusLayout;
         public ViewHolder(View v) {
             super(v);
             mIngredient=(TextView)v.findViewById(R.id.ingredientTitle);
@@ -106,10 +106,10 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             addToCup=(TextView)v.findViewById(R.id.addToCup);
             minusToCup=(TextView)v.findViewById(R.id.minusToCup);
             addPlus=(ImageView)v.findViewById(R.id.addPlus);
-            addLayout=(LinearLayout)v.findViewById(R.id.add_layout);
-            addLayout.setVisibility(View.VISIBLE);
-            plusMinusLayout=(LinearLayout)v.findViewById(R.id.plus_minus_layout);
-            plusMinusLayout.setVisibility(View.GONE);
+//            addLayout=(LinearLayout)v.findViewById(R.id.add_layout);
+//            addLayout.setVisibility(View.VISIBLE);
+//            plusMinusLayout=(LinearLayout)v.findViewById(R.id.plus_minus_layout);
+//            plusMinusLayout.setVisibility(View.GONE);
             ingMeasure=(TextView)v.findViewById(R.id.ingredientMeasure);
             ingMeasure.setVisibility(View.GONE);
             thumbnail=(ImageView)v.findViewById(R.id.maskImage);
@@ -134,7 +134,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.ingredients_list_item3, parent, false);
+                .inflate(R.layout.ingredients_list_item_new, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
         ViewHolder vh = new ViewHolder(v);
@@ -167,9 +167,9 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         // - replace the contents of the view with that element
         MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
         if (dbHandler.isIngredients(mDataset.get(position).getName())) {
-            holder.addPlus.setImageDrawable(activity.getResources().getDrawable(R.drawable.minus));
+            holder.addPlus.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_minus_icon));
         }else {
-            holder.addPlus.setImageDrawable(activity.getResources().getDrawable(R.drawable.plus));
+            holder.addPlus.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_add_icon));
         }
 
         holder.mIngredient.setText(mDataset.get(position).getName());
@@ -261,7 +261,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
                ImageView img = (ImageView) v;
                if (img.getDrawable().getConstantState().equals
-                       (activity.getResources().getDrawable(R.drawable.plus).getConstantState())){
+                       (activity.getResources().getDrawable(R.drawable.ic_add_icon).getConstantState())){
 
 //                   Animation anim= AnimationUtils.loadAnimation(activity,R.anim.wibble);
 //                   img.setAnimation(anim);
@@ -283,7 +283,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                            pojo.setCup_count(c.getCount());
                        MainActivity.updateCupValue(pojo.getCup_count());
                        IngredientsActivity.updateCupValue(pojo.getCup_count());
-                       holder.addPlus.setImageDrawable(activity.getResources().getDrawable(R.drawable.minus));
+                       holder.addPlus.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_minus_icon));
                    } else
                        Toast.makeText(activity, "FAILED", Toast.LENGTH_SHORT).show();
 
@@ -308,7 +308,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                        }
                        MainActivity.updateCupValue(pojo.getCup_count());
                        IngredientsActivity.updateCupValue(pojo.getCup_count());
-                       holder.addPlus.setImageDrawable(activity.getResources().getDrawable(R.drawable.plus));
+                       holder.addPlus.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_add_icon));
 
                    }
                    else
