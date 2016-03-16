@@ -60,26 +60,7 @@
                 android:src="@drawable/non_veg_icon"
                 android:layout_alignParentRight="true"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="right">
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/time"/>
-
-                <TextView
-                    android:id="@+id/time_taken"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4 Minutes"
-                    android:layout_marginLeft="5dp"
-                    android:layout_gravity="center"/>
-
-            </LinearLayout>
 
 
 
@@ -91,6 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="#ffffff"
+            android:layout_marginTop="5dp"
             android:layout_below="@+id/time_layout"/>
 
 
@@ -106,7 +88,6 @@
             android:layout_below="@+id/time_layout">
 
         <TextView
-            android:id="@+id/serves"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="jg"
@@ -151,7 +132,6 @@
                 android:layout_gravity="center"/>
 
             <TextView
-                android:id="@+id/prep_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4 Minutes"
@@ -175,7 +155,6 @@
             android:layout_gravity="center"/>
 
         <TextView
-            android:id="@+id/cook_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="4 Minutes"
@@ -213,15 +192,17 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/delete_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/serves"
                     android:layout_gravity="center"/>
 
+
                 <TextView
+                    android:id="@+id/serves"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 MINS"
+                    android:text="4 Minutes"
                     android:textSize="12dp"
                     android:textColor="#ffffff"
                     android:layout_marginTop="9dp"
@@ -236,15 +217,16 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/delete_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/total_time"
                     android:layout_gravity="center"/>
 
                 <TextView
+                    android:id="@+id/time_taken"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 MINS"
+                    android:text="4 Minutes"
                     android:textSize="12dp"
                     android:textColor="#ffffff"
                     android:layout_marginTop="9dp"
@@ -259,207 +241,219 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/delete_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/cook_time"
                     android:layout_gravity="center"/>
 
                 <TextView
+                    android:id="@+id/prep_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 MINS"
+                    android:text="4 Minutes"
                     android:textSize="12dp"
+                    android:visibility="gone"
                     android:textColor="#ffffff"
                     android:layout_marginTop="9dp"
                     android:layout_gravity="center"/>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/delete_icon"
-                    android:layout_gravity="center"/>
-
                 <TextView
+                    android:id="@+id/cook_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 MINS"
+                    android:text="4 Minutes"
                     android:textSize="12dp"
-                    android:textColor="#ffffff"
-                    android:layout_marginTop="9dp"
-                    android:layout_gravity="center"/>
-
-            </LinearLayout>
-
-
+                android:textColor="#ffffff"
+                android:layout_marginTop="9dp"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
 
-    </RelativeLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#ffffff"
-        android:layout_margin="5dp">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:orientation="vertical">
-
-
-        <TextView
-            android:id="@+id/ing_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="YOU NEED"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"/>
-
-        <View
-            android:layout_below="@+id/ing_text"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#000000"/>
-
         <LinearLayout
-            android:id="@+id/ing_view"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ing_text"
             android:orientation="vertical">
 
-
-
-
-
-        </LinearLayout>
-
-
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_margin="8dp"
-        android:background="#000000"/>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="8dp"
-        android:layout_gravity="center"
-        android:paddingRight="8dp">
-
-
-
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_ingredients"
-            android:padding="8dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="gone"
-            android:background="?selectableItemBackground"
-            android:layout_alignParentRight="true"/>
-
-
-
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:padding="8dp"
-            android:src="@drawable/ic_share"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="gone"
-            android:background="?selectableItemBackground"
-            android:layout_alignParentRight="true"/>
-
-    </LinearLayout>
-
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="METHOD"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/how_to_cook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
-            android:layout_alignParentRight="true"
-            android:padding="8dp"
-            android:textColor="#000000"/>
-
-
-
-    </LinearLayout>
-    <TextView
-        android:id="@+id/reference"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:padding="8dp"
-        android:textColor="#000000"/>
-
-    <RelativeLayout
-        android:id="@+id/review_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?selectableItemBackground"
-        android:layout_gravity="center">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@drawable/square_border"
-            android:layout_centerVertical="true"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerInParent="true"
-            android:gravity="center">
-
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/delete_icon"
+                android:layout_gravity="center"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reviews"
+                android:text="2 MINS"
                 android:textSize="12dp"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="#ffffff"
+                android:layout_marginTop="9dp"
+                android:layout_gravity="center"/>
+
         </LinearLayout>
-    </RelativeLayout>
+
+
 
     </LinearLayout>
+
+</RelativeLayout>
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    android:layout_margin="5dp">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/ing_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="YOU NEED"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"/>
+
+    <View
+        android:layout_below="@+id/ing_text"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#000000"/>
+
+    <LinearLayout
+        android:id="@+id/ing_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ing_text"
+        android:orientation="vertical">
+
+
+
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="0.5dp"
+    android:layout_margin="8dp"
+    android:background="#000000"/>
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="8dp"
+    android:layout_gravity="center"
+    android:paddingRight="8dp">
+
+
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_ingredients"
+        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        android:background="?selectableItemBackground"
+        android:layout_alignParentRight="true"/>
+
+
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_share"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        android:background="?selectableItemBackground"
+        android:layout_alignParentRight="true"/>
+
+</LinearLayout>
+
+
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="METHOD"
+    android:textColor="@color/colorPrimary"
+    android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/how_to_cook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+        android:layout_alignParentRight="true"
+        android:padding="8dp"
+        android:textColor="#000000"/>
+
+
+
+</LinearLayout>
+<TextView
+    android:id="@+id/reference"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text=""
+    android:padding="8dp"
+    android:textColor="#000000"/>
+
+<RelativeLayout
+    android:id="@+id/review_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?selectableItemBackground"
+    android:layout_gravity="center">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@drawable/square_border"
+        android:layout_centerVertical="true"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:gravity="center">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reviews"
+            android:textSize="12dp"
+            android:textColor="@color/colorPrimary"/>
+    </LinearLayout>
+</RelativeLayout>
+
+</LinearLayout>
 
 
 </LinearLayout>

@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -137,6 +138,57 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         extras=getIntent().getExtras();
         fullView=(LinearLayout)findViewById(R.id.full_layout);
+
+
+        final FloatingActionButton fab=(FloatingActionButton)findViewById(R.id.fab);
+
+        MyDbHandler dbHandler = new MyDbHandler(RecipeDetailsActivity.this, null, null, 1);
+        if(dbHandler.isFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))){
+            fab.setImageDrawable(getResources().getDrawable(R.drawable.heart));
+            isFav=true;
+        }else{
+            fab.setImageDrawable(getResources().getDrawable(R.drawable.fav));
+            isFav=false;
+        }
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isFav) {
+
+
+                    MyDbHandler dbHandler = new MyDbHandler(getApplicationContext(), null, null, 1);
+
+                    RecipesPojo recipesPojo = new RecipesPojo();
+                    recipesPojo.setId(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""));
+                    recipesPojo.setName(SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", ""));
+                    recipesPojo.setVeg(SmartChefApp.readFromPreferences(getApplicationContext(), "RVEG", ""));
+                    recipesPojo.setServes(SmartChefApp.readFromPreferences(getApplicationContext(), "RSERVE", ""));
+                    recipesPojo.setFood_kind(SmartChefApp.readFromPreferences(getApplicationContext(), "RFOOD_KIND", ""));
+                    recipesPojo.setCuisine(SmartChefApp.readFromPreferences(getApplicationContext(), "RCUISINE", ""));
+                    recipesPojo.setPreparation_time(SmartChefApp.readFromPreferences(getApplicationContext(), "RPREP_TIME", ""));
+                    recipesPojo.setMedia_url(SmartChefApp.readFromPreferences(getApplicationContext(), "RMEDIA_URL", ""));
+
+
+                    if (dbHandler.addtoFav(recipesPojo)) {
+                        Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Added to fav", Toast.LENGTH_SHORT).show();
+//                    MainActivity.showSnak(SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "") + " Added to Fav", item.getActionView());
+                        fab.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.heart));
+                        isFav=true;
+                    } else
+                        Toast.makeText(getApplicationContext(), "FAILED ADD", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    MyDbHandler dbHandler = new MyDbHandler(getApplicationContext(), null, null, 1);
+                    if (dbHandler.deletefromFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))) {
+                        Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Removed from favourites", Toast.LENGTH_SHORT).show();
+                        fab.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.fav));
+                        isFav=false;
+
+                    } else
+                        Toast.makeText(getApplicationContext(), "FAILED REMOV", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 //        fullView.setVisibility(View.GONE);
 
 
@@ -303,7 +355,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     if(!jobj.isNull("cuisine"))
                         cusineType.setText(jobj.getString("cuisine") +" CUISINE");
                     if(!jobj.isNull("serves"))
-                        serves.setText("Serves: "+jobj.getString("serves"));
+                        serves.setText(jobj.getString("serves"));
                     if(!jobj.isNull("food_kind"))
                         food_kind.setText(", "+jobj.getString("food_kind"));
                     if(!jobj.isNull("reference"))
@@ -473,16 +525,16 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_fab, menu);
-        MenuItem item = menu.findItem(R.id.action_like);
+//        MenuItem item = menu.findItem(R.id.action_like);
 
-        MyDbHandler dbHandler = new MyDbHandler(RecipeDetailsActivity.this, null, null, 1);
-        if(dbHandler.isFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))){
-            item.setIcon(getResources().getDrawable(R.drawable.heart_white));
-            isFav=true;
-        }else{
-            item.setIcon(getResources().getDrawable(R.drawable.fav_white));
-            isFav=false;
-        }
+//        MyDbHandler dbHandler = new MyDbHandler(RecipeDetailsActivity.this, null, null, 1);
+//        if(dbHandler.isFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))){
+//            item.setIcon(getResources().getDrawable(R.drawable.heart_white));
+//            isFav=true;
+//        }else{
+//            item.setIcon(getResources().getDrawable(R.drawable.fav_white));
+//            isFav=false;
+//        }
         return true;
     }
 
@@ -512,45 +564,46 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             } catch (android.content.ActivityNotFoundException ex) {
                 ex.printStackTrace();
             }
-        }else if(id== R.id.action_like){
-
-
-            if (!isFav) {
-
-
-                MyDbHandler dbHandler = new MyDbHandler(getApplicationContext(), null, null, 1);
-
-                RecipesPojo recipesPojo = new RecipesPojo();
-                recipesPojo.setId(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""));
-                recipesPojo.setName(SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", ""));
-                recipesPojo.setVeg(SmartChefApp.readFromPreferences(getApplicationContext(), "RVEG", ""));
-                recipesPojo.setServes(SmartChefApp.readFromPreferences(getApplicationContext(), "RSERVE", ""));
-                recipesPojo.setFood_kind(SmartChefApp.readFromPreferences(getApplicationContext(), "RFOOD_KIND", ""));
-                recipesPojo.setCuisine(SmartChefApp.readFromPreferences(getApplicationContext(), "RCUISINE", ""));
-                recipesPojo.setPreparation_time(SmartChefApp.readFromPreferences(getApplicationContext(), "RPREP_TIME", ""));
-                recipesPojo.setMedia_url(SmartChefApp.readFromPreferences(getApplicationContext(), "RMEDIA_URL", ""));
-
-
-                if (dbHandler.addtoFav(recipesPojo)) {
-                    Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Added to fav", Toast.LENGTH_SHORT).show();
-//                    MainActivity.showSnak(SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "") + " Added to Fav", item.getActionView());
-                    item.setIcon(getApplicationContext().getResources().getDrawable(R.drawable.heart_white));
-                    isFav=true;
-                } else
-                    Toast.makeText(getApplicationContext(), "FAILED ADD", Toast.LENGTH_SHORT).show();
-
-            }else{
-                MyDbHandler dbHandler = new MyDbHandler(getApplicationContext(), null, null, 1);
-                if (dbHandler.deletefromFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))) {
-                    Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Removed from favourites", Toast.LENGTH_SHORT).show();
-                    item.setIcon(getApplicationContext().getResources().getDrawable(R.drawable.fav_white));
-                    isFav=false;
-
-                } else
-                    Toast.makeText(getApplicationContext(), "FAILED REMOV", Toast.LENGTH_SHORT).show();
-            }
-
         }
+//        else if(id== R.id.action_like){
+//
+//
+//            if (!isFav) {
+//
+//
+//                MyDbHandler dbHandler = new MyDbHandler(getApplicationContext(), null, null, 1);
+//
+//                RecipesPojo recipesPojo = new RecipesPojo();
+//                recipesPojo.setId(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""));
+//                recipesPojo.setName(SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", ""));
+//                recipesPojo.setVeg(SmartChefApp.readFromPreferences(getApplicationContext(), "RVEG", ""));
+//                recipesPojo.setServes(SmartChefApp.readFromPreferences(getApplicationContext(), "RSERVE", ""));
+//                recipesPojo.setFood_kind(SmartChefApp.readFromPreferences(getApplicationContext(), "RFOOD_KIND", ""));
+//                recipesPojo.setCuisine(SmartChefApp.readFromPreferences(getApplicationContext(), "RCUISINE", ""));
+//                recipesPojo.setPreparation_time(SmartChefApp.readFromPreferences(getApplicationContext(), "RPREP_TIME", ""));
+//                recipesPojo.setMedia_url(SmartChefApp.readFromPreferences(getApplicationContext(), "RMEDIA_URL", ""));
+//
+//
+//                if (dbHandler.addtoFav(recipesPojo)) {
+//                    Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Added to fav", Toast.LENGTH_SHORT).show();
+////                    MainActivity.showSnak(SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "") + " Added to Fav", item.getActionView());
+//                    item.setIcon(getApplicationContext().getResources().getDrawable(R.drawable.heart_white));
+//                    isFav=true;
+//                } else
+//                    Toast.makeText(getApplicationContext(), "FAILED ADD", Toast.LENGTH_SHORT).show();
+//
+//            }else{
+//                MyDbHandler dbHandler = new MyDbHandler(getApplicationContext(), null, null, 1);
+//                if (dbHandler.deletefromFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))) {
+//                    Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Removed from favourites", Toast.LENGTH_SHORT).show();
+//                    item.setIcon(getApplicationContext().getResources().getDrawable(R.drawable.fav_white));
+//                    isFav=false;
+//
+//                } else
+//                    Toast.makeText(getApplicationContext(), "FAILED REMOV", Toast.LENGTH_SHORT).show();
+//            }
+
+//        }
         return super.onOptionsItemSelected(item);
     }
 

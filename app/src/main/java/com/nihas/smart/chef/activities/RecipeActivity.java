@@ -86,6 +86,7 @@ public class RecipeActivity extends AppCompatActivity {
 
 
         emptyView=(TextView)findViewById(R.id.empty_view);
+        emptyView.setVisibility(View.GONE);
         mRecyclerView=(RecyclerView)findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         bundle=getIntent().getExtras();
@@ -98,15 +99,15 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        if (SmartChefApp.isNetworkAvailable()) {
-//            new getRecipe().execute();
-//        } else {
-//            SmartChefApp.showAToast("Internet not Connected");
-//        }
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (SmartChefApp.isNetworkAvailable()) {
+            new getRecipe().execute();
+        } else {
+            SmartChefApp.showAToast("Internet not Connected");
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -123,23 +123,23 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recipe_list_item, parent, false);
+                .inflate(R.layout.recipe_list_item_new, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
 
         ViewHolder vh = new ViewHolder(v);
         imageLoader.init(ImageLoaderConfiguration.createDefault(activity));
         options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                .displayer(new BitmapDisplayer() {
-                    @Override
-                    public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
-                        int gradientStartColor = Color.parseColor("#00000000");//argb(0, 0, 0, 0);
-                        int gradientEndColor = Color.parseColor("#88000000");//argb(255, 0, 0, 0);
-                        GradientHalfoverImageDrawable gradientDrawable = new GradientHalfoverImageDrawable(activity.getResources(), bitmap);
-                        gradientDrawable.setGradientColors(gradientStartColor, gradientEndColor);
-                        imageAware.setImageDrawable(gradientDrawable);
-                    }
-                })
+//                .displayer(new BitmapDisplayer() {
+//                    @Override
+//                    public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
+//                        int gradientStartColor = Color.parseColor("#00000000");//argb(0, 0, 0, 0);
+//                        int gradientEndColor = Color.parseColor("#88000000");//argb(255, 0, 0, 0);
+//                        GradientHalfoverImageDrawable gradientDrawable = new GradientHalfoverImageDrawable(activity.getResources(), bitmap);
+//                        gradientDrawable.setGradientColors(gradientStartColor, gradientEndColor);
+//                        imageAware.setImageDrawable(gradientDrawable);
+//                    }
+//                })
                 .cacheOnDisc(true).resetViewBeforeLoading(true)
                 .showImageForEmptyUri(R.drawable.empty_photo)
                 .showImageOnFail(R.drawable.empty_photo)

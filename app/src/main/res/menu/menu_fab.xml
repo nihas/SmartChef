@@ -3,13 +3,8 @@
 
     <item
         android:id="@+id/action_share"
-        android:icon="@drawable/send"
+        android:icon="@drawable/share"
         android:title="Share"
         app:showAsAction="always"/>
 
-    <item
-        android:id="@+id/action_like"
-        android:actionLayout="@layout/fav_icon"
-        android:title="Like"
-        app:showAsAction="always"/>
 </menu>
