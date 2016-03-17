@@ -177,7 +177,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         }else{
             holder.foodType.setImageResource(R.drawable.non_veg_icon);
         }
-        holder.ratingBar.setRating(mDataset.get(position).getRating());
+        holder.ratingBar.setRating(Float.parseFloat(mDataset.get(position).getRating()));
 
 
 

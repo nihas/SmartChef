@@ -102,7 +102,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     TextView recipeName,cusineType,howToCook,timeTaken,serves,food_kind,refer,prepTime,cookTime,rate_text;
     ProgressBar pBar;
     Drawable favIcon;
-    RelativeLayout reviewLayout;
+    LinearLayout reviewLayout;
+    RatingBar ratingBar;
     Boolean isFav;
     AutoScrollViewPager viewPager;
     private ImageLoadingListener imageListener;
@@ -140,6 +141,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         fullView=(LinearLayout)findViewById(R.id.full_layout);
         rate_text=(TextView)findViewById(R.id.review_text);
         String rate=SmartChefApp.readFromPreferences(getApplicationContext(), "R_RATING", "");
+//        String s = String.format("%.2f", 1.2975118);
         rate_text.setText(String.valueOf(rate));
         final FloatingActionButton fab=(FloatingActionButton)findViewById(R.id.fab);
 
@@ -207,7 +209,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         imageListener = new ImageDisplayListener();
 
 
-        reviewLayout=(RelativeLayout)findViewById(R.id.review_layout);
+        reviewLayout=(LinearLayout)findViewById(R.id.review_layout);
         thumb=(ImageView)findViewById(R.id.thumb);
         thumb.setVisibility(View.GONE);
         pBar=(ProgressBar)findViewById(R.id.progressBar);
@@ -222,6 +224,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         refer=(TextView)findViewById(R.id.reference);
         prepTime=(TextView)findViewById(R.id.prep_time);
         cookTime=(TextView)findViewById(R.id.cook_time);
+        ratingBar=(RatingBar)findViewById(R.id.ratingBar);
 //        getSupportActionBar().setTitle("Rasperry Ice");
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -268,9 +271,21 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //                ReviewDialog dialogFragment = new ReviewDialog();
 //                dialogFragment.show(fm, "Sample Fragment");
 
-                Intent review=new Intent(RecipeDetailsActivity.this, ReviewActivity.class);
-                review.putExtra("rid",extras.getString("RECIPE_ID"));
+                Intent review = new Intent(RecipeDetailsActivity.this, ReviewActivity.class);
+                review.putExtra("rid", extras.getString("RECIPE_ID"));
                 startActivity(review);
+            }
+        });
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                FragmentManager fm = getSupportFragmentManager();
+                ReviewDialog dialogFragment = new ReviewDialog();
+                Bundle bund=new Bundle();
+                bund.putFloat("RatingStar",rating);
+                dialogFragment.setArguments(bund);
+                dialogFragment.show(fm, "Sample Fragment");
             }
         });
 
@@ -444,16 +459,16 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
 //                        mType.setTextSize(17);
-                        mType.setPadding(0, 8, 0, 8);
+                        mType.setPadding(0, 10, 0, 10);
                         mType.setTypeface(Typeface.DEFAULT);
 
 //                        mValue.setTextSize(16);
-                        mValue.setPadding(0, 8, 0, 8);
+                        mValue.setPadding(0, 10, 0, 10);
                         mValue.setTypeface(Typeface.DEFAULT);
 
                         mType.setText(jobj2.getString("name"));
                         if(!jobj2.isNull("qty"))
-                            mValue.setText(jobj2.getString("qty"));
+                            mValue.setText(" "+jobj2.getString("qty"));
                         else
                             mValue.setText("0 "+jobj2.getString("qty_type"));
 
