@@ -11,13 +11,25 @@
         android:id="@+id/pager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@null"/>
+        android:background="@null"
+        android:visibility="gone"/>
+
+    <VideoView
+        android:id="@+id/video_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal|top" />
 
     <com.nihas.smart.chef.utils.CirclePageIndicator
         android:id="@+id/indicator"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_normal"
+        android:visibility="gone"
         android:layout_above="@+id/linearLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -25,8 +37,8 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@drawable/gradient_bg"
+        android:layout_height="95dp"
+        android:background="#BBCCCCCC"
         android:layout_alignParentBottom="true"/>
 
 
@@ -38,24 +50,26 @@
         android:padding="10dp">
 
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#ffffff"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"/>
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0.5dp"-->
+            <!--android:background="#ffffff"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginRight="8dp"/>-->
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
 
 
 
             <FrameLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content">
                 <com.google.android.gms.common.SignInButton
 
@@ -71,18 +85,18 @@
 
                 <ImageView
                     android:id="@+id/googlesignin"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:padding="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?selectableItemBackground"
-                    android:src="@drawable/g_plus_button"/>
+                    android:src="@drawable/google_login"/>
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/FrameLayout1"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content" >
 
                 <com.facebook.login.widget.LoginButton
@@ -93,13 +107,12 @@
 
                 <ImageView
                     android:id="@+id/fb"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:padding="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?selectableItemBackground"
-                    android:src="@drawable/fb_button"/>
+                    android:src="@drawable/fb_login"/>
             </FrameLayout>
 
 

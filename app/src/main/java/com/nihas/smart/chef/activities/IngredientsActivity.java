@@ -66,6 +66,11 @@ public class IngredientsActivity extends AppCompatActivity{
     ViewPager viewPager;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ingredients_main);
@@ -101,6 +106,7 @@ public class IngredientsActivity extends AppCompatActivity{
         tabLayout.setupWithViewPager(viewPager);
 
         extras=getIntent().getExtras();
+        viewPager.setCurrentItem(extras.getInt("POSITION"));
 
 //        progressBar=(ProgressBar)findViewById(R.id.pBar);
 //        if (SmartChefApp.isNetworkAvailable()) {
@@ -115,64 +121,10 @@ public class IngredientsActivity extends AppCompatActivity{
     }
 
 
-    private class getAllCategories extends AsyncTask<String, Void, JSONArray> {
-
-        @Override
-        protected JSONArray doInBackground(String... params) {
-            JSONArray jsonObject = null;
-            try {
-
-                return WebRequest.getDataJSONArray(WebServices.getIngredients(SmartChefApp.readFromPreferences(IngredientsActivity.this, "ID", 1)));
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
-            return jsonObject;
-        }
-
-        @Override
-        protected void onPostExecute(JSONArray jArray) {
-            super.onPostExecute(jArray);
-//            progressBar.setVisibility(View.GONE);
-            onDone(jArray);
-        }
-    }
-
-
-    private void onDone(JSONArray jArray){
-        try {
-            if(jArray != null) {
-                listIngredients = new ArrayList<>();
-                if (jArray.length() > 0) {
-                    for (int i = 0; i < jArray.length(); i++) {
-//                            AllPojo cp = new AllPojo();
-////                            cp.setName(jArray.getString(i));
-                        listIngredients.add(new IngredientsPojo(jArray.getJSONObject(i).getString(Keys.name),
-                                jArray.getJSONObject(i).getString(Keys.image)));
-                    }
-
-
-                } else {
-                    SmartChefApp.showAToast("Something Went Wrong.");
-                }
-
-//                    final EstablishmentTypeAdapter adapter = new EstablishmentTypeAdapter(getContext(), estTypeListArray);
-//                    typeList.setAdapter(adapter);
-//                ingAdapter=new IngredientsAdapter(IngredientsActivity.this,listIngredients);
-//                mRecyclerView.setAdapter(ingAdapter);
 
 
 
 
-
-            }else{
-                SmartChefApp.showAToast("Something Went Wrong.");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
 
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

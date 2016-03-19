@@ -89,6 +89,9 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
 
 
     }
+
+
+
     private void initialise(View rootView) {
         try {
             progressBar=(ProgressBar)rootView.findViewById(R.id.pBar);

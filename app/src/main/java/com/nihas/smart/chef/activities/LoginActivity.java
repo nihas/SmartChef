@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -71,6 +73,7 @@ boolean loggedIn;
 private SignInButton signinButton;
 private static GoogleApiClient mGoogleApiClient;
 private boolean mIntentInProgress;
+    VideoView videoView;
 
 private boolean mSignInClicked;
 
@@ -97,6 +100,18 @@ private ConnectionResult mConnectionResult;
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         loginButton = (LoginButton) findViewById(R.id.fblogin);
 //        loginButton.setFragment(this);
+        videoView=(VideoView)findViewById(R.id.video_view);
+        Uri video = Uri.parse("android.resource://" + getPackageName() + "/"
+                + R.raw.sample);
+        videoView.setVideoURI(video);
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mediaPlayer.start();
+            }
+        });
+        videoView.start();
+
         signinButton = (SignInButton)findViewById(R.id.signin);
         signinButton.setOnClickListener(this);
         findViewById(R.id.fb).setOnClickListener(this);

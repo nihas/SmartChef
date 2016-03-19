@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -109,11 +110,18 @@ public class MainActivity extends AppCompatActivity {
     private void initialise() {
         try {
             progressBar=(ProgressBar)findViewById(R.id.pBar);
-            if (SmartChefApp.isNetworkAvailable()) {
-                new getAllCategories().execute();
-            } else {
-                SmartChefApp.showAToast("Internet Unavailable");
-            }
+//            if(SmartChefApp.readFromPreferences(getApplicationContext(),"CATEGORIES","").equals("")) {
+                if (SmartChefApp.isNetworkAvailable()) {
+                    new getAllCategories().execute();
+                } else {
+                    SmartChefApp.showAToast("Internet Unavailable");
+                }
+//            }else{
+//                progressBar.setVisibility(View.GONE);
+//                JSONArray jarray=new JSONArray(SmartChefApp.readFromPreferences(getApplicationContext(),"CATEGORIES",""));
+//                Log.e("hhghghg",jarray.toString());
+//                onDone(jarray);
+//            }
 
 
 
@@ -207,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(JSONArray jArray) {
             super.onPostExecute(jArray);
             progressBar.setVisibility(View.GONE);
+//            SmartChefApp.saveToPreferences(getApplicationContext(), "CATEGORIES", jArray.toString());
             onDone(jArray);
         }
     }
@@ -362,25 +371,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-//    {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        // check if the request code is same as what is passed  here it is 2
-//        if(resultCode==2)
-//        {
-////            getSupportFragmentManager().beginTransaction().replace(R.id.container,new RecipeFragment()).addToBackStack(null).commit();
-//
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction transaction = fragmentManager.beginTransaction();
-//            Fragment fragment = RecipeFragment.newInstance(data.getExtras().getString("ING"));
-//            transaction.replace(R.id.container, fragment);
-//            transaction.addToBackStack(null);
-//            transaction.commit();
-//        }else{
-////            getSupportFragmentManager().beginTransaction().replace(R.id.container,new CategoryFragment()).addToBackStack(null).commit();
-//        }
-//    }
+
 
 
     public static void updateCupValue(int size) {
@@ -415,68 +406,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private class SearchRecipe extends AsyncTask<String, Void, JSONObject> {
-
-        @Override
-        protected JSONObject doInBackground(String... params) {
-            JSONObject jsonObject = null;
-            try {
-
-                return WebRequest.getData(WebServices.searchIngRecipe(params[0]));
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
-            return jsonObject;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject jobj) {
-            super.onPostExecute(jobj);
-            try {
-//                JSONObject jobj2=jobj.getJSONObject("ingredients");
-                JSONArray jarray=jobj.getJSONArray("ingredients");
-                JSONArray jarray2=jobj.getJSONArray("recipes");
-//                mSuggestionsList.clear();
-//                mSuggestionsRecipe.clear();
-                for(int i=0;i<jarray.length();i++){
-//                    mSuggestionsList.add(new SearchItem(jarray.getString(i)));
-                }
-                for (int j=0;j<jarray2.length();j++){
-                    JSONObject job=jarray2.getJSONObject(j);
-                    RecipesPojo pojo=new RecipesPojo();
-                    pojo.setId(job.getString("id"));
-                    pojo.setName(job.getString("name"));
-                    pojo.setMedia_type("media_type");
-                    if(pojo.getMedia_type().equals("image"))
-                        pojo.setMedia_url("media_url");
-                    else
-                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
-//                    mSuggestionsRecipe.add(pojo);
-                }
-                List<SearchItem> mResultsList = new ArrayList<>();
-//                mSearchAdapter = new SearchAdapter(MainActivity.this, mResultsList, mSuggestionsList, SearchCodes.THEME_LIGHT);
-//                mSearchView.setAdapter(mSearchAdapter);
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-//
-//            progressBar.setVisibility(View.GONE);
-//            onDone(jArray);
-        }
-    }
-
-
     @Override
     public void onBackPressed() {
             super.onBackPressed();
     }
 
-//    public static void replaceFrag(){
-//        getSupportFragmentManager().beginTransaction().replace(R.id.container,new CategoryFragment()).commit();
-//    }
 
 public static void showSnak(String msg,View v) {
     Snackbar.make(v, msg, Snackbar.LENGTH_LONG)

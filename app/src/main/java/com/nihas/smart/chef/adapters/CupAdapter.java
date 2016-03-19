@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.CupActivity;
+import com.nihas.smart.chef.activities.IngredientsActivity;
 import com.nihas.smart.chef.activities.MainActivity;
 import com.nihas.smart.chef.customui.GradientoverImageDrawable;
 import com.nihas.smart.chef.db.MyDbHandler;
@@ -103,6 +104,7 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
                                 else
                                     pojo.setCup_count(c.getCount());
                             }
+                            IngredientsActivity.updateCupValue(pojo.getCup_count());
                             MainActivity.updateCupValue(pojo.getCup_count());
 
 
