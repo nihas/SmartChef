@@ -83,6 +83,12 @@ public class ReviewDialog extends DialogFragment {
 //        }
 
         ratingBar=(RatingBar)view.findViewById(R.id.ratingBar);
+        Bundle bund=getArguments();
+        if(bund!=null)
+        ratingBar.setRating(getArguments().getFloat("RatingStar"));
+        else
+        ratingBar.setRating(0);
+
         review=(EditText)view.findViewById(R.id.review);
         submitButton=(Button)view.findViewById(R.id.submit_button);
 //        pBar=(ProgressBar)view.findViewById(R.id.progressBar);

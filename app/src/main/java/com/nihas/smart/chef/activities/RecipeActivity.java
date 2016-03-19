@@ -193,8 +193,10 @@ public class RecipeActivity extends AppCompatActivity {
                                         pojo.setMedia_type(innerjobj.getString(Keys.media_type));
                                     else
                                         pojo.setMedia_type("");
-                                    if(!innerjobj.isNull("rating"))
-                                        pojo.setRating(Float.parseFloat(innerjobj.getString("rating")));
+                                    if(!innerjobj.isNull("rating")) {
+                                        String s = String.format("%.2f", Float.parseFloat(innerjobj.getString("rating")));
+                                        pojo.setRating(s);
+                                    }
 
                                     listRecipes.add(pojo);
                                 }

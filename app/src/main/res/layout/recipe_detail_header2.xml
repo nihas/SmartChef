@@ -270,6 +270,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/review_layout"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -282,7 +283,7 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/circle_stroke"/>
+                android:src="@drawable/circle_stroke"/>
                 <TextView
                     android:id="@+id/review_text"
                     android:layout_width="wrap_content"
@@ -435,7 +436,6 @@
     android:textColor="#000000"/>
 
 <RelativeLayout
-    android:id="@+id/review_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="15dp"
