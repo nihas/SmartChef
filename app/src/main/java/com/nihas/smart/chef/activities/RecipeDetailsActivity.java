@@ -105,6 +105,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     RelativeLayout reviewLayout;
     Boolean isFav;
     AutoScrollViewPager viewPager;
+    CircleImageView pro_pic;
     private ImageLoadingListener imageListener;
 //    private ScrollGalleryView scrollGalleryView;
     public static final ArrayList<ReviewPojo> rvwList=new ArrayList<>();
@@ -137,7 +138,11 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         extras=getIntent().getExtras();
+        pro_pic=(CircleImageView)findViewById(R.id.pro_pic);
+
+
         fullView=(LinearLayout)findViewById(R.id.full_layout);
+        fullView.setVisibility(View.GONE);
         rate_text=(TextView)findViewById(R.id.review_text);
         String rate=SmartChefApp.readFromPreferences(getApplicationContext(), "R_RATING", "");
         rate_text.setText(String.valueOf(rate));
@@ -259,6 +264,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         imageLoader = ImageLoader.getInstance();
         imageLoader.destroy();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
+        imageLoader.displayImage(SmartChefApp.readFromPreferences(getApplicationContext(), "profile_pic", ""), pro_pic);
 
 
         reviewLayout.setOnClickListener(new View.OnClickListener() {
@@ -444,7 +450,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
 //                        mType.setTextSize(17);
-                        mType.setPadding(0, 8, 0, 8);
+                        mType.setPadding(5, 8, 0, 8);
                         mType.setTypeface(Typeface.DEFAULT);
 
 //                        mValue.setTextSize(16);
