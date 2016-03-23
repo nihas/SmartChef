@@ -12,7 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -91,6 +93,16 @@ public class SearchActivity extends AppCompatActivity {
         pBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
 
         searchQuery=(EditText)findViewById(R.id.search_query);
+        searchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    //performSearch();
+                    return true;
+                }
+                return false;
+            }
+        });
         searchQuery.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -100,7 +112,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(SmartChefApp.isNetworkAvailable()){
-                    if(charSequence.length()>0) {
+                    if(charSequence.length()>0 && !charSequence.equals("")) {
                         new SearchRecipe().execute(charSequence.toString());
                         recyclerView.setVisibility(View.VISIBLE);
                     }
@@ -201,25 +213,30 @@ public class SearchActivity extends AppCompatActivity {
             pBar.setVisibility(View.GONE);
             try {
 //                JSONObject jobj2=jobj.getJSONObject("ingredients");
-                JSONArray jarray=jobj.getJSONArray("ingredients");
-                mIngList=new ArrayList<>();
-                for(int i=0;i<jarray.length();i++){
-                    IngredientsPojo po=new IngredientsPojo();
-                    po.setName(jarray.getString(i));
-                    mIngList.add(po);
-                }
-                JSONArray jarrayrec=jobj.getJSONArray("recipes");
-                mRecipeList = new ArrayList<>();
-                for(int j=0;j<jarrayrec.length();j++){
-                    RecipesPojo pojo=new RecipesPojo();
-                    pojo.setId(jarrayrec.getJSONObject(j).getString("id"));
-                    pojo.setName(jarrayrec.getJSONObject(j).getString("name"));
-                    pojo.setMedia_type(jarrayrec.getJSONObject(j).getString("media_type"));
-                    pojo.setMedia_url(jarrayrec.getJSONObject(j).getString("media_url"));
-                    mRecipeList.add(pojo);
-                }
-                com.nihas.smart.chef.adapters.SearchAdapter searchAdapter=new com.nihas.smart.chef.adapters.SearchAdapter(SearchActivity.this,mIngList,mRecipeList);
-                recyclerView.setAdapter(searchAdapter);
+ if(!jobj.isNull("ingredients")) {
+     JSONArray jarray = jobj.getJSONArray("ingredients");
+     mIngList = new ArrayList<>();
+     for (int i = 0; i < jarray.length(); i++) {
+         IngredientsPojo po = new IngredientsPojo();
+         po.setName(jarray.getString(i));
+         mIngList.add(po);
+     }
+     JSONArray jarrayrec = jobj.getJSONArray("recipes");
+     mRecipeList = new ArrayList<>();
+     for (int j = 0; j < jarrayrec.length(); j++) {
+         RecipesPojo pojo = new RecipesPojo();
+         pojo.setId(jarrayrec.getJSONObject(j).getString("id"));
+         pojo.setName(jarrayrec.getJSONObject(j).getString("name"));
+         pojo.setMedia_type(jarrayrec.getJSONObject(j).getString("media_type"));
+         pojo.setMedia_url(jarrayrec.getJSONObject(j).getString("media_url"));
+         mRecipeList.add(pojo);
+     }
+
+     com.nihas.smart.chef.adapters.SearchAdapter searchAdapter = new com.nihas.smart.chef.adapters.SearchAdapter(SearchActivity.this, mIngList, mRecipeList);
+     recyclerView.setAdapter(searchAdapter);
+ }else{
+     SmartChefApp.showAToast("No Items Found");
+ }
 //                mSearchAdapter = new SearchAdapter(SearchActivity.this, mResultsList, mSuggestionsList, mSuggestionsRecipe, SearchCodes.THEME_LIGHT);
 //                mSearchView.setAdapter(mSearchAdapter);
 

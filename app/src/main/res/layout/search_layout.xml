@@ -17,6 +17,7 @@
             android:layout_height="wrap_content">
 
         <EditText
+            android:imeOptions="actionSearch"
             android:id="@+id/search_query"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
