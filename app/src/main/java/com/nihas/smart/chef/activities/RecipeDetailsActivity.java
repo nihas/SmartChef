@@ -79,6 +79,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -249,6 +252,14 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             Log.e("IID",extras.getString("RECIPE_ID"));
         }
 
+        refer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(RecipeDetailsActivity.this,WebViewActivity.class));
+
+            }
+        });
+
         options = new DisplayImageOptions.Builder().cacheInMemory(true)
                 .displayer(new BitmapDisplayer() {
                     @Override
@@ -290,6 +301,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 ReviewDialog dialogFragment = new ReviewDialog();
                 Bundle bund=new Bundle();
                 bund.putFloat("RatingStar",rating);
+                bund.putString("rid", extras.getString("RECIPE_ID"));
                 dialogFragment.setArguments(bund);
                 dialogFragment.show(fm, "Sample Fragment");
             }
@@ -384,7 +396,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     if(!jobj.isNull("food_kind"))
                         food_kind.setText(", "+jobj.getString("food_kind"));
                     if(!jobj.isNull("reference"))
-                        refer.setText("reference: "+jobj.getString("reference"));
+                        refer.setText("By: "+jobj.getString("reference"));
                     if(!jobj.isNull("preparation_time"))
                         prepTime.setText(jobj.getString("preparation_time"));
                     if(!jobj.isNull("cook_time"))
@@ -410,14 +422,14 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                                 pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
 //                                scrollGalleryView.addMedia(MediaInfo.mediaLoader(
 //                                        new DefaultVideoLoader(jobj2.getString("media_url"), R.drawable.default_video)));
-//                                imageLoader.displayImage("http://collegemix.ca/img/placeholder.png", thumb, options);
+                                imageLoader.displayImage("http://collegemix.ca/img/placeholder.png", thumb, options);
                             }else{
                                 pojo.setMedia_url(jobj2.getString("media_url"));
 //                                for (String url : images) {
 //                                    infos.add(MediaInfo.mediaLoader(new PicassoImageLoader(jobj2.getString("media_url"))));
 //                                scrollGalleryView.addMedia(infos);
 //                                }
-//                                imageLoader.displayImage(jobj2.getString("media_url"), thumb, options);
+                                imageLoader.displayImage(jobj2.getString("media_url"), thumb, options);
                             }
                         }
                         attachArray.add(pojo);
@@ -563,32 +575,77 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    public void onShareItem(View v) {
+        // Get access to bitmap image from view
+//        ImageView ivImage = (ImageView) findViewById(R.id.ivResult);
+        // Get access to the URI for the bitmap
+        Uri bmpUri = getLocalBitmapUri(thumb);
+        if (bmpUri != null) {
+            // Construct a ShareIntent with link to image
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Download Smart Chef to view recipe: " + recipeName.getText());
+            shareIntent.setType("image/*");
+            // Launch sharing dialog for image
+            startActivity(Intent.createChooser(shareIntent, "Share Image"));
+        } else {
+            // ...sharing failed, handle error
+        }
+    }
 
+    // Returns the URI path to the Bitmap displayed in specified ImageView
+    public Uri getLocalBitmapUri(ImageView imageView) {
+        // Extract Bitmap from ImageView drawable
+        Drawable drawable = imageView.getDrawable();
+        Bitmap bmp = null;
+        if (drawable instanceof BitmapDrawable){
+            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        } else {
+            return null;
+        }
+        // Store image to default external storage directory
+        Uri bmpUri = null;
+        try {
+            File file =  new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
+            file.getParentFile().mkdirs();
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_share) {
 
-            String image_url = "http://images.cartradeexchange.com//img//800//vehicle//Honda_Brio_562672_5995_6_1438153637072.jpg";
-            Uri uri =  Uri.parse( "http://images.cartradeexchange.com//img//800//vehicle//Honda_Brio_562672_5995_6_1438153637072.jpg" );
+            onShareItem(thumb);
 
-            Intent shareIntent = new Intent();
-            shareIntent.setType("image/*");
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            shareIntent.setAction(Intent.ACTION_SEND);
-
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "Download Smart Chef to view recipe: "+recipeName.getText());
-            shareIntent.putExtra(Intent.EXTRA_STREAM,uri);
-            // Target whatsapp:
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-            try {
-                startActivity(shareIntent);
-            } catch (android.content.ActivityNotFoundException ex) {
-                ex.printStackTrace();
-            }
+//            String image_url = "http://images.cartradeexchange.com//img//800//vehicle//Honda_Brio_562672_5995_6_1438153637072.jpg";
+//            Uri uri =  Uri.parse( "http://images.cartradeexchange.com//img//800//vehicle//Honda_Brio_562672_5995_6_1438153637072.jpg" );
+//
+//            Intent shareIntent = new Intent();
+//            shareIntent.setType("image/*");
+//            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            shareIntent.setAction(Intent.ACTION_SEND);
+//
+//            shareIntent.setType("text/plain");
+//            shareIntent.putExtra(Intent.EXTRA_TEXT, "Download Smart Chef to view recipe: "+recipeName.getText());
+//            shareIntent.putExtra(Intent.EXTRA_STREAM,uri);
+//            // Target whatsapp:
+//            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//
+//            try {
+//                startActivity(shareIntent);
+//            } catch (android.content.ActivityNotFoundException ex) {
+//                ex.printStackTrace();
+//            }
         }
 //        else if(id== R.id.action_like){
 //

@@ -70,6 +70,19 @@ public class IngredientsActivity extends AppCompatActivity{
         super.onResume();
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SmartChefApp.saveToPreferences(getApplicationContext(),"ING_ACT",true);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SmartChefApp.saveToPreferences(getApplicationContext(), "ING_ACT", false);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

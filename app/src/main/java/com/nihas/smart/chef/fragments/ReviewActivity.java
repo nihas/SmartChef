@@ -35,6 +35,7 @@ import com.nihas.smart.chef.customui.CircleImageView;
 import com.nihas.smart.chef.pojos.ReviewPojo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +54,7 @@ public class ReviewActivity extends AppCompatActivity {
 //    RatingBar ratingBar;
 //    EditText review;
     Button post;
+    RatingBar ratingBar;
     RecyclerView recyclerView;
 //    ProgressBar pBar;
     ImageLoader imageLoader;
@@ -62,6 +64,7 @@ public class ReviewActivity extends AppCompatActivity {
     float rating_value;
     JSONObject jsonPost;
     Bundle bundle;
+    CircleImageView pro_pic;
 
     public static final ArrayList<ReviewPojo> rvwList=new ArrayList<>();
 
@@ -81,6 +84,7 @@ public class ReviewActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle("Reviews");
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+        ratingBar=(RatingBar)findViewById(R.id.ratingBar);
 
         final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
@@ -96,15 +100,15 @@ public class ReviewActivity extends AppCompatActivity {
 //        title=(TextView)view.findViewById(R.id.title);
         recyclerView=(RecyclerView)findViewById(R.id.rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         emptyView=(TextView)findViewById(R.id.empty_view);
-
         emptyView.setVisibility(View.GONE);
+
         if(SmartChefApp.isNetworkAvailable()){
             new getReviews().execute(bundle.getString("rid"));
         }else{
             SmartChefApp.showAToast("Internet Unavailable");
         }
+
         if(!RecipeDetailsActivity.rvwList.isEmpty()) {
 
 
@@ -124,9 +128,25 @@ public class ReviewActivity extends AppCompatActivity {
                 .showImageOnFail(R.drawable.empty_photo)
                 .showImageOnLoading(R.drawable.empty_photo).build();
 
+        pro_pic=(CircleImageView)findViewById(R.id.pro_pic);
+        imageLoader = ImageLoader.getInstance();
+        imageLoader.destroy();
+        imageLoader.init(ImageLoaderConfiguration.createDefault(this));
+        imageLoader.displayImage(SmartChefApp.readFromPreferences(getApplicationContext(), "profile_pic", ""), pro_pic);
 
 //        imageLoader.displayImage(SmartChefApp.readFromPreferences(ReviewActivity.this, "profile_pic", ""), pro_pic, options);
 
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                FragmentManager fm = getSupportFragmentManager();
+                ReviewDialog dialogFragment = new ReviewDialog();
+                Bundle bund=new Bundle();
+                bund.putFloat("RatingStar",rating);
+                dialogFragment.setArguments(bund);
+                dialogFragment.show(fm, "Sample Fragment");
+            }
+        });
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override

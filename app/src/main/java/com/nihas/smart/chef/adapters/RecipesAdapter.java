@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +49,9 @@ import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,9 +94,11 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         ImageView thumbnail,foodType,fav;
         CardView recipeView;
         RatingBar ratingBar;
+        ImageView share;
 //        LinearLayout addLayout,plusMinusLayout;
         public ViewHolder(View v) {
             super(v);
+            share=(ImageView)v.findViewById(R.id.share_action);
             title=(TextView)v.findViewById(R.id.recipe_title);
 //            mTitleLetter=(TextView)v.findViewById(R.id.titleLetter);
             serveTo=(TextView)v.findViewById(R.id.serve_to);
@@ -168,6 +177,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
         holder.title.setText(mDataset.get(position).getName());
         imageLoader.displayImage(mDataset.get(position).getMedia_url(), holder.thumbnail, options);
+        holder.thumbnail.setTag(holder.title.getText());
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
     holder.serveTo.setText(mDataset.get(position).getServes() + "");
         holder.cusine.setText(mDataset.get(position).getCuisine());
@@ -179,7 +189,12 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         }
         holder.ratingBar.setRating(Float.parseFloat(mDataset.get(position).getRating()));
 
-
+        holder.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onShareItem(holder.thumbnail);
+            }
+        });
 
         holder.recipeView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -263,6 +278,52 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         });
 
     }
+
+    public void onShareItem(ImageView v) {
+        // Get access to bitmap image from view
+//        ImageView ivImage = (ImageView) findViewById(R.id.ivResult);
+        // Get access to the URI for the bitmap
+        Uri bmpUri = getLocalBitmapUri(v);
+        if (bmpUri != null) {
+            // Construct a ShareIntent with link to image
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Download Smart Chef to view recipe: " + v.getTag());
+            shareIntent.setType("image/*");
+            // Launch sharing dialog for image
+            activity.startActivity(Intent.createChooser(shareIntent, "Share Image"));
+        } else {
+            // ...sharing failed, handle error
+        }
+    }
+
+    // Returns the URI path to the Bitmap displayed in specified ImageView
+    public Uri getLocalBitmapUri(ImageView imageView) {
+        // Extract Bitmap from ImageView drawable
+        Drawable drawable = imageView.getDrawable();
+        Bitmap bmp = null;
+        if (drawable instanceof BitmapDrawable){
+            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        } else {
+            return null;
+        }
+        // Store image to default external storage directory
+        Uri bmpUri = null;
+        try {
+            File file =  new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
+            file.getParentFile().mkdirs();
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
+    }
+
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override

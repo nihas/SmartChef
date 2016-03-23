@@ -2,10 +2,17 @@ package com.nihas.smart.chef.activities;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.app.SmartChefApp;
@@ -28,7 +35,10 @@ import java.util.List;
 /**
  * Created by snyxius on 3/3/16.
  */
-public class ActivityGallery extends FragmentActivity {
+public class ActivityGallery extends AppCompatActivity {
+
+
+    Toolbar toolbar;
 
     private static final ArrayList<String> images = new ArrayList<>(Arrays.asList(
             "http://img1.goodfon.ru/original/1920x1080/d/f5/aircraft-jet-su-47-berkut.jpg",
@@ -53,6 +63,26 @@ public class ActivityGallery extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
+
+
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle("Gallery");
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         Bitmap bitmap = convertDrawableToBitmap(R.drawable.wallpaper7);
 

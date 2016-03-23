@@ -10,12 +10,56 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"/>
 
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#808080"
+            android:layout_marginBottom="10dp"/>
+
+        <com.nihas.smart.chef.customui.CircleImageView
+            android:id="@+id/pro_pic"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:tint="#808080"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nihas Nizar"
+            android:textColor="#000000"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"/>
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ratingBar"
+            android:max="5"
+            android:layout_gravity="center"
+            android:stepSize="1"
+            android:numStars="5"
+            />
+
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/empty_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:text="No Reviews"
+        android:gravity="center"
+        android:layout_below="@+id/linear"
         android:textColor="#000000"
         android:layout_centerInParent="true"/>
 
@@ -24,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/linear"
         android:layout_above="@+id/post_button"
         android:id="@+id/rv" />
 
@@ -33,6 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#ffffff"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:text="Post Review" />

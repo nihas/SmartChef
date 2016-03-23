@@ -39,6 +39,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,8 +114,12 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(SmartChefApp.isNetworkAvailable()){
-                    if(charSequence.length()>0 && !charSequence.equals("")) {
-                        new SearchRecipe().execute(charSequence.toString());
+                    if(charSequence.length()>0) {
+                        try {
+                            new SearchRecipe().execute(URLEncoder.encode(charSequence.toString(),"UTF-8"));
+                        } catch (UnsupportedEncodingException e) {
+
+                        }
                         recyclerView.setVisibility(View.VISIBLE);
                     }
                     else

@@ -1,6 +1,8 @@
 package com.nihas.smart.chef.adapters;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -16,6 +18,7 @@ import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.CupActivity;
 import com.nihas.smart.chef.activities.IngredientsActivity;
 import com.nihas.smart.chef.activities.MainActivity;
+import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.customui.GradientoverImageDrawable;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.pojos.CupPojo;
@@ -87,31 +90,31 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
-                        if (dbHandler.deleteProduct(holder.mIngredient.getText().toString())) {
-                            Toast.makeText(activity, "Deleted", Toast.LENGTH_SHORT).show();
-                            notifyDataSetChanged();
-                            notifyItemChanged(position);
-                            notifyItemRemoved(position);
-                            mDataset.remove(position);
-                            Cursor c=dbHandler.getAllCup();
-                            CupPojo pojo=new CupPojo();
-                            if(c==null) {
-                                pojo.setCup_count(0);
-                            }
-                            else {
-                                if(c.getCount()==0)
-                                    CupActivity.updateView();
-                                else
-                                    pojo.setCup_count(c.getCount());
-                            }
-                            IngredientsActivity.updateCupValue(pojo.getCup_count());
-                            MainActivity.updateCupValue(pojo.getCup_count());
-
-
-                        }
+                if (dbHandler.deleteProduct(holder.mIngredient.getText().toString())) {
+                    Toast.makeText(activity, "Deleted", Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
+                    notifyItemChanged(position);
+                    notifyItemRemoved(position);
+                    mDataset.remove(position);
+                    Cursor c = dbHandler.getAllCup();
+                    CupPojo pojo = new CupPojo();
+                    if (c == null) {
+                        pojo.setCup_count(0);
+                    } else {
+                        if (c.getCount() == 0)
+                            CupActivity.updateView();
                         else
-                            Toast.makeText(activity, "FAILED Delete", Toast.LENGTH_SHORT).show();
-                }
+                            pojo.setCup_count(c.getCount());
+                    }
+
+                    if(SmartChefApp.readFromPreferences(activity,"ING_ACT",false))
+                    IngredientsActivity.updateCupValue(pojo.getCup_count());
+                    MainActivity.updateCupValue(pojo.getCup_count());
+
+
+                } else
+                    Toast.makeText(activity, "FAILED Delete", Toast.LENGTH_SHORT).show();
+            }
 
         });
 
@@ -134,6 +137,8 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
         });
 
     }
+
+
 
     @Override
     public int getItemCount() {
