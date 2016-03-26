@@ -107,8 +107,8 @@ public class CupAdapter extends RecyclerView.Adapter<CupAdapter.ViewHolder> {
                             pojo.setCup_count(c.getCount());
                     }
 
-                    if(SmartChefApp.readFromPreferences(activity,"ING_ACT",false))
-                    IngredientsActivity.updateCupValue(pojo.getCup_count());
+//                    if(SmartChefApp.readFromPreferences(activity,"ING_ACT",true))
+//                    IngredientsActivity.updateCupValue(pojo.getCup_count());
                     MainActivity.updateCupValue(pojo.getCup_count());
 
 

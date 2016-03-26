@@ -2,6 +2,8 @@ package com.nihas.smart.chef.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -111,6 +113,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     AutoScrollViewPager viewPager;
     CircleImageView pro_pic;
     private ImageLoadingListener imageListener;
+    boolean isVideo;
+    String Videoid="";
+    MenuItem videoitem;
 //    private ScrollGalleryView scrollGalleryView;
     public static final ArrayList<ReviewPojo> rvwList=new ArrayList<>();
     private static final ArrayList<String> images = new ArrayList<>(Arrays.asList(
@@ -137,7 +142,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
-
+        isVideo=false;
 //        initializeRecylceView();
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -419,10 +424,12 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         if((!jobj2.isNull("media_type"))&&(!jobj2.isNull("media_url"))){
 
                             if(jobj2.getString("media_type").equals("video")){
-                                pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                                isVideo=true;
+                                Videoid=jobj2.getString("media_url");
+//                                pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
 //                                scrollGalleryView.addMedia(MediaInfo.mediaLoader(
 //                                        new DefaultVideoLoader(jobj2.getString("media_url"), R.drawable.default_video)));
-                                imageLoader.displayImage("http://collegemix.ca/img/placeholder.png", thumb, options);
+//                                imageLoader.displayImage("http://collegemix.ca/img/placeholder.png", thumb, options);
                             }else{
                                 pojo.setMedia_url(jobj2.getString("media_url"));
 //                                for (String url : images) {
@@ -526,6 +533,11 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 }
 //            }
 
+            if(isVideo)
+                videoitem.setVisible(true);
+            else
+                videoitem.setVisible(false);
+
             viewPager = (AutoScrollViewPager) findViewById(R.id.pager);
 
             viewPager.setInterval(Constants.SPLASH_TIME_OUT);
@@ -562,7 +574,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_fab, menu);
-//        MenuItem item = menu.findItem(R.id.action_like);
+        videoitem = menu.findItem(R.id.action_video);
 
 //        MyDbHandler dbHandler = new MyDbHandler(RecipeDetailsActivity.this, null, null, 1);
 //        if(dbHandler.isFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))){
@@ -626,6 +638,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         if (id == R.id.action_share) {
 
             onShareItem(thumb);
+        }else if(id==R.id.action_video){
+            if(!Videoid.equals(""))
+            startVideo(Videoid);
+        }
 
 //            String image_url = "http://images.cartradeexchange.com//img//800//vehicle//Honda_Brio_562672_5995_6_1438153637072.jpg";
 //            Uri uri =  Uri.parse( "http://images.cartradeexchange.com//img//800//vehicle//Honda_Brio_562672_5995_6_1438153637072.jpg" );
@@ -646,7 +662,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //            } catch (android.content.ActivityNotFoundException ex) {
 //                ex.printStackTrace();
 //            }
-        }
+//        }
 //        else if(id== R.id.action_like){
 //
 //
@@ -688,6 +704,20 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //        }
         return super.onOptionsItemSelected(item);
     }
+
+
+    private void startVideo(String videoID)
+    { // default youtube app
+     Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoID));
+//     List<ResolveInfo> list = getPackageManager().queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY);
+//     if (list.size() == 0) {
+    // default youtube app not present or doesn't conform to the standard we know
+    // use our own activity
+//     i = new Intent(getApplicationContext(), YouTube.class);
+//     i.putExtra("VIDEO_ID", videoID);
+//     }
+     startActivity(i);
+     }
 
 
 

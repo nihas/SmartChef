@@ -7,4 +7,10 @@
         android:title="Share"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/action_video"
+        android:icon="@drawable/default_video"
+        android:title="Video"
+        app:showAsAction="always"/>
+
 </menu>

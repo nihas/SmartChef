@@ -151,7 +151,7 @@ public class IngredientsActivity extends AppCompatActivity{
         @Override
         public Fragment getItem(int position) {
 
-            return new IngredientsFragment(IngredientsActivity.this,position,listIngredients,listCats.get(position).getId());
+            return IngredientsFragment.newInstance(IngredientsActivity.this,position,listIngredients,listCats.get(position).getId());
         }
 
         @Override

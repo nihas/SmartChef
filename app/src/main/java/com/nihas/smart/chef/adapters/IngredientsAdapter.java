@@ -173,7 +173,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         }
 
         holder.mIngredient.setText(mDataset.get(position).getName());
-        imageLoader.displayImage(WebServices.getImagePath(mDataset.get(position).getImage_url()), holder.thumbnail, options);
+        imageLoader.displayImage(mDataset.get(position).getImage_url(), holder.thumbnail, options);
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
 //        final ViewHolder innerHolder=holder;
 //        holder.minusToCup.setOnClickListener(new View.OnClickListener() {
@@ -337,12 +337,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         mOnDataChangeListener = onDataChangeListener;
     }
 
-    private void doButtonOneClickActions(int size) {
 
-        if(mOnDataChangeListener != null){
-            mOnDataChangeListener.onDataChanged(size);
-        }
-    }
 
 
 

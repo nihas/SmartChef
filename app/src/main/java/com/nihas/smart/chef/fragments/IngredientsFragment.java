@@ -1,6 +1,7 @@
 package com.nihas.smart.chef.fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -57,13 +58,13 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
     }
 
 
-//    public static IngredientsFragment newInstance(int index) {
-//        IngredientsFragment f = new IngredientsFragment();
-//        Bundle args = new Bundle();
+    public static IngredientsFragment newInstance(Context context, int position, ArrayList<IngredientsPojo> listIng, int id) {
+        IngredientsFragment f = new IngredientsFragment(context,position,listIng,id);
+        Bundle args = new Bundle();
 //        args.putInt("index", index);
-//        f.setArguments(args);
-//        return f;
-//    }
+        f.setArguments(args);
+        return f;
+    }
 
 
 
@@ -125,6 +126,16 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
 
 
     private class getAllCategories extends AsyncTask<String, Void, JSONArray> {
+ProgressDialog dial=new ProgressDialog(getActivity());
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dial.setMessage("Loading..");
+            dial.setCancelable(false);
+            dial.show();
+            progressBar.setVisibility(View.GONE);
+        }
 
         @Override
         protected JSONArray doInBackground(String... params) {
@@ -143,7 +154,7 @@ public class IngredientsFragment extends Fragment implements View.OnClickListene
         protected void onPostExecute(JSONArray jArray) {
             super.onPostExecute(jArray);
             progressBar.setVisibility(View.GONE);
-
+            dial.dismiss();
             onDone(jArray);
         }
     }
