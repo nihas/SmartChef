@@ -1,0 +1,429 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:clickable="true"
+    android:id="@+id/container"
+    android:layout_height="match_parent">
+
+
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        >
+
+        <RelativeLayout
+            android:id="@+id/relative1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/wrong"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="7dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?selectableItemBackground"
+                android:src="@drawable/com_facebook_close"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filters"
+                android:textColor="#ffffff"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:layout_centerInParent="true"
+
+                />
+            <TextView
+                android:id="@+id/reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="RESET"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:layout_centerVertical="true"
+                android:background="?selectableItemBackground"
+                android:layout_alignParentRight="true"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_above="@+id/apply"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <RelativeLayout
+                android:padding="10dp"
+                android:background="#F1F1F1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+
+                <TextView
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@android:color/black"
+                    android:text="SORT BY"
+                    android:layout_marginLeft="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:padding="10dp"
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <RadioGroup
+                    android:id="@+id/radioGroupSort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/sortRadioDistance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:visibility="gone"
+                        android:text="Popularity"
+                        android:textStyle="bold"
+                        android:textColor="@drawable/rbtn_textcolor_selector" />
+
+
+                    <RadioButton
+                        android:textStyle="bold"
+                        android:id="@+id/sortRadioRating"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Ratings"
+                        android:textColor="@drawable/rbtn_textcolor_selector" />
+
+
+                    <RadioButton
+                        android:textStyle="bold"
+                        android:id="@+id/sortRadioPopularity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Popularity"
+                        android:textColor="@drawable/rbtn_textcolor_selector" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:padding="10dp"
+                android:background="#F1F1F1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+
+                <TextView
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@android:color/black"
+                    android:text="QUICK FILTER"
+                    android:layout_marginLeft="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioGroup
+                    android:id="@+id/radioGroupVeg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+
+
+                    <RadioButton
+                        android:textStyle="bold"
+                        android:id="@+id/veg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Veg"
+                        android:textColor="@drawable/rbtn_textcolor_selector" />
+
+
+                    <RadioButton
+                        android:textStyle="bold"
+                        android:id="@+id/non_veg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Non Veg"
+                        android:textColor="@drawable/rbtn_textcolor_selector" />
+
+                </RadioGroup>
+
+
+
+        </LinearLayout>
+
+            <RelativeLayout
+                android:padding="10dp"
+                android:background="#F1F1F1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+
+                <TextView
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@android:color/black"
+                    android:text="SUITED FOR"
+                    android:layout_marginLeft="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/breakfast"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:layout_marginLeft="25dp"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@android:color/black"
+                        android:text="Breakfast"
+                        android:buttonTint="@color/colorPrimary"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <CheckBox
+                        android:id="@+id/snack"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:layout_centerInParent="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@android:color/black"
+                        android:text="Snack"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:buttonTint="@color/colorPrimary"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/lunch"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:layout_marginLeft="25dp"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@android:color/black"
+                        android:text="Lunch"
+                        android:buttonTint="@color/colorPrimary"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <CheckBox
+                        android:id="@+id/dinner"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:layout_centerInParent="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@android:color/black"
+                        android:text="Dinner"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:buttonTint="@color/colorPrimary"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <CheckBox
+                        android:id="@+id/desert"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:layout_marginLeft="25dp"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@android:color/black"
+                        android:text="Dessert"
+                        android:buttonTint="@color/colorPrimary"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:padding="20dp"
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:padding="10dp"
+                android:background="#F1F1F1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+
+                <TextView
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@android:color/black"
+                    android:text="TOTAL TIME"
+                    android:layout_marginLeft="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:padding="10dp"
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <RadioGroup
+                    android:id="@+id/radioGrouptime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/sortRadio15"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="15 min"
+                        android:textStyle="bold"
+                        android:textColor="@drawable/rbtn_textcolor_selector" />
+
+
+                    <RadioButton
+                        android:textStyle="bold"
+                        android:id="@+id/sortRadioRating30"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="30 min"
+                        android:textColor="@drawable/rbtn_textcolor_selector" />
+
+
+                    <RadioButton
+                        android:textStyle="bold"
+                        android:id="@+id/sortRadioPopularity40"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="40 min"
+                        android:textColor="@drawable/rbtn_textcolor_selector" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <Button
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:text="APPLY"
+        android:id="@+id/apply"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

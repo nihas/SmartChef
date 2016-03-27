@@ -55,7 +55,7 @@ public class FilterDialog extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.filter_dialog);
+        setContentView(R.layout.filter_layout);
         overridePendingTransition(R.anim.push_up_in, R.anim.fade_out);
 
         toolbar=(Toolbar)findViewById(R.id.toolbar);

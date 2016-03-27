@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
 //                adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
                 if (jArray.length() > 0) {
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"LIST_CUISINES",jArray.toString());
                     for (int i = 0; i < jArray.length(); i++) {
 //                            AllPojo cp = new AllPojo();
 ////                            cp.setName(jArray.getString(i));
@@ -237,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     }
-                    IngredientsActivity.equateCats(listCuisines);
+//                    IngredientsActivity.equateCats(listCuisines);
 //                    ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 //                    adapter.addFragment(listCuisines);
 //                    viewPager.setAdapter(adapter);
@@ -339,6 +340,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, CupActivity.class);
 //                startActivity(intent);
                 startActivity(intent);
+                SmartChefApp.saveToPreferences(getApplicationContext(), "TO_CUP", "main");
+                finish();
 //                getSupportFragmentManager().beginTransaction()
 //                        .add(R.id.container_drawer,new CupFragment().newInstance(drawerLayout), "CupFragment")
 //                        .commit();

@@ -187,6 +187,18 @@ initialise();
 
     @Override
     public void onBackPressed() {
+        if(SmartChefApp.readFromPreferences(getApplicationContext(),"TO_CUP","").equals("ing")){
+            Intent intent=new Intent(CupActivity.this,IngredientsActivity.class);
+            Bundle extras=getIntent().getExtras();
+            intent.putExtra("POSITION", extras.getInt("POSITION"));
+            startActivity(intent);
+            finish();
+
+        }else{
+
+            startActivity(new Intent(CupActivity.this, MainActivity.class));
+            finish();
+        }
 //        Intent intent=new Intent(CupActivity.this,MainActivity.class);
 //        intent.putExtra("MESSAGE","msg");
 //        setResult(1, intent);

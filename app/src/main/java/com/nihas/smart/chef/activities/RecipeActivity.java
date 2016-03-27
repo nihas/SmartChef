@@ -32,6 +32,7 @@ import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.db.MyDbHandler;
 import com.nihas.smart.chef.fragments.FilterDialog;
+import com.nihas.smart.chef.fragments.FilterLayout;
 import com.nihas.smart.chef.fragments.ReviewDialog;
 import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.pojos.IngredientsPojo;
@@ -119,7 +120,7 @@ public class RecipeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_filter) {
-            Intent filterIntent=new Intent(RecipeActivity.this,FilterDialog.class);
+            Intent filterIntent=new Intent(RecipeActivity.this,FilterLayout.class);
             filterIntent.putExtra("ingredients", bundle.getString("ingredients"));
             startActivity(filterIntent);
             finish();
@@ -139,11 +140,11 @@ public class RecipeActivity extends AppCompatActivity {
             try {
                 String param=bundle.getString("ingredients");
                 String encodedpara = URLEncoder.encode(param, "UTF-8");
-                if(SmartChefApp.readFromPreferences(getApplicationContext(),"SORT_RATING", false)) {
-                    return WebRequest.getData(WebServices.searchRecipeSortRating(encodedpara, 1));
-                }else{
-                    return WebRequest.getData(WebServices.searchRecipe(encodedpara, 1));
-                }
+//                if(SmartChefApp.readFromPreferences(getApplicationContext(),"SORT_RATING", false)) {
+//                    return WebRequest.getData(WebServices.searchRecipeSortRating(encodedpara, 1));
+//                }else{
+                    return WebRequest.getData(WebServices.searchRecipe(encodedpara, 1)+getFilteredUrl());
+//                }
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -202,34 +203,30 @@ public class RecipeActivity extends AppCompatActivity {
                                 }
 
 
-                                if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_VEG",false)) {
-                                    RecipesAdapter recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterList( //filterng for veg nonveg
-                                            getfilterTypeList(// filtering for brakfast snack lunch dinner desert
-                                            listRecipes,SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST,false),
-                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_SNACK,false),
-                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_LUNCH,false),
-                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DINNER,false),
-                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DESERT,false)),true));
-
+//                                if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_VEG",false)) {
+//                                    RecipesAdapter recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterList( //filterng for veg nonveg
+//                                            getfilterTypeList(// filtering for brakfast snack lunch dinner desert
+//                                            listRecipes,SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST,false),
+//                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_SNACK,false),
+//                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_LUNCH,false),
+//                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DINNER,false),
+//                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DESERT,false)),true));
+//
+//                                    mRecyclerView.setAdapter(recipAdapter);
+//                                }else if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_NON_VEG",false)) {
+//                                    RecipesAdapter recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterList( //filterng for veg nonveg
+//                                            getfilterTypeList(// filtering for brakfast snack lunch dinner desert
+//                                                    listRecipes,SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST,false),
+//                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_SNACK,false),
+//                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_LUNCH,false),
+//                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DINNER,false),
+//                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DESERT,false)),false));
+//                                    mRecyclerView.setAdapter(recipAdapter);
+//                                }
+//                                else{
+                                    recipAdapter = new RecipesAdapter(RecipeActivity.this,listRecipes);
                                     mRecyclerView.setAdapter(recipAdapter);
-                                }else if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_NON_VEG",false)) {
-                                    RecipesAdapter recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterList( //filterng for veg nonveg
-                                            getfilterTypeList(// filtering for brakfast snack lunch dinner desert
-                                                    listRecipes,SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST,false),
-                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_SNACK,false),
-                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_LUNCH,false),
-                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DINNER,false),
-                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DESERT,false)),false));
-                                    mRecyclerView.setAdapter(recipAdapter);
-                                }else{
-                                    recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterTypeList(// filtering for brakfast snack lunch dinner desert
-                                            listRecipes,SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST,false),
-                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_SNACK,false),
-                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_LUNCH,false),
-                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DINNER,false),
-                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DESERT,false)));
-                                    mRecyclerView.setAdapter(recipAdapter);
-                                }
+//                                }
                             } else {
                                 SmartChefApp.showAToast("No Data Available");
                             }
@@ -330,7 +327,43 @@ public class RecipeActivity extends AppCompatActivity {
             return original;
     }
 
+//    SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST,false),
+    //                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_SNACK,false),
+//                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_LUNCH,false),
+//                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DINNER,false),
+//                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DESERT,false)
+    public String getFilteredUrl(){
+        String param="";
+        if(SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST,false)){
+            param=param+"&kind=breakfast";
+        }else if(SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_SNACK,false)){
+            param=param+"&kind=snack";
+        }else if(SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_LUNCH,false)){
+            param=param+"&kind=lunch";
+        }else if(SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_DINNER,false)){
+            param=param+"&kind=dinner";
+        }else if(SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_DESERT,false)){
+            param=param+"&kind=dessert";
+        }else{
+            param=param+"";
+        }
 
+        if (SmartChefApp.readFromPreferences(getApplicationContext(), "SORT_RATING", false)) {
+            param=param+"&sort=rating";
+        }else{
+            param=param+"";
+        }
+
+        if (SmartChefApp.readFromPreferences(getApplicationContext(), "FILTER_VEG", false)){
+            param=param+"&veg=1";
+        }else if(SmartChefApp.readFromPreferences(getApplicationContext(), "FILTER_NON_VEG", false)){
+            param=param+"&veg=0";
+        }else{
+            param=param+"";
+        }
+
+        return param;
+    }
 
     public ArrayList<RecipesPojo> getfilterTypeList(ArrayList<RecipesPojo> original,boolean breakfast,boolean snack,boolean lunch,boolean dinner,boolean dessert){
         if(breakfast || snack || lunch || dinner || dessert) {

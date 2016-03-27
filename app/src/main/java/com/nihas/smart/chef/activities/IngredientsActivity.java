@@ -43,6 +43,7 @@ import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.pojos.IngredientsPojo;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class IngredientsActivity extends AppCompatActivity{
     @Override
     protected void onStart() {
         super.onStart();
-        SmartChefApp.saveToPreferences(getApplicationContext(),"ING_ACT",true);
+        SmartChefApp.saveToPreferences(getApplicationContext(), "ING_ACT", true);
     }
 
     @Override
@@ -95,6 +96,24 @@ public class IngredientsActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle("SmartChef");
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+        listCats=new ArrayList<>();
+        SmartChefApp.readFromPreferences(getApplicationContext(), "LIST_CUISINES", "");
+        try {
+            JSONArray jArray=new JSONArray(SmartChefApp.readFromPreferences(getApplicationContext(), "LIST_CUISINES", ""));
+
+        for (int i = 0; i < jArray.length(); i++) {
+//                            AllPojo cp = new AllPojo();
+////                            cp.setName(jArray.getString(i));
+            listCats.add(new AllPojo(jArray.getJSONObject(i).getInt(Keys.id),
+                    jArray.getJSONObject(i).getString(Keys.name),
+                    jArray.getJSONObject(i).getString(Keys.image)));
+
+
+        }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
@@ -188,7 +207,10 @@ public class IngredientsActivity extends AppCompatActivity{
 
                 Intent intent = new Intent(IngredientsActivity.this, CupActivity.class);
 //                startActivity(intent);
+                intent.putExtra("POSITION", extras.getInt("POSITION"));
                 startActivity(intent);
+                SmartChefApp.saveToPreferences(getApplicationContext(), "TO_CUP", "ing");
+                finish();
 //                getSupportFragmentManager().beginTransaction()
 //                        .add(R.id.container_drawer,new CupFragment().newInstance(drawerLayout), "CupFragment")
 //                        .commit();
