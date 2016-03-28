@@ -123,7 +123,7 @@ initialise();
             addIng.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finish();
+                    onBackPressed();
                 }
             });
             emptyView=(LinearLayout)findViewById(R.id.empty_view);
@@ -168,6 +168,18 @@ initialise();
                     intent.putExtra("ingredients", cook_ing);
 //                    setResult(2,intent);
                     startActivity(intent);
+                    finish();
+                    SmartChefApp.saveToPreferences(getApplicationContext(), "FILTER_VEG", false);
+                    SmartChefApp.saveToPreferences(getApplicationContext(), "FILTER_NON_VEG", false);
+
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_BREAKFAST",false);
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_SNACK",false);
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_LUNCH",false);
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_DINNER",false);
+                    SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_DESERT",false);
+
+                    SmartChefApp.saveToPreferences(getApplicationContext(), "TIMING", "");
+                    SmartChefApp.saveToPreferences(getApplicationContext(), "SORT_RATING", false);
 //                    finish();//finishing activity
 //                    getSupportFragmentManager().beginTransaction().replace(R.id.container,new RecipeFragment()).addToBackStack(null).commit();
 //                    finish();

@@ -77,6 +77,7 @@ public class FilterLayout extends AppCompatActivity {
                 SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_DINNER",false);
                 SmartChefApp.saveToPreferences(getApplicationContext(),"FILTER_DESERT",false);
 
+                SmartChefApp.saveToPreferences(getApplicationContext(),"TIMING","");
                 SmartChefApp.saveToPreferences(getApplicationContext(),"SORT_RATING",false);
                 onBackPressed();
             }
@@ -250,7 +251,7 @@ public class FilterLayout extends AppCompatActivity {
                     }
                 }
 
-                int sortid = rGroup.getCheckedRadioButtonId();
+                int sortid = rSortGroup.getCheckedRadioButtonId();
                 if (sortid == -1){
                     //no item selected
                 }

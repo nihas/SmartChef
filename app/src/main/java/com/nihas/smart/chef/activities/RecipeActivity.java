@@ -174,6 +174,8 @@ public class RecipeActivity extends AppCompatActivity {
                                     pojo.setName(innerjobj.getString(Keys.name));
                                     pojo.setVeg(innerjobj.getString(Keys.veg));
                                     pojo.setServes(innerjobj.getString(Keys.serves));
+                                    if(!innerjobj.isNull(Keys.reference))
+                                        pojo.setReference(innerjobj.getString(Keys.reference));
                                     if (!innerjobj.isNull(Keys.food_kind))
                                         pojo.setFood_kind(innerjobj.getString(Keys.food_kind));
                                     else
@@ -229,6 +231,7 @@ public class RecipeActivity extends AppCompatActivity {
 //                                }
                             } else {
                                 SmartChefApp.showAToast("No Data Available");
+                                showEmptyView();
                             }
                         }
                     }
@@ -245,10 +248,10 @@ public class RecipeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        Intent intent=new Intent(RecipeActivity.this,MainActivity.class);
+        Intent intent=new Intent(RecipeActivity.this,MainActivity.class);
 //        intent.putExtra("MESSAGE","msg");
 //        setResult(1, intent);
-//        startActivity(intent);
+        startActivity(intent);
         finish();
 
     }

@@ -270,8 +270,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                    MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
 
                CupPojo product =
-                       new CupPojo(mDataset.get(position).getName(),
-                               WebServices.getImagePath(mDataset.get(position).getImage_url()));
+                       new CupPojo(mDataset.get(position).getName(),mDataset.get(position).getImage_url());
                if (!dbHandler.isIngredients(mDataset.get(position).getName())) {
                    if (dbHandler.addProduct(product)) {
                        MainActivity.showSnak(mDataset.get(position).getName() + " Added to Cup", v);

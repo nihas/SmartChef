@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
@@ -82,6 +84,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         this.activity=activity;
         imageLoader = ImageLoader.getInstance();
 
+
     }
 
 
@@ -90,7 +93,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView title,serveTo,timeTaken,cusine;
+        public TextView title,serveTo,timeTaken,cusine,refer;
         ImageView thumbnail,foodType,fav;
         CardView recipeView;
         RatingBar ratingBar;
@@ -104,11 +107,19 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             serveTo=(TextView)v.findViewById(R.id.serve_to);
             timeTaken=(TextView)v.findViewById(R.id.time_taken);
             cusine=(TextView)v.findViewById(R.id.cusine);
+            refer=(TextView)v.findViewById(R.id.reference);
 //            minusToCup=(TextView)v.findViewById(R.id.minusToCup);
             foodType=(ImageView)v.findViewById(R.id.food_type);
             fav=(ImageView)v.findViewById(R.id.fav);
             recipeView=(CardView)v.findViewById(R.id.recipe_card);
             ratingBar=(RatingBar)v.findViewById(R.id.ratingBar);
+            Drawable drawable = ratingBar.getProgressDrawable();
+            Drawable drawable2 = ratingBar.getIndeterminateDrawable();
+
+
+
+//            drawable.setColorFilter(Color.parseColor("#efcb07"), PorterDuff.Mode.SRC_ATOP);
+//            drawable2.setColorFilter(Color.parseColor("#808080"), PorterDuff.Mode.SRC_ATOP);
 //            addPlus=(TextView)v.findViewById(R.id.addPlus);
 //            addLayout=(LinearLayout)v.findViewById(R.id.add_layout);
 //            addLayout.setVisibility(View.VISIBLE);
@@ -180,6 +191,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         holder.thumbnail.setTag(holder.title.getText());
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
     holder.serveTo.setText(mDataset.get(position).getServes() + "");
+        holder.refer.setText("by "+mDataset.get(position).getReference());
         holder.cusine.setText(mDataset.get(position).getCuisine());
         holder.timeTaken.setText(mDataset.get(position).getPreparation_time());
         if(Integer.parseInt(mDataset.get(position).getVeg())==1){
@@ -248,34 +260,40 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                     if (dbHandler.addtoFav(recipesPojo)) {
 
                         SmartChefApp.saveToPreferences(activity, "RID", mDataset.get(position).getId());
-                        SmartChefApp.saveToPreferences(activity,"RNAME",mDataset.get(position).getName());
-                        SmartChefApp.saveToPreferences(activity,"RVEG",mDataset.get(position).getVeg());
-                        SmartChefApp.saveToPreferences(activity,"RSERVE",mDataset.get(position).getServes());
-                        SmartChefApp.saveToPreferences(activity,"RFOOD_KIND",mDataset.get(position).getFood_kind());
-                        SmartChefApp.saveToPreferences(activity,"RCUISINE",mDataset.get(position).getCuisine());
-                        SmartChefApp.saveToPreferences(activity,"RPREP_TIME",mDataset.get(position).getPreparation_time());
-                        SmartChefApp.saveToPreferences(activity,"RMEDIA_URL",mDataset.get(position).getMedia_url());
-                        SmartChefApp.saveToPreferences(activity,"R_RATING",String.valueOf(mDataset.get(position).getRating()));
+                        SmartChefApp.saveToPreferences(activity, "RNAME", mDataset.get(position).getName());
+                        SmartChefApp.saveToPreferences(activity, "RVEG", mDataset.get(position).getVeg());
+                        SmartChefApp.saveToPreferences(activity, "RSERVE", mDataset.get(position).getServes());
+                        SmartChefApp.saveToPreferences(activity, "RFOOD_KIND", mDataset.get(position).getFood_kind());
+                        SmartChefApp.saveToPreferences(activity, "RCUISINE", mDataset.get(position).getCuisine());
+                        SmartChefApp.saveToPreferences(activity, "RPREP_TIME", mDataset.get(position).getPreparation_time());
+                        SmartChefApp.saveToPreferences(activity, "RMEDIA_URL", mDataset.get(position).getMedia_url());
+                        SmartChefApp.saveToPreferences(activity, "R_RATING", String.valueOf(mDataset.get(position).getRating()));
 
 
-                        MainActivity.showSnak(mDataset.get(position).getName() + " Added to Fav", view);
+                        MainActivity.showSnak(mDataset.get(position).getName() + " Added to CookBook", view);
                         holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.heart));
                     } else
                         Toast.makeText(activity, "FAILED ADD", Toast.LENGTH_SHORT).show();
 
-                }else{
+                } else {
                     MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
                     if (dbHandler.deletefromFav(mDataset.get(position).getId())) {
-                        MainActivity.showSnak(mDataset.get(position).getName() + "Remov frm Fav", view);
+                        MainActivity.showSnak(mDataset.get(position).getName() + " Deleted from CookBook", view);
                         holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav));
 
-                        if(mDataset.isEmpty())
+                        if (mDataset.isEmpty())
                             CookBook.updateView();
                     } else
                         Toast.makeText(activity, "FAILED REMOV", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+
+        LayerDrawable stars = (LayerDrawable) holder.ratingBar.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(activity.getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);//FULLY SELECT
+        stars.getDrawable(1).setColorFilter(activity.getResources().getColor(R.color.color7), PorterDuff.Mode.SRC_ATOP);//PARTIALLY SELECT
+        stars.getDrawable(0).setColorFilter(activity.getResources().getColor(R.color.color7), PorterDuff.Mode.SRC_ATOP);//NOT SELECTED
 
     }
 

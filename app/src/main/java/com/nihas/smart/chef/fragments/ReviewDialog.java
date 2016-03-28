@@ -1,7 +1,9 @@
 package com.nihas.smart.chef.fragments;
 
 import android.app.ProgressDialog;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -12,6 +14,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -58,6 +61,8 @@ public class ReviewDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.post_review_dialog, container, false);
+
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 //        imageLoader = ImageLoader.getInstance();
         return rootView;
     }
@@ -83,6 +88,9 @@ public class ReviewDialog extends DialogFragment {
 //        }
 
         ratingBar=(RatingBar)view.findViewById(R.id.ratingBar);
+        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(1).setColorFilter(getResources().getColor(R.color.color7), PorterDuff.Mode.SRC_ATOP);
         Bundle bund=getArguments();
         if(bund!=null)
         ratingBar.setRating(getArguments().getFloat("RatingStar"));

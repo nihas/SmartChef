@@ -24,12 +24,14 @@
         android:orientation="vertical"
         android:gravity="center">
         <com.nihas.smart.chef.customui.CircleImageView
+            android:id="@+id/user_pro_pic"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:src="@drawable/com_facebook_profile_picture_blank_portrait"
             android:layout_marginTop="10dp"/>
 
         <TextView
+            android:id="@+id/user_full_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -38,6 +40,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:layout_marginTop="10dp"/>
         <TextView
+            android:id="@+id/user_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -61,6 +64,7 @@
             android:textColor="#abadad"
             android:layout_marginTop="10dp"/>
         <TextView
+            android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="melgib@gmail.com"
@@ -80,11 +84,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Username"
+            android:text="Name"
             android:layout_marginLeft="10dp"
             android:textColor="#abadad"
             android:layout_marginTop="10dp"/>
         <TextView
+            android:id="@+id/user_first_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="melgibson"
@@ -99,18 +104,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:visibility="gone"
         android:layout_marginTop="10dp"
         android:layout_below="@+id/userrltv">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Phone"
+            android:text="Last Name"
             android:layout_marginLeft="10dp"
             android:textColor="#abadad"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:layout_marginTop="10dp"/>
         <TextView
+            android:id="@+id/user_last_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(650)555 123"
@@ -218,6 +225,7 @@
         android:textColor="#ffffff"
         android:layout_gravity="center"
         android:textAllCaps="true"
+        android:visibility="gone"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         />
 

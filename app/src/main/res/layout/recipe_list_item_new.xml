@@ -198,6 +198,15 @@
                 style="@android:style/Widget.Holo.RatingBar.Small"
                 />
 
+            <TextView
+                android:id="@+id/reference"
+                android:textSize="13dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="hdgfhdgfhf"/>
+
 
         </LinearLayout>
 

@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/action_filter"
-        android:icon="@drawable/com_facebook_button_like_icon_selected"
+        android:icon="@drawable/filter_white"
         android:title="Share"
         app:showAsAction="always"/>
 

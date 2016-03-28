@@ -20,6 +20,15 @@ public class RecipesPojo {
     String media_url;
     String media_type;
     String rating;
+    String reference;
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
 
     public String getRating() {
         return rating;

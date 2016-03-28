@@ -73,7 +73,7 @@ boolean loggedIn;
 private SignInButton signinButton;
 private static GoogleApiClient mGoogleApiClient;
 private boolean mIntentInProgress;
-    VideoView videoView;
+//    VideoView videoView;
 
 private boolean mSignInClicked;
 
@@ -100,17 +100,17 @@ private ConnectionResult mConnectionResult;
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         loginButton = (LoginButton) findViewById(R.id.fblogin);
 //        loginButton.setFragment(this);
-        videoView=(VideoView)findViewById(R.id.video_view);
-        Uri video = Uri.parse("android.resource://" + getPackageName() + "/"
-                + R.raw.sample);
-        videoView.setVideoURI(video);
-        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                mediaPlayer.start();
-            }
-        });
-        videoView.start();
+//        videoView=(VideoView)findViewById(R.id.video_view);
+//        Uri video = Uri.parse("android.resource://" + getPackageName() + "/"
+//                + R.raw.sample);
+//        videoView.setVideoURI(video);
+//        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mediaPlayer) {
+//                mediaPlayer.start();
+//            }
+//        });
+//        videoView.start();
 
         signinButton = (SignInButton)findViewById(R.id.signin);
         signinButton.setOnClickListener(this);

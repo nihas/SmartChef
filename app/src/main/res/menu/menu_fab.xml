@@ -9,7 +9,7 @@
 
     <item
         android:id="@+id/action_video"
-        android:icon="@drawable/default_video"
+        android:icon="@drawable/video_white"
         android:title="Video"
         app:showAsAction="always"/>
 

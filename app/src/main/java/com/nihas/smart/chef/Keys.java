@@ -21,7 +21,7 @@ public interface Keys {
     public static final String preparation_time="preparation_time";
     public static final String media_url="media_url";
     public static final String media_type="media_type";
-
+    public static final String reference="reference";
 
 
 }

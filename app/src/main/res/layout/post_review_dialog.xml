@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:descendantFocusability="beforeDescendants">
 
 
 
@@ -38,7 +39,9 @@
         android:hint="Type your Review"
         android:inputType="textLongMessage"
         android:layout_margin="8dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp" >
+        <requestFocus/>
+        </EditText>
 
 
 

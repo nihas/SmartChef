@@ -25,6 +25,7 @@ import com.nihas.smart.chef.Keys;
 import com.nihas.smart.chef.R;
 import com.nihas.smart.chef.activities.CookBook;
 import com.nihas.smart.chef.activities.LoginActivity;
+import com.nihas.smart.chef.activities.ProfileActivity;
 import com.nihas.smart.chef.activities.RecipeActivity;
 import com.nihas.smart.chef.adapters.CategoryAdapter;
 import com.nihas.smart.chef.adapters.CupAdapter;
@@ -48,7 +49,7 @@ import java.util.ArrayList;
 public class DrawerFragment extends Fragment implements View.OnClickListener {
 
 
-    TextView logOut,userName,eMail,myCookBook;
+    TextView logOut,userName,eMail,myCookBook,myProfile;
     CircleImageView proPic;
     ImageLoader imageLoader;
 
@@ -72,6 +73,9 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
         proPic=(CircleImageView)view.findViewById(R.id.profile);
         userName=(TextView)view.findViewById(R.id.username);
         eMail=(TextView)view.findViewById(R.id.email);
+        myProfile=(TextView)view.findViewById(R.id.my_profile);
+        myProfile.setOnClickListener(this);
+
         imageLoader = ImageLoader.getInstance();
         userName.setText(SmartChefApp.readFromPreferences(getContext(), "user_name", ""));
         eMail.setText(SmartChefApp.readFromPreferences(getContext(),"email",""));
@@ -121,6 +125,10 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
             case R.id.my_cook_book:
                 Intent cookIntent=new Intent(getActivity(), CookBook.class);
                 startActivity(cookIntent);
+                break;
+            case R.id.my_profile:
+                Intent proIntent=new Intent(getActivity(), ProfileActivity.class);
+                startActivity(proIntent);
                 break;
             default:
                 SmartChefApp.showAToast("Under Construction");

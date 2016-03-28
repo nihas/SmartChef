@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -260,7 +261,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         refer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(RecipeDetailsActivity.this,WebViewActivity.class));
+                startActivity(new Intent(RecipeDetailsActivity.this, WebViewActivity.class));
 
             }
         });
@@ -298,7 +299,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 startActivity(review);
             }
         });
-
+        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(1).setColorFilter(getResources().getColor(R.color.color7), PorterDuff.Mode.SRC_ATOP);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -309,6 +312,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 bund.putString("rid", extras.getString("RECIPE_ID"));
                 dialogFragment.setArguments(bund);
                 dialogFragment.show(fm, "Sample Fragment");
+
             }
         });
 
