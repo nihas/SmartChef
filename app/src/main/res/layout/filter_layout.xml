@@ -379,7 +379,7 @@
 
                     <RadioButton
                         android:textStyle="bold"
-                        android:id="@+id/sortRadioRating30"
+                        android:id="@+id/sortRadio30"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -392,7 +392,7 @@
 
                     <RadioButton
                         android:textStyle="bold"
-                        android:id="@+id/sortRadioPopularity40"
+                        android:id="@+id/sortRadio40"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

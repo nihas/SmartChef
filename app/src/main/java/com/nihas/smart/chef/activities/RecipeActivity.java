@@ -348,6 +348,16 @@ public class RecipeActivity extends AppCompatActivity {
             param=param+"";
         }
 
+        if (SmartChefApp.readFromPreferences(getApplicationContext(), "TIMING", "").equals("15")) {
+            param=param+"&time=15";
+        }else if (SmartChefApp.readFromPreferences(getApplicationContext(), "TIMING", "").equals("30")) {
+            param=param+"&time=30";
+        }else if (SmartChefApp.readFromPreferences(getApplicationContext(), "TIMING", "").equals("40")) {
+            param=param+"&time=40";
+        }else{
+            param=param+"";
+        }
+
         if (SmartChefApp.readFromPreferences(getApplicationContext(), "SORT_RATING", false)) {
             param=param+"&sort=rating";
         }else{

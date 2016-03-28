@@ -30,8 +30,8 @@ import org.w3c.dom.Text;
 public class FilterLayout extends AppCompatActivity {
 
 //    Toolbar toolbar;
-    RadioButton veg,nonVeg,radioRating,radioPopular;
-    RadioGroup rGroup,rSortGroup;
+    RadioButton veg,nonVeg,radioRating,radioPopular,radio15,radio30,radio40;
+    RadioGroup rGroup,rSortGroup,rGroupTime;
     Boolean isVeg,isNonVeg;
     Bundle bundle;
     TextView reset;
@@ -92,6 +92,11 @@ public class FilterLayout extends AppCompatActivity {
         radioRating=(RadioButton)findViewById(R.id.sortRadioRating);
         radioPopular=(RadioButton)findViewById(R.id.sortRadioPopularity);
 
+        rGroupTime=(RadioGroup)findViewById(R.id.radioGrouptime);
+        radio15=(RadioButton)findViewById(R.id.sortRadio15);
+        radio30=(RadioButton)findViewById(R.id.sortRadio30);
+        radio40=(RadioButton)findViewById(R.id.sortRadio40);
+
         breakfast=(CheckBox)findViewById(R.id.breakfast);
         snack=(CheckBox)findViewById(R.id.snack);
         lunch=(CheckBox)findViewById(R.id.lunch);
@@ -111,8 +116,18 @@ public class FilterLayout extends AppCompatActivity {
             radioPopular.toggle();
         if(SmartChefApp.readFromPreferences(getApplicationContext(), "FILTER_VEG", false))
             veg.toggle();
-        else
+        else  if(SmartChefApp.readFromPreferences(getApplicationContext(), "FILTER_NON_VEG", false))
             nonVeg.toggle();
+
+
+        if(SmartChefApp.readFromPreferences(getApplicationContext(),"TIMING","").equals("15"))
+            radio15.toggle();
+        else if(SmartChefApp.readFromPreferences(getApplicationContext(),"TIMING","").equals("30"))
+            radio30.toggle();
+        else if(SmartChefApp.readFromPreferences(getApplicationContext(),"TIMING","").equals("40"))
+            radio40.toggle();
+        else
+            rGroupTime.clearCheck();
 
         breakfast.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -245,6 +260,21 @@ public class FilterLayout extends AppCompatActivity {
                         SmartChefApp.saveToPreferences(getApplicationContext(),"SORT_RATING",true);
                     }else if(sortid==R.id.sortRadioPopularity){
                         SmartChefApp.saveToPreferences(getApplicationContext(),"SORT_RATING",false);
+                    }
+                }
+
+                int timeid = rGroupTime.getCheckedRadioButtonId();
+                if (timeid == -1){
+                    //no item selected
+                }
+                else{
+                    if (timeid == R.id.sortRadio15){
+                        //Do something with the button
+                        SmartChefApp.saveToPreferences(getApplicationContext(),"TIMING","15");
+                    }else if(timeid==R.id.sortRadio30){
+                        SmartChefApp.saveToPreferences(getApplicationContext(),"TIMING","30");
+                    }else if(timeid == R.id.sortRadio40){
+                        SmartChefApp.saveToPreferences(getApplicationContext(),"TIMING","40");
                     }
                 }
 //                if(isVeg)
