@@ -44,6 +44,7 @@ import org.json.JSONObject;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Nihas on 08-11-2015.
@@ -164,44 +165,50 @@ public class RecipeActivity extends AppCompatActivity {
                         if (!jobj.isNull("results")) {
 
                             if (Integer.parseInt(jobj.getString("results")) > 0) {
+                                Iterator<String> keys = jobj.keys();
                                 listRecipes = new ArrayList<>();
-                                for (int i = 0; i < Integer.parseInt(jobj.getString("results")); i++) {
+                                while (keys.hasNext()) {
+                                    String key = keys.next();
+                                    if(!key.equals("results") && !key.equals("pages")) {
+                                        JSONObject innerjobj = jobj.getJSONObject(key);
+//                                    for (int i = 0; i < Integer.parseInt(jobj.getString("results")); i++) {
 //                    for(int i=0;i<10;i++){
-                                    JSONObject innerjobj = new JSONObject(jobj.getString(String.valueOf(i)));
-                                    RecipesPojo pojo = new RecipesPojo();
+//                                        JSONObject innerjobj = new JSONObject(jobj.getString(String.valueOf(i)));
+                                        RecipesPojo pojo = new RecipesPojo();
 
-                                    pojo.setId(innerjobj.getString(Keys.id));
-                                    pojo.setName(innerjobj.getString(Keys.name));
-                                    pojo.setVeg(innerjobj.getString(Keys.veg));
-                                    pojo.setServes(innerjobj.getString(Keys.serves));
-                                    if(!innerjobj.isNull(Keys.reference))
-                                        pojo.setReference(innerjobj.getString(Keys.reference));
-                                    if (!innerjobj.isNull(Keys.food_kind))
-                                        pojo.setFood_kind(innerjobj.getString(Keys.food_kind));
-                                    else
-                                        pojo.setFood_kind("");
-                                    if (!innerjobj.isNull(Keys.cuisine))
-                                        pojo.setCuisine(innerjobj.getString(Keys.cuisine));
-                                    else
-                                        pojo.setCuisine("");
-                                    if (!innerjobj.isNull(Keys.preparation_time))
-                                        pojo.setPreparation_time(innerjobj.getString(Keys.preparation_time));
-                                    else
-                                        pojo.setPreparation_time("");
-                                    if (!innerjobj.isNull(Keys.media_url))
-                                        pojo.setMedia_url(innerjobj.getString(Keys.media_url));
-                                    else
-                                        pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
-                                    if (!innerjobj.isNull(Keys.media_type))
-                                        pojo.setMedia_type(innerjobj.getString(Keys.media_type));
-                                    else
-                                        pojo.setMedia_type("");
-                                    if(!innerjobj.isNull("rating")) {
-                                        String s = String.format("%.2f", Float.parseFloat(innerjobj.getString("rating")));
-                                        pojo.setRating(s);
+                                        pojo.setId(innerjobj.getString(Keys.id));
+                                        pojo.setName(innerjobj.getString(Keys.name));
+                                        pojo.setVeg(innerjobj.getString(Keys.veg));
+                                        pojo.setServes(innerjobj.getString(Keys.serves));
+                                        if (!innerjobj.isNull(Keys.reference))
+                                            pojo.setReference(innerjobj.getString(Keys.reference));
+                                        if (!innerjobj.isNull(Keys.food_kind))
+                                            pojo.setFood_kind(innerjobj.getString(Keys.food_kind));
+                                        else
+                                            pojo.setFood_kind("");
+                                        if (!innerjobj.isNull(Keys.cuisine))
+                                            pojo.setCuisine(innerjobj.getString(Keys.cuisine));
+                                        else
+                                            pojo.setCuisine("");
+                                        if (!innerjobj.isNull(Keys.preparation_time))
+                                            pojo.setPreparation_time(innerjobj.getString(Keys.preparation_time));
+                                        else
+                                            pojo.setPreparation_time("");
+                                        if (!innerjobj.isNull(Keys.media_url))
+                                            pojo.setMedia_url(innerjobj.getString(Keys.media_url));
+                                        else
+                                            pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                                        if (!innerjobj.isNull(Keys.media_type))
+                                            pojo.setMedia_type(innerjobj.getString(Keys.media_type));
+                                        else
+                                            pojo.setMedia_type("");
+                                        if (!innerjobj.isNull("rating")) {
+                                            String s = String.format("%.2f", Float.parseFloat(innerjobj.getString("rating")));
+                                            pojo.setRating(s);
+                                        }else
+                                            pojo.setRating("0");
+                                        listRecipes.add(pojo);
                                     }
-
-                                    listRecipes.add(pojo);
                                 }
 
 
@@ -229,6 +236,7 @@ public class RecipeActivity extends AppCompatActivity {
                                     recipAdapter = new RecipesAdapter(RecipeActivity.this,listRecipes);
                                     mRecyclerView.setAdapter(recipAdapter);
 //                                }
+
                             } else {
                                 SmartChefApp.showAToast("No Data Available");
                                 showEmptyView();

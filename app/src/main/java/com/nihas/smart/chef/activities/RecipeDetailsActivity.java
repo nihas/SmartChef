@@ -91,6 +91,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import io.branch.indexing.BranchUniversalObject;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
+
 /**
  * Created by Nihas on 10-11-2015.
  */
@@ -117,6 +122,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     boolean isVideo;
     String Videoid="";
     MenuItem videoitem;
+    String image_url;
 //    private ScrollGalleryView scrollGalleryView;
     public static final ArrayList<ReviewPojo> rvwList=new ArrayList<>();
     private static final ArrayList<String> images = new ArrayList<>(Arrays.asList(
@@ -440,6 +446,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //                                    infos.add(MediaInfo.mediaLoader(new PicassoImageLoader(jobj2.getString("media_url"))));
 //                                scrollGalleryView.addMedia(infos);
 //                                }
+                                image_url=jobj2.getString("media_url");
                                 imageLoader.displayImage(jobj2.getString("media_url"), thumb, options);
                             }
                         }
@@ -595,19 +602,41 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         // Get access to bitmap image from view
 //        ImageView ivImage = (ImageView) findViewById(R.id.ivResult);
         // Get access to the URI for the bitmap
-        Uri bmpUri = getLocalBitmapUri(thumb);
-        if (bmpUri != null) {
-            // Construct a ShareIntent with link to image
-            Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "Download Smart Chef to view recipe: " + recipeName.getText());
-            shareIntent.setType("image/*");
-            // Launch sharing dialog for image
-            startActivity(Intent.createChooser(shareIntent, "Share Image"));
-        } else {
-            // ...sharing failed, handle error
-        }
+        BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
+                .setCanonicalIdentifier("monster/12345")
+                .setTitle("Meet Mr. Squiggles")
+                .setContentDescription("Your friend Josh has invited you to meet his awesome monster, Mr. Squiggles!")
+                .setContentImageUrl(image_url)
+                .addContentMetadata("RID", extras.getString("RECIPE_ID"));
+
+        LinkProperties linkProperties = new LinkProperties()
+//                .setChannel("facebook")
+                .setChannel("any")
+                .setFeature("sharing");
+
+        branchUniversalObject.generateShortUrl(this, linkProperties, new Branch.BranchLinkCreateListener() {
+            @Override
+            public void onLinkCreate(String url, BranchError error) {
+                if (error == null) {
+                    Log.i("MyApp", "got my Branch link to share: " + url);
+                }
+            }
+        });
+
+
+//        Uri bmpUri = getLocalBitmapUri(thumb);
+//        if (bmpUri != null) {
+//            // Construct a ShareIntent with link to image
+//            Intent shareIntent = new Intent();
+//            shareIntent.setAction(Intent.ACTION_SEND);
+//            shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+//            shareIntent.putExtra(Intent.EXTRA_TEXT, "Download Smart Chef to view recipe: " + recipeName.getText());
+//            shareIntent.setType("image/*");
+//            // Launch sharing dialog for image
+//            startActivity(Intent.createChooser(shareIntent, "Share Image"));
+//        } else {
+//            // ...sharing failed, handle error
+//        }
     }
 
     // Returns the URI path to the Bitmap displayed in specified ImageView
