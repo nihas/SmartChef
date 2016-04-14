@@ -9,6 +9,13 @@
     <string name="app_id_lap">951187541633753</string>
     <string name="google_api_key">AIzaSyBGALr1k0D4eHBEQovU5KFIHtzlBnJl-PA</string>
 
+    <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
+        send downstream messages to this app.</string>
+    <string name="registering_message">Generating InstanceID token...</string>
+    <string name="token_error_message">An error occurred while either fetching the InstanceID token,
+        sending the fetched token to the server or subscribing to the PubSub topic. Please try
+        running the sample again.</string>
+
     <string name="menu_item_email">Privacy Policy</string>
     <string name="menu_item_text">Profile</string>
     <string name="menu_item_logout">LogOut Me</string>

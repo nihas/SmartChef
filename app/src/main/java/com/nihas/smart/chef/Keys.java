@@ -13,6 +13,14 @@ public interface Keys {
     public static final String email = "email";
 
 
+    String key = "key";
+    String excellentdialog = "excellentdialog";
+
+    String token = "token";
+    String isSent = "isSent";
+    String push = "push";
+
+
 
     public static final String veg="veg";
     public static final String serves="serves";

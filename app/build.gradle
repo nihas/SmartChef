@@ -35,6 +35,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.google.android.gms:play-services-plus:8.4.0'
     compile 'com.google.android.gms:play-services-identity:8.4.0'
+    apply plugin: 'com.google.gms.google-services'
+    compile "com.google.android.gms:play-services-gcm:8.4.0"
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'ch.acra:acra:4.3.0'
     compile files('libs/gson-2.4.jar')

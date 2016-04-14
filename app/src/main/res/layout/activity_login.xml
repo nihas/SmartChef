@@ -26,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#80000000"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"/>
 
 
@@ -114,7 +115,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?selectableItemBackground"
-                    android:src="@drawable/google_login"/>
+                    android:src="@drawable/google_login3"/>
             </FrameLayout>
 
             <FrameLayout
@@ -136,7 +137,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?selectableItemBackground"
-                    android:src="@drawable/fb_login"/>
+                    android:src="@drawable/fb_login3"/>
             </FrameLayout>
 
 
