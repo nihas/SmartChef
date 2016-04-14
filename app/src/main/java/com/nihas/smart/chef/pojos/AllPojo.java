@@ -11,6 +11,8 @@ public class AllPojo {
     int img_drawable;
     private int id;
 
+
+
     public AllPojo(String titl, String urll, String subTitl,int ImgDraw){
         this.title=titl;
         this.url=urll;

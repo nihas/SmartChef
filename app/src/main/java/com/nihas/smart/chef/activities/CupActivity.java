@@ -168,7 +168,7 @@ initialise();
                     intent.putExtra("ingredients", cook_ing);
 //                    setResult(2,intent);
                     startActivity(intent);
-                    finish();
+//                    finish();
                     SmartChefApp.saveToPreferences(getApplicationContext(), "FILTER_VEG", false);
                     SmartChefApp.saveToPreferences(getApplicationContext(), "FILTER_NON_VEG", false);
 

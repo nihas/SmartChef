@@ -10,6 +10,7 @@ public class WebServices {
     public static final String baseUrl = "http://creatingfutures.in/sarath/recipe/apis/";
 
     public static final String baseUrl2 = "http://airesearch.xyz/recipe/apis/";
+    public static final String baseUrl3 = "http://airesearch.xyz/recipe/logging/";
     public static final String imageUrl = "http://airesearch.xyz/recipe/";
 
     public static final String signUp = baseUrl +  "merchants/signUp";
@@ -106,6 +107,9 @@ Response
     public static final String postReview=baseUrl2+"review_in.php?key="+SECRET_KEY;
 
     public static final String registerUser=baseUrl2+"register.php?key="+SECRET_KEY;
+
+
+    public static final String logging = baseUrl3 +  "log_search.php?key="+SECRET_KEY;
 
     public static final String cuisine = baseUrl  + "establishmenttype/cuisine";
 

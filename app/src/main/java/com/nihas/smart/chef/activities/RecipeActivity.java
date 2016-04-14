@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -37,8 +38,10 @@ import com.nihas.smart.chef.fragments.ReviewDialog;
 import com.nihas.smart.chef.pojos.CupPojo;
 import com.nihas.smart.chef.pojos.IngredientsPojo;
 import com.nihas.smart.chef.pojos.RecipesPojo;
+import com.nihas.smart.chef.utils.EndlessRecyclerOnScrollListener;
 import com.nihas.smart.chef.utils.RecyclerItemClickListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -61,6 +64,7 @@ public class RecipeActivity extends AppCompatActivity {
     Bundle bundle;
     ArrayList<RecipesPojo> filterList;
     ArrayList<RecipesPojo> filterTypeList;
+    int page=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,7 @@ public class RecipeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle("Recipes");
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
-
+        bundle=getIntent().getExtras();
         final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
@@ -86,29 +90,85 @@ public class RecipeActivity extends AppCompatActivity {
 
         progressBar=(ProgressBar)findViewById(R.id.pBar);
 
+        try{
+            if (SmartChefApp.isNetworkAvailable()) {
+                String param=bundle.getString("ingredients");
+                String encodedpara = URLEncoder.encode(param, "UTF-8");
+
+                new getRecipe().execute(WebServices.searchRecipe(encodedpara, 1)+getFilteredUrl());
+            } else {
+                SmartChefApp.showAToast("Internet not Connected");
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
 
         emptyView=(TextView)findViewById(R.id.empty_view);
         emptyView.setVisibility(View.GONE);
         mRecyclerView=(RecyclerView)findViewById(R.id.rv);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        bundle=getIntent().getExtras();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
 
+            @Override
+            public void onLoadMore(int current_page) {
+                Log.d("POSITION"," "+current_page);
+                if(!recipAdapter.isFooterEnabled() && recipAdapter.getItemCount() > 0) {
+
+                }else{
+                    ScrollApiCall(current_page);
+                }
+            }
+        });
+
+
+
+//        if (SmartChefApp.isNetworkAvailable()) {
+//            new getRecipe().execute();
+//        } else {
+//            SmartChefApp.showAToast("Internet not Connected");
+//        }
+    }
+
+
+    private void ScrollApiCall(int current_page) {
+
+        try{
 
         if (SmartChefApp.isNetworkAvailable()) {
-            new getRecipe().execute();
+
+
+            String param=bundle.getString("ingredients");
+            String encodedpara = URLEncoder.encode(param, "UTF-8");
+
+            new getRecipeScroll().execute(WebServices.searchRecipe(encodedpara, current_page)+getFilteredUrl());
         } else {
             SmartChefApp.showAToast("Internet not Connected");
+        }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (SmartChefApp.isNetworkAvailable()) {
-            new getRecipe().execute();
-        } else {
-            SmartChefApp.showAToast("Internet not Connected");
-        }
+//        try{
+//        if (SmartChefApp.isNetworkAvailable()) {
+//            String param=bundle.getString("ingredients");
+//            String encodedpara = URLEncoder.encode(param, "UTF-8");
+//
+//            new getRecipe().execute(WebServices.searchRecipe(encodedpara, 1)+getFilteredUrl());
+//        } else {
+//            SmartChefApp.showAToast("Internet not Connected");
+//        }
+//        } catch (Exception e) {
+//
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -139,12 +199,12 @@ public class RecipeActivity extends AppCompatActivity {
         protected JSONObject doInBackground(String... params) {
             JSONObject jsonObject = null;
             try {
-                String param=bundle.getString("ingredients");
-                String encodedpara = URLEncoder.encode(param, "UTF-8");
+//                String param=bundle.getString("ingredients");
+//                String encodedpara = URLEncoder.encode(param, "UTF-8");
 //                if(SmartChefApp.readFromPreferences(getApplicationContext(),"SORT_RATING", false)) {
 //                    return WebRequest.getData(WebServices.searchRecipeSortRating(encodedpara, 1));
 //                }else{
-                    return WebRequest.getData(WebServices.searchRecipe(encodedpara, 1)+getFilteredUrl());
+                    return WebRequest.getData(params[0]);
 //                }
             } catch (Exception e) {
 
@@ -163,6 +223,16 @@ public class RecipeActivity extends AppCompatActivity {
                 try {
                     if (jobj.length() != 0) {
                         if (!jobj.isNull("results")) {
+
+                            page=Integer.parseInt(jobj.getString("pages"));
+
+                            JSONObject logJson=new JSONObject();
+                            logJson.accumulate("id", SmartChefApp.readFromPreferences(RecipeActivity.this, "user_id", ""));
+                            logJson.accumulate("ingredients", bundle.getString("ingredients"));
+                            logJson.accumulate("recipes",jobj.getString("results"));
+                            if(SmartChefApp.isNetworkAvailable()){
+                                new LogDetails().execute(logJson.toString());
+                            }
 
                             if (Integer.parseInt(jobj.getString("results")) > 0) {
                                 Iterator<String> keys = jobj.keys();
@@ -254,12 +324,144 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
 
+
+    private class getRecipeScroll extends AsyncTask<String, Void, JSONArray> {
+
+        @Override
+        protected JSONArray doInBackground(String... params) {
+            JSONArray jsonObject = null;
+            try {
+//                String param=bundle.getString("ingredients");
+//                String encodedpara = URLEncoder.encode(param, "UTF-8");
+//                if(SmartChefApp.readFromPreferences(getApplicationContext(),"SORT_RATING", false)) {
+//                    return WebRequest.getData(WebServices.searchRecipeSortRating(encodedpara, 1));
+//                }else{
+                return WebRequest.getDataJSONArray(params[0]);
+//                }
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+            return jsonObject;
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray jobj) {
+            super.onPostExecute(jobj);
+            progressBar.setVisibility(View.GONE);
+//            onDone(jArray);
+//            SmartChefApp.showAToast(jobj+"");
+            if (jobj != null) {
+                try {
+//                    if (jobj.length() != 0) {
+                        if (jobj.length()>0) {
+
+
+//                            page=Integer.parseInt(jobj.getString("pages"));
+                        for(int i=0;i<jobj.length();i++){
+//                            if (Integer.parseInt(jobj.getString("results")) > 0) {
+//                                Iterator<String> keys = jobj.keys();
+//                                listRecipes = new ArrayList<>();
+//                                while (keys.hasNext()) {
+//                                    String key = keys.next();
+//                                    if (!key.equals("results") && !key.equals("pages")) {
+                                        JSONObject innerjobj = jobj.getJSONObject(i);
+//                                    for (int i = 0; i < Integer.parseInt(jobj.getString("results")); i++) {
+//                    for(int i=0;i<10;i++){
+//                                        JSONObject innerjobj = new JSONObject(jobj.getString(String.valueOf(i)));
+                                        RecipesPojo pojo = new RecipesPojo();
+
+                                        pojo.setId(innerjobj.getString(Keys.id));
+                                        pojo.setName(innerjobj.getString(Keys.name));
+                                        pojo.setVeg(innerjobj.getString(Keys.veg));
+                                        pojo.setServes(innerjobj.getString(Keys.serves));
+                                        if (!innerjobj.isNull(Keys.reference))
+                                            pojo.setReference(innerjobj.getString(Keys.reference));
+                                        if (!innerjobj.isNull(Keys.food_kind))
+                                            pojo.setFood_kind(innerjobj.getString(Keys.food_kind));
+                                        else
+                                            pojo.setFood_kind("");
+                                        if (!innerjobj.isNull(Keys.cuisine))
+                                            pojo.setCuisine(innerjobj.getString(Keys.cuisine));
+                                        else
+                                            pojo.setCuisine("");
+                                        if (!innerjobj.isNull(Keys.preparation_time))
+                                            pojo.setPreparation_time(innerjobj.getString(Keys.preparation_time));
+                                        else
+                                            pojo.setPreparation_time("");
+                                        if (!innerjobj.isNull(Keys.media_url))
+                                            pojo.setMedia_url(innerjobj.getString(Keys.media_url));
+                                        else
+                                            pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
+                                        if (!innerjobj.isNull(Keys.media_type))
+                                            pojo.setMedia_type(innerjobj.getString(Keys.media_type));
+                                        else
+                                            pojo.setMedia_type("");
+                                        if (!innerjobj.isNull("rating")) {
+                                            String s = String.format("%.2f", Float.parseFloat(innerjobj.getString("rating")));
+                                            pojo.setRating(s);
+                                        } else
+                                            pojo.setRating("0");
+                                        listRecipes.add(pojo);
+
+
+                                    }
+                                }else {
+                            SmartChefApp.showAToast("No Data Available");
+                            showEmptyView();
+                        }
+
+
+
+
+//                                if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_VEG",false)) {
+//                                    RecipesAdapter recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterList( //filterng for veg nonveg
+//                                            getfilterTypeList(// filtering for brakfast snack lunch dinner desert
+//                                            listRecipes,SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST,false),
+//                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_SNACK,false),
+//                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_LUNCH,false),
+//                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DINNER,false),
+//                                            SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DESERT,false)),true));
+//
+//                                    mRecyclerView.setAdapter(recipAdapter);
+//                                }else if(SmartChefApp.readFromPreferences(getApplicationContext(),"FILTER_NON_VEG",false)) {
+//                                    RecipesAdapter recipAdapter = new RecipesAdapter(RecipeActivity.this, getfilterList( //filterng for veg nonveg
+//                                            getfilterTypeList(// filtering for brakfast snack lunch dinner desert
+//                                                    listRecipes,SmartChefApp.readFromPreferences(getApplicationContext(), Constants.FILTER_BREAKFAST,false),
+//                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_SNACK,false),
+//                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_LUNCH,false),
+//                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DINNER,false),
+//                                                    SmartChefApp.readFromPreferences(getApplicationContext(),Constants.FILTER_DESERT,false)),false));
+//                                    mRecyclerView.setAdapter(recipAdapter);
+//                                }
+//                                else{
+//                                recipAdapter = new RecipesAdapter(RecipeActivity.this,listRecipes);
+//                                mRecyclerView.setAdapter(recipAdapter);
+//                                int curSize = recipAdapter.getItemCount();
+                                recipAdapter.notifyDataSetChanged();//(curSize, listRecipes.size() - 1);
+//                                }
+
+
+
+
+//                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    SmartChefApp.showAToast("SOMETHNG WRONG");
+                }
+            }else{
+                showEmptyView();
+            }
+        }
+    }
+
+
     @Override
     public void onBackPressed() {
-        Intent intent=new Intent(RecipeActivity.this,MainActivity.class);
+//        Intent intent=new Intent(RecipeActivity.this,MainActivity.class);
 //        intent.putExtra("MESSAGE","msg");
 //        setResult(1, intent);
-        startActivity(intent);
+//        startActivity(intent);
         finish();
 
     }
@@ -563,6 +765,32 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
 
+    private class LogDetails extends AsyncTask<String, Void, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            JSONObject jsonObject = null;
+            try {
+//                String param=bundle.getString("ingredients");
+//                String encodedpara = URLEncoder.encode(param, "UTF-8");
+//                if(SmartChefApp.readFromPreferences(getApplicationContext(),"SORT_RATING", false)) {
+//                    return WebRequest.getData(WebServices.searchRecipeSortRating(encodedpara, 1));
+//                }else{
+                return WebRequest.postData(params[0], WebServices.logging);
+//                }
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+            return jsonObject;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jobj) {
+            super.onPostExecute(jobj);
+        }
+    }
+
     public static void showEmptyView(){
         emptyView.setVisibility(View.VISIBLE);
     }
@@ -570,4 +798,8 @@ public class RecipeActivity extends AppCompatActivity {
     public static void hideEmptyView(){
         emptyView.setVisibility(View.GONE);
     }
+
+
+
+
 }

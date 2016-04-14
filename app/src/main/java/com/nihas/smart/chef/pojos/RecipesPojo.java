@@ -22,6 +22,27 @@ public class RecipesPojo {
     String rating;
     String reference;
 
+    public RecipesPojo() {
+    }
+
+    public RecipesPojo(String id,String name,String veg,String serves,String food_kind,
+                       String cuisine,String preparation_time,String media_url,String media_type,String rating,String reference) {
+        this.id = id;
+        this.name = name;
+        this.veg = veg;
+        this.serves = serves;
+        this.food_kind = food_kind;
+        this.cuisine = cuisine;
+        this.preparation_time = preparation_time;
+
+        this.media_url = media_url;
+        this.media_type = media_type;
+        this.rating = rating;
+        this.reference = reference;
+
+    }
+
+
     public String getReference() {
         return reference;
     }

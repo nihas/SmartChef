@@ -27,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -60,13 +61,15 @@ import java.util.List;
 /**
  * Created by snyxius on 10/14/2015.
  */
-public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
+public class RecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<RecipesPojo> mDataset;
     ImageLoader imageLoader;
     DisplayImageOptions options;
     Activity activity;
     Dialog dialog;
+    private final int VIEW_ITEM = 1;
+    private final int VIEW_PROG = 0;
 
     static String measurement;
     private static int colorCode=0;
@@ -78,6 +81,17 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             "Tea Spoon",
             "Pieces"
     };
+
+
+    public boolean isFooterEnabled() {
+        return isFooterEnabled;
+    }
+
+    public void setIsFooterEnabled(boolean isFooterEnabled) {
+        this.isFooterEnabled = isFooterEnabled;
+    }
+
+    private boolean isFooterEnabled = true;
 
     public RecipesAdapter(Activity activity, ArrayList<RecipesPojo> ingredients) {
         mDataset = ingredients;
@@ -91,7 +105,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView title,serveTo,timeTaken,cusine,refer;
         ImageView thumbnail,foodType,fav;
@@ -99,7 +113,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         RatingBar ratingBar;
         ImageView share;
 //        LinearLayout addLayout,plusMinusLayout;
-        public ViewHolder(View v) {
+        public MyViewHolder(View v) {
             super(v);
             share=(ImageView)v.findViewById(R.id.share_action);
             title=(TextView)v.findViewById(R.id.recipe_title);
@@ -134,25 +148,36 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         }
     }
 
+    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
+        public ProgressBar progressBar;
+        public ProgressViewHolder(View v) {
+            super(v);
+            progressBar = (ProgressBar)v.findViewById(R.id.progressBar);
+        }
+    }
+
 
 
 
 
     // Create new views (invoked by the layout manager)
 //    @Override
-    public RecipesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
 
+        RecyclerView.ViewHolder vh;
 
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recipe_list_item_new, parent, false);
-        // set the view's size, margins, paddings and layout parameters
+        if(viewType==VIEW_ITEM) {
+            // create a new view
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.recipe_list_item_new, parent, false);
+            // set the view's size, margins, paddings and layout parameters
 
 
-        ViewHolder vh = new ViewHolder(v);
-        imageLoader.init(ImageLoaderConfiguration.createDefault(activity));
-        options = new DisplayImageOptions.Builder().cacheInMemory(true)
+            //MyViewHolder
+             vh = new MyViewHolder(v);
+            imageLoader.init(ImageLoaderConfiguration.createDefault(activity));
+            options = new DisplayImageOptions.Builder().cacheInMemory(true)
 //                .displayer(new BitmapDisplayer() {
 //                    @Override
 //                    public void display(Bitmap bitmap, ImageAware imageAware, LoadedFrom loadedFrom) {
@@ -163,52 +188,66 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 //                        imageAware.setImageDrawable(gradientDrawable);
 //                    }
 //                })
-                .cacheOnDisc(true).resetViewBeforeLoading(true)
-                .showImageForEmptyUri(R.drawable.empty_photo)
-                .showImageOnFail(R.drawable.empty_photo)
-                .showImageOnLoading(R.drawable.empty_photo).build();
+                    .cacheOnDisc(true).resetViewBeforeLoading(true)
+                    .showImageForEmptyUri(R.drawable.empty_photo)
+                    .showImageOnFail(R.drawable.empty_photo)
+                    .showImageOnLoading(R.drawable.empty_photo).build();
+        }else {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.progress_item, parent, false);
 
+            vh = new ProgressViewHolder(v);
+        }
 
 
 
 
         return vh;
+
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder myViewHolder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        if(myViewHolder instanceof ProgressViewHolder){
+
+            ((ProgressViewHolder)myViewHolder).progressBar.setIndeterminate(true);
+
+        }else if (mDataset.size() > 0 && position < mDataset.size()) {
+            if(myViewHolder instanceof MyViewHolder) {
+
+
         if(mDataset.isEmpty()){
             RecipeActivity.showEmptyView();
         }else {
             RecipeActivity.hideEmptyView();
         }
 
-        holder.title.setText(mDataset.get(position).getName());
-        imageLoader.displayImage(mDataset.get(position).getMedia_url(), holder.thumbnail, options);
-        holder.thumbnail.setTag(holder.title.getText());
+                ((MyViewHolder) myViewHolder).title.setText(mDataset.get(position).getName());
+        imageLoader.displayImage(mDataset.get(position).getMedia_url(),  ((MyViewHolder) myViewHolder).thumbnail, options);
+                ((MyViewHolder) myViewHolder).thumbnail.setTag( ((MyViewHolder) myViewHolder).title.getText());
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
-    holder.serveTo.setText(mDataset.get(position).getServes() + "");
-        holder.refer.setText("by "+mDataset.get(position).getReference());
-        holder.cusine.setText(mDataset.get(position).getCuisine());
-        holder.timeTaken.setText(mDataset.get(position).getPreparation_time());
+                ((MyViewHolder) myViewHolder).serveTo.setText(mDataset.get(position).getServes() + "");
+                ((MyViewHolder) myViewHolder).refer.setText("by "+mDataset.get(position).getReference());
+                ((MyViewHolder) myViewHolder).cusine.setText(mDataset.get(position).getCuisine());
+                ((MyViewHolder) myViewHolder).timeTaken.setText(mDataset.get(position).getPreparation_time());
         if(Integer.parseInt(mDataset.get(position).getVeg())==1){
-            holder.foodType.setImageResource(R.drawable.veg_icon);
+            ((MyViewHolder) myViewHolder).foodType.setImageResource(R.drawable.veg_icon);
         }else{
-            holder.foodType.setImageResource(R.drawable.non_veg_icon);
+            ((MyViewHolder) myViewHolder).foodType.setImageResource(R.drawable.non_veg_icon);
         }
-        holder.ratingBar.setRating(Float.parseFloat(mDataset.get(position).getRating()));
+                ((MyViewHolder) myViewHolder).ratingBar.setRating(Float.parseFloat(mDataset.get(position).getRating()));
 
-        holder.share.setOnClickListener(new View.OnClickListener() {
+                ((MyViewHolder) myViewHolder).share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onShareItem(holder.thumbnail);
+                onShareItem( ((MyViewHolder) myViewHolder).thumbnail);
             }
         });
 
-        holder.recipeView.setOnClickListener(new View.OnClickListener() {
+                ((MyViewHolder) myViewHolder).recipeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(activity, RecipeDetailsActivity.class);
@@ -230,12 +269,12 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
         MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
         if(dbHandler.isFav(mDataset.get(position).getId())){
-            holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.heart));
+            ((MyViewHolder) myViewHolder).fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.heart));
         }else{
-            holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav));
+            ((MyViewHolder) myViewHolder).fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav));
         }
 
-        holder.fav.setOnClickListener(new View.OnClickListener() {
+                ((MyViewHolder) myViewHolder).fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ImageView img = (ImageView) view;
@@ -271,7 +310,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
 
                         MainActivity.showSnak(mDataset.get(position).getName() + " Added to CookBook", view);
-                        holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.heart));
+                        ((MyViewHolder) myViewHolder).fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.heart));
                     } else
                         Toast.makeText(activity, "FAILED ADD", Toast.LENGTH_SHORT).show();
 
@@ -279,7 +318,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                     MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
                     if (dbHandler.deletefromFav(mDataset.get(position).getId())) {
                         MainActivity.showSnak(mDataset.get(position).getName() + " Deleted from CookBook", view);
-                        holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav));
+                        ((MyViewHolder) myViewHolder).fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav));
 
                         if (mDataset.isEmpty())
                             CookBook.updateView();
@@ -290,10 +329,14 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         });
 
 
-        LayerDrawable stars = (LayerDrawable) holder.ratingBar.getProgressDrawable();
+        LayerDrawable stars = (LayerDrawable) ((MyViewHolder) myViewHolder).ratingBar.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(activity.getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);//FULLY SELECT
         stars.getDrawable(1).setColorFilter(activity.getResources().getColor(R.color.color7), PorterDuff.Mode.SRC_ATOP);//PARTIALLY SELECT
         stars.getDrawable(0).setColorFilter(activity.getResources().getColor(R.color.color7), PorterDuff.Mode.SRC_ATOP);//NOT SELECTED
+
+            }
+
+        }
 
     }
 
@@ -343,10 +386,22 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     }
 
 
+    @Override
+    public int getItemViewType(int position) {
+//        return super.getItemViewType(position);
+        return (isFooterEnabled && position >= mDataset.size() ) ? VIEW_PROG : VIEW_ITEM;
+
+    }
+
+    public void enableFooter(boolean isEnabled){
+        this.isFooterEnabled = isEnabled;
+    }
+
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.size();
+//        return mDataset.size();
+        return  (isFooterEnabled) ? mDataset.size() + 1 : mDataset.size();
     }
 
     public interface OnDataChangeListener{
