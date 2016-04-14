@@ -21,6 +21,7 @@ public class WebViewActivity extends AppCompatActivity {
     //private Button button;
     private WebView webView;
     Toolbar toolbar;
+    Bundle extra;
 
 
 
@@ -33,8 +34,10 @@ public class WebViewActivity extends AppCompatActivity {
 
         //Get webview
         webView = (WebView) findViewById(R.id.webView1);
+        extra=getIntent().getExtras();
 
-        startWebView("http://www.sailusfood.com/2006/06/07/spicy-chicken-masala-curry/");
+
+        startWebView(extra.getString("url"));
 
 
         toolbar=(Toolbar)findViewById(R.id.toolbar);

@@ -123,6 +123,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     String Videoid="";
     MenuItem videoitem;
     String image_url;
+    String url_reference;
 //    private ScrollGalleryView scrollGalleryView;
     public static final ArrayList<ReviewPojo> rvwList=new ArrayList<>();
     private static final ArrayList<String> images = new ArrayList<>(Arrays.asList(
@@ -267,8 +268,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         refer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(RecipeDetailsActivity.this, WebViewActivity.class));
 
+                        Intent myInten=new Intent(RecipeDetailsActivity.this, WebViewActivity.class);
+                myInten.putExtra("url",url_reference);
+                startActivity(myInten);
             }
         });
 
@@ -410,8 +413,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         serves.setText(jobj.getString("serves"));
                     if(!jobj.isNull("food_kind"))
                         food_kind.setText(", "+jobj.getString("food_kind"));
-                    if(!jobj.isNull("reference"))
-                        refer.setText("By: "+jobj.getString("reference"));
+                    if(!jobj.isNull("reference")) {
+                        url_reference=jobj.getString("reference");
+                        refer.setText("By: " + jobj.getString("reference"));
+                    }
                     if(!jobj.isNull("preparation_time"))
                         prepTime.setText(jobj.getString("preparation_time"));
                     if(!jobj.isNull("cook_time"))
