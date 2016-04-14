@@ -545,8 +545,14 @@ private ConnectionResult mConnectionResult;
             try {
                 if(jobj.getString("status").equals("true") || jobj.getString("status").equals("exists")){
                     SmartChefApp.showAToast("Success");
-                    Intent intent = new Intent(LoginActivity.this, PreferActivity.class);
-                    startActivity(intent);
+                    if(SmartChefApp.readFromPreferences(LoginActivity.this,"preference",false)) {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(LoginActivity.this, PreferActivity.class);
+                        startActivity(intent);
+                    }
+
                     overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out);
                     finish();
                 }else{
