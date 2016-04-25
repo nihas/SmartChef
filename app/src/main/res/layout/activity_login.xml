@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@mipmap/bg" />
+        android:src="@mipmap/fruits" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
@@ -40,14 +40,14 @@
 
 
     <!--<VideoView-->
-        <!--android:id="@+id/video_view"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="fill_parent"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_gravity="center_horizontal|top" />-->
+    <!--android:id="@+id/video_view"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="fill_parent"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_gravity="center_horizontal|top" />-->
 
     <com.nihas.smart.chef.utils.CirclePageIndicator
         android:id="@+id/indicator"
@@ -62,7 +62,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="95dp"
+        android:layout_height="200dp"
         android:background="#BBCCCCCC"
         android:layout_alignParentBottom="true"/>
 
@@ -76,16 +76,16 @@
 
 
         <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0.5dp"-->
-            <!--android:background="#ffffff"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:layout_marginLeft="8dp"-->
-            <!--android:layout_marginRight="8dp"/>-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0.5dp"-->
+        <!--android:background="#ffffff"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginRight="8dp"/>-->
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:layout_gravity="center"
             android:orientation="horizontal"
             android:layout_marginBottom="10dp">
@@ -111,11 +111,12 @@
                 <ImageView
                     android:id="@+id/googlesignin"
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:clickable="true"
                     android:focusable="true"
+                    android:padding="10dp"
                     android:background="?selectableItemBackground"
-                    android:src="@drawable/google_login3"/>
+                    android:src="@drawable/g_plus_button"/>
             </FrameLayout>
 
             <FrameLayout
@@ -133,11 +134,12 @@
                 <ImageView
                     android:id="@+id/fb"
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?selectableItemBackground"
-                    android:src="@drawable/fb_login3"/>
+                    android:src="@drawable/fb_button"/>
             </FrameLayout>
 
 

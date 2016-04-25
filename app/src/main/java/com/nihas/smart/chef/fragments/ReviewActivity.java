@@ -60,7 +60,7 @@ public class ReviewActivity extends AppCompatActivity {
 //    ProgressBar pBar;
     ImageLoader imageLoader;
     DisplayImageOptions options;
-    TextView emptyView;
+    TextView emptyView,userName;
     String review_detail;
     float rating_value;
     JSONObject jsonPost;
@@ -80,7 +80,8 @@ public class ReviewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         bundle=getIntent().getExtras();
-
+        userName=(TextView)findViewById(R.id.name);
+        userName.setText(SmartChefApp.readFromPreferences(ReviewActivity.this, "user_name", ""));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle("Reviews");

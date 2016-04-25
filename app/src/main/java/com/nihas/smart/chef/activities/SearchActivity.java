@@ -219,31 +219,35 @@ public class SearchActivity extends AppCompatActivity {
             super.onPostExecute(jobj);
             pBar.setVisibility(View.GONE);
             try {
+                if(jobj.length()>0) {
 //                JSONObject jobj2=jobj.getJSONObject("ingredients");
- if(!jobj.isNull("ingredients")) {
-     JSONArray jarray = jobj.getJSONArray("ingredients");
-     mIngList = new ArrayList<>();
-     for (int i = 0; i < jarray.length(); i++) {
-         IngredientsPojo po = new IngredientsPojo();
-         po.setName(jarray.getString(i));
-         mIngList.add(po);
-     }
-     JSONArray jarrayrec = jobj.getJSONArray("recipes");
-     mRecipeList = new ArrayList<>();
-     for (int j = 0; j < jarrayrec.length(); j++) {
-         RecipesPojo pojo = new RecipesPojo();
-         pojo.setId(jarrayrec.getJSONObject(j).getString("id"));
-         pojo.setName(jarrayrec.getJSONObject(j).getString("name"));
-         pojo.setMedia_type(jarrayrec.getJSONObject(j).getString("media_type"));
-         pojo.setMedia_url(jarrayrec.getJSONObject(j).getString("media_url"));
-         mRecipeList.add(pojo);
-     }
+                    if (!jobj.isNull("ingredients")) {
+                        JSONArray jarray = jobj.getJSONArray("ingredients");
+                        mIngList = new ArrayList<>();
+                        for (int i = 0; i < jarray.length(); i++) {
+                            IngredientsPojo po = new IngredientsPojo();
+                            po.setName(jarray.getString(i));
+                            mIngList.add(po);
+                        }
+                        JSONArray jarrayrec = jobj.getJSONArray("recipes");
+                        mRecipeList = new ArrayList<>();
+                        for (int j = 0; j < jarrayrec.length(); j++) {
+                            RecipesPojo pojo = new RecipesPojo();
+                            pojo.setId(jarrayrec.getJSONObject(j).getString("id"));
+                            pojo.setName(jarrayrec.getJSONObject(j).getString("name"));
+                            pojo.setMedia_type(jarrayrec.getJSONObject(j).getString("media_type"));
+                            pojo.setMedia_url(jarrayrec.getJSONObject(j).getString("media_url"));
+                            mRecipeList.add(pojo);
+                        }
 
-     com.nihas.smart.chef.adapters.SearchAdapter searchAdapter = new com.nihas.smart.chef.adapters.SearchAdapter(SearchActivity.this, mIngList, mRecipeList);
-     recyclerView.setAdapter(searchAdapter);
- }else{
-     SmartChefApp.showAToast("No Items Found");
- }
+                        com.nihas.smart.chef.adapters.SearchAdapter searchAdapter = new com.nihas.smart.chef.adapters.SearchAdapter(SearchActivity.this, mIngList, mRecipeList);
+                        recyclerView.setAdapter(searchAdapter);
+                    } else {
+                        SmartChefApp.showAToast("No Items Found");
+                    }
+                }else {
+                SmartChefApp.showAToast("No Items Found");
+            }
 //                mSearchAdapter = new SearchAdapter(SearchActivity.this, mResultsList, mSuggestionsList, mSuggestionsRecipe, SearchCodes.THEME_LIGHT);
 //                mSearchView.setAdapter(mSearchAdapter);
 

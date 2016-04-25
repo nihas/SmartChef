@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,8 @@ import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -226,17 +229,30 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
                 ((MyViewHolder) myViewHolder).title.setText(mDataset.get(position).getName());
-        imageLoader.displayImage(mDataset.get(position).getMedia_url(),  ((MyViewHolder) myViewHolder).thumbnail, options);
-                ((MyViewHolder) myViewHolder).thumbnail.setTag( ((MyViewHolder) myViewHolder).title.getText());
+        imageLoader.displayImage(mDataset.get(position).getMedia_url(), ((MyViewHolder) myViewHolder).thumbnail, options);
+                ((MyViewHolder) myViewHolder).thumbnail.setTag(((MyViewHolder) myViewHolder).title.getText());
 //        mImageFetcher.loadImage(mDataset.get(position).getUrl(), holder.mRimageView);
                 ((MyViewHolder) myViewHolder).serveTo.setText(mDataset.get(position).getServes() + "");
-                ((MyViewHolder) myViewHolder).refer.setText("by "+mDataset.get(position).getReference());
+                String name=getDomain(mDataset.get(position).getReference());
+                if (name.endsWith(".com")) {
+                    name = name.substring(0, name.length() - 4);
+                }
+                if (name.startsWith("www.")) {
+                    name = name.substring(4);
+                }
+
+                ((MyViewHolder) myViewHolder).refer.setText("by " +name );
                 ((MyViewHolder) myViewHolder).cusine.setText(mDataset.get(position).getCuisine());
+//                if(mDataset.get(position).getPreparation_time().startsWith("Makes"))
+//                    ((MyViewHolder) myViewHolder).timeTaken.setText((mDataset.get(position).getPreparation_time()).substring(6));
+//                else
                 ((MyViewHolder) myViewHolder).timeTaken.setText(mDataset.get(position).getPreparation_time());
         if(Integer.parseInt(mDataset.get(position).getVeg())==1){
             ((MyViewHolder) myViewHolder).foodType.setImageResource(R.drawable.veg_icon);
-        }else{
+        }else  if(Integer.parseInt(mDataset.get(position).getVeg())==2){
             ((MyViewHolder) myViewHolder).foodType.setImageResource(R.drawable.non_veg_icon);
+        }else{
+            ((MyViewHolder) myViewHolder).foodType.setVisibility(View.INVISIBLE);
         }
                 ((MyViewHolder) myViewHolder).ratingBar.setRating(Float.parseFloat(mDataset.get(position).getRating()));
 
@@ -275,58 +291,58 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
                 ((MyViewHolder) myViewHolder).fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ImageView img = (ImageView) view;
-                if (img.getDrawable().getConstantState().equals
-                        (activity.getResources().getDrawable(R.drawable.fav).getConstantState())) {
+                    @Override
+                    public void onClick(View view) {
+                        ImageView img = (ImageView) view;
+                        if (img.getDrawable().getConstantState().equals
+                                (activity.getResources().getDrawable(R.drawable.fav).getConstantState())) {
 
 
-                    MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
+                            MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
 
-                    RecipesPojo recipesPojo = new RecipesPojo();
-                    recipesPojo.setId(mDataset.get(position).getId());
-                    recipesPojo.setName(mDataset.get(position).getName());
-                    recipesPojo.setVeg(mDataset.get(position).getVeg());
-                    recipesPojo.setServes(mDataset.get(position).getServes());
-                    recipesPojo.setFood_kind(mDataset.get(position).getFood_kind());
-                    recipesPojo.setCuisine(mDataset.get(position).getCuisine());
-                    recipesPojo.setPreparation_time(mDataset.get(position).getPreparation_time());
-                    recipesPojo.setMedia_url(mDataset.get(position).getMedia_url());
-                    recipesPojo.setRating(mDataset.get(position).getRating());
-
-
-                    if (dbHandler.addtoFav(recipesPojo)) {
-
-                        SmartChefApp.saveToPreferences(activity, "RID", mDataset.get(position).getId());
-                        SmartChefApp.saveToPreferences(activity, "RNAME", mDataset.get(position).getName());
-                        SmartChefApp.saveToPreferences(activity, "RVEG", mDataset.get(position).getVeg());
-                        SmartChefApp.saveToPreferences(activity, "RSERVE", mDataset.get(position).getServes());
-                        SmartChefApp.saveToPreferences(activity, "RFOOD_KIND", mDataset.get(position).getFood_kind());
-                        SmartChefApp.saveToPreferences(activity, "RCUISINE", mDataset.get(position).getCuisine());
-                        SmartChefApp.saveToPreferences(activity, "RPREP_TIME", mDataset.get(position).getPreparation_time());
-                        SmartChefApp.saveToPreferences(activity, "RMEDIA_URL", mDataset.get(position).getMedia_url());
-                        SmartChefApp.saveToPreferences(activity, "R_RATING", String.valueOf(mDataset.get(position).getRating()));
+                            RecipesPojo recipesPojo = new RecipesPojo();
+                            recipesPojo.setId(mDataset.get(position).getId());
+                            recipesPojo.setName(mDataset.get(position).getName());
+                            recipesPojo.setVeg(mDataset.get(position).getVeg());
+                            recipesPojo.setServes(mDataset.get(position).getServes());
+                            recipesPojo.setFood_kind(mDataset.get(position).getFood_kind());
+                            recipesPojo.setCuisine(mDataset.get(position).getCuisine());
+                            recipesPojo.setPreparation_time(mDataset.get(position).getPreparation_time());
+                            recipesPojo.setMedia_url(mDataset.get(position).getMedia_url());
+                            recipesPojo.setRating(mDataset.get(position).getRating());
 
 
-                        MainActivity.showSnak(mDataset.get(position).getName() + " Added to CookBook", view);
-                        ((MyViewHolder) myViewHolder).fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.heart));
-                    } else
-                        Toast.makeText(activity, "FAILED ADD", Toast.LENGTH_SHORT).show();
+                            if (dbHandler.addtoFav(recipesPojo)) {
 
-                } else {
-                    MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
-                    if (dbHandler.deletefromFav(mDataset.get(position).getId())) {
-                        MainActivity.showSnak(mDataset.get(position).getName() + " Deleted from CookBook", view);
-                        ((MyViewHolder) myViewHolder).fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav));
+                                SmartChefApp.saveToPreferences(activity, "RID", mDataset.get(position).getId());
+                                SmartChefApp.saveToPreferences(activity, "RNAME", mDataset.get(position).getName());
+                                SmartChefApp.saveToPreferences(activity, "RVEG", mDataset.get(position).getVeg());
+                                SmartChefApp.saveToPreferences(activity, "RSERVE", mDataset.get(position).getServes());
+                                SmartChefApp.saveToPreferences(activity, "RFOOD_KIND", mDataset.get(position).getFood_kind());
+                                SmartChefApp.saveToPreferences(activity, "RCUISINE", mDataset.get(position).getCuisine());
+                                SmartChefApp.saveToPreferences(activity, "RPREP_TIME", mDataset.get(position).getPreparation_time());
+                                SmartChefApp.saveToPreferences(activity, "RMEDIA_URL", mDataset.get(position).getMedia_url());
+                                SmartChefApp.saveToPreferences(activity, "R_RATING", String.valueOf(mDataset.get(position).getRating()));
 
-                        if (mDataset.isEmpty())
-                            CookBook.updateView();
-                    } else
-                        Toast.makeText(activity, "FAILED REMOV", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
+                                MainActivity.showSnak(mDataset.get(position).getName() + " Added to CookBook", view);
+                                ((MyViewHolder) myViewHolder).fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.heart));
+                            } else
+                                Toast.makeText(activity, "FAILED ADD", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            MyDbHandler dbHandler = new MyDbHandler(activity, null, null, 1);
+                            if (dbHandler.deletefromFav(mDataset.get(position).getId())) {
+                                MainActivity.showSnak(mDataset.get(position).getName() + " Deleted from CookBook", view);
+                                ((MyViewHolder) myViewHolder).fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav));
+
+                                if (mDataset.isEmpty())
+                                    CookBook.updateView();
+                            } else
+                                Toast.makeText(activity, "FAILED REMOV", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
 
         LayerDrawable stars = (LayerDrawable) ((MyViewHolder) myViewHolder).ratingBar.getProgressDrawable();
@@ -338,6 +354,22 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         }
 
+    }
+
+
+    public String getDomain(String u){
+//        String u = "www.facebook.com/lol";
+        URL url = null;
+        String host="";
+        try {
+            url = new URL(u);
+             host= url.getHost();
+            Log.e("HOST",host);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return host;
+         // should be www.facebook.com
     }
 
     public void onShareItem(ImageView v) {

@@ -85,6 +85,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -124,6 +126,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     MenuItem videoitem;
     String image_url;
     String url_reference;
+    TextView userName;
 //    private ScrollGalleryView scrollGalleryView;
     public static final ArrayList<ReviewPojo> rvwList=new ArrayList<>();
     private static final ArrayList<String> images = new ArrayList<>(Arrays.asList(
@@ -156,8 +159,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         extras=getIntent().getExtras();
         pro_pic=(CircleImageView)findViewById(R.id.pro_pic);
-
-
+        userName=(TextView)findViewById(R.id.user_name);
+        userName.setText(SmartChefApp.readFromPreferences(RecipeDetailsActivity.this, "user_name", ""));
         fullView=(LinearLayout)findViewById(R.id.full_layout);
         fullView.setVisibility(View.GONE);
         rate_text=(TextView)findViewById(R.id.review_text);
@@ -197,7 +200,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
 
                     if (dbHandler.addtoFav(recipesPojo)) {
-                        Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Added to fav", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ " Added to CookBook", Toast.LENGTH_SHORT).show();
 //                    MainActivity.showSnak(SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "") + " Added to Fav", item.getActionView());
                         fab.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.heart));
                         isFav=true;
@@ -207,7 +210,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 }else{
                     MyDbHandler dbHandler = new MyDbHandler(getApplicationContext(), null, null, 1);
                     if (dbHandler.deletefromFav(SmartChefApp.readFromPreferences(getApplicationContext(), "RID", ""))) {
-                        Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ "Removed from favourites", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), SmartChefApp.readFromPreferences(getApplicationContext(), "RNAME", "")+ " Removed from CookBook", Toast.LENGTH_SHORT).show();
                         fab.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.fav));
                         isFav=false;
 
@@ -270,6 +273,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                         Intent myInten=new Intent(RecipeDetailsActivity.this, WebViewActivity.class);
+                myInten.putExtra("title",refer.getText().toString());
                 myInten.putExtra("url",url_reference);
                 startActivity(myInten);
             }
@@ -400,63 +404,96 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //            for(int i=0;i<jArray.length();i++){
 
                 try {
-                    JSONObject jobj=jArray.getJSONObject(0);
-                    if(!jobj.isNull(Keys.name))
-                    recipeName.setText(jobj.getString("name"));
+                    if(jArray.length()>0) {
+                        JSONObject jobj = jArray.getJSONObject(0);
+                        if (!jobj.isNull(Keys.name))
+                            recipeName.setText(jobj.getString("name"));
 
-
-                    if(!jobj.isNull("how_to_cook"))
-                    howToCook.setText(jobj.getString("how_to_cook"));
-                    if(!jobj.isNull("cuisine"))
-                        cusineType.setText(jobj.getString("cuisine") +" CUISINE");
-                    if(!jobj.isNull("serves"))
-                        serves.setText(jobj.getString("serves"));
-                    if(!jobj.isNull("food_kind"))
-                        food_kind.setText(", "+jobj.getString("food_kind"));
-                    if(!jobj.isNull("reference")) {
-                        url_reference=jobj.getString("reference");
-                        refer.setText("By: " + jobj.getString("reference"));
-                    }
-                    if(!jobj.isNull("preparation_time"))
-                        prepTime.setText(jobj.getString("preparation_time"));
-                    if(!jobj.isNull("cook_time"))
-                        cookTime.setText(jobj.getString("cook_time"));
-                    if(!jobj.isNull("total_time"))
-                        timeTaken.setText(jobj.getString("total_time"));
-                    if(!jobj.isNull("veg")) {
-                        if(Integer.parseInt(jobj.getString("veg"))==1){
-                            isVeg.setImageResource(R.drawable.veg_icon);
-                        }else{
-                            isVeg.setImageResource(R.drawable.non_veg_icon);
+                        if (!jobj.isNull("how_to_cook")) {
+                            String s = jobj.getString("how_to_cook");
+                            String[] arr = s.split("\\.");
+                            System.out.println("Split => " + Arrays.toString(arr));
+                            String Compl="";
+                            for(int i=0;i<arr.length;i++) {
+                                Compl=Compl+(i+1)+". "+arr[i]+"\n";
+                            }
+                            howToCook.setText(Compl);
                         }
-                    }
-                    JSONArray attachmentarr=jobj.getJSONArray("attachments");
-                    SmartChefApp.saveToPreferences(getApplicationContext(),"ATTACHMENTS",attachmentarr+"");
-                    List<MediaInfo> infos = new ArrayList<>(images.size());
-                    for(int j=0;j<attachmentarr.length();j++) {
-                        JSONObject jobj2=attachmentarr.getJSONObject(j);
-                        RecipesPojo pojo=new RecipesPojo();
-                        if((!jobj2.isNull("media_type"))&&(!jobj2.isNull("media_url"))){
+                        if (!jobj.isNull("cuisine")) {
+                            if(jobj.getString("cuisine").equals(""))
+                                cusineType.setText("");
+                            else
+                                cusineType.setText(jobj.getString("cuisine") + " CUISINE");
+                        }
+                        if (!jobj.isNull("serves")) {
+                            if(jobj.getString("serves").startsWith("Makes"))
+                            serves.setText(jobj.getString("serves").substring(6));
+                            else
+                                serves.setText(jobj.getString("serves"));
+                        }
+                        if (!jobj.isNull("food_kind")) {
+                            if(jobj.getString("food_kind").equals(""))
+                                food_kind.setText("");
+                            else
+                            food_kind.setText(", " + jobj.getString("food_kind"));
+                        }
+                        if (!jobj.isNull("reference")) {
+                            url_reference = jobj.getString("reference");
+                            try {
+                                String name=getDomainName(jobj.getString("reference"));
+                                if (name.endsWith(".com")) {
+                                    name = name.substring(0, name.length() - 4);
+                                }
+                                if (name.startsWith("www.")) {
+                                    name = name.substring(4);
+                                }
 
-                            if(jobj2.getString("media_type").equals("video")){
-                                isVideo=true;
-                                Videoid=jobj2.getString("media_url");
+
+                                refer.setText("By: " + name);
+                            } catch (URISyntaxException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (!jobj.isNull("preparation_time"))
+                            prepTime.setText(jobj.getString("preparation_time"));
+                        if (!jobj.isNull("cook_time"))
+                            cookTime.setText(jobj.getString("cook_time"));
+                        if (!jobj.isNull("total_time"))
+                            timeTaken.setText(jobj.getString("total_time"));
+                        if (!jobj.isNull("veg")) {
+                            if (Integer.parseInt(jobj.getString("veg")) == 1) {
+                                isVeg.setImageResource(R.drawable.veg_icon);
+                            } else {
+                                isVeg.setImageResource(R.drawable.non_veg_icon);
+                            }
+                        }
+                        JSONArray attachmentarr = jobj.getJSONArray("attachments");
+                        SmartChefApp.saveToPreferences(getApplicationContext(), "ATTACHMENTS", attachmentarr + "");
+                        List<MediaInfo> infos = new ArrayList<>(images.size());
+                        for (int j = 0; j < attachmentarr.length(); j++) {
+                            JSONObject jobj2 = attachmentarr.getJSONObject(j);
+                            RecipesPojo pojo = new RecipesPojo();
+                            if ((!jobj2.isNull("media_type")) && (!jobj2.isNull("media_url"))) {
+
+                                if (jobj2.getString("media_type").equals("video")) {
+                                    isVideo = true;
+                                    Videoid = jobj2.getString("media_url");
 //                                pojo.setMedia_url("http://collegemix.ca/img/placeholder.png");
 //                                scrollGalleryView.addMedia(MediaInfo.mediaLoader(
 //                                        new DefaultVideoLoader(jobj2.getString("media_url"), R.drawable.default_video)));
 //                                imageLoader.displayImage("http://collegemix.ca/img/placeholder.png", thumb, options);
-                            }else{
-                                pojo.setMedia_url(jobj2.getString("media_url"));
+                                } else {
+                                    pojo.setMedia_url(jobj2.getString("media_url"));
 //                                for (String url : images) {
 //                                    infos.add(MediaInfo.mediaLoader(new PicassoImageLoader(jobj2.getString("media_url"))));
 //                                scrollGalleryView.addMedia(infos);
 //                                }
-                                image_url=jobj2.getString("media_url");
-                                imageLoader.displayImage(jobj2.getString("media_url"), thumb, options);
+                                    image_url = jobj2.getString("media_url");
+                                    imageLoader.displayImage(jobj2.getString("media_url"), thumb, options);
+                                }
                             }
+                            attachArray.add(pojo);
                         }
-                        attachArray.add(pojo);
-                    }
 
 
                         JSONArray reviewarr = jobj.getJSONArray("reviews");
@@ -472,54 +509,52 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
                         }
 
-                    JSONArray jarr2=jobj.getJSONArray("ingredients");
-                    for(int j=0;j<jarr2.length();j++) {
+                        JSONArray jarr2 = jobj.getJSONArray("ingredients");
+                        for (int j = 0; j < jarr2.length(); j++) {
 
-                        JSONObject jobj2=jarr2.getJSONObject(j);
+                            JSONObject jobj2 = jarr2.getJSONObject(j);
 
-                        LinearLayout childLayout = new LinearLayout(
-                                RecipeDetailsActivity.this);
+                            LinearLayout childLayout = new LinearLayout(
+                                    RecipeDetailsActivity.this);
 
-                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT);
-                        childLayout.setLayoutParams(linearParams);
+                            LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT);
+                            childLayout.setLayoutParams(linearParams);
 
-                        TextView mType = new TextView(RecipeDetailsActivity.this);
-                        TextView mValue = new TextView(RecipeDetailsActivity.this);
+                            TextView mType = new TextView(RecipeDetailsActivity.this);
+                            TextView mValue = new TextView(RecipeDetailsActivity.this);
 
 //                        mType.setLayoutParams(new TableLayout.LayoutParams(
 //                                0,
 //                                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-                        mType.setLayoutParams(new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.WRAP_CONTENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT));
+                            mType.setLayoutParams(new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT));
 
-                        mValue.setLayoutParams(new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.WRAP_CONTENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT));
+                            mValue.setLayoutParams(new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT));
 
 //                        mType.setTextSize(17);
-                        mType.setPadding(5, 8, 0, 8);
-                        mType.setTypeface(Typeface.DEFAULT);
+                            mType.setPadding(5, 8, 0, 8);
+                            mType.setTypeface(Typeface.DEFAULT);
 
 //                        mValue.setTextSize(16);
-                        mValue.setPadding(0, 10, 0, 10);
-                        mValue.setTypeface(Typeface.DEFAULT);
+                            mValue.setPadding(0, 10, 0, 10);
+                            mValue.setTypeface(Typeface.DEFAULT);
 
-                        mType.setText(jobj2.getString("name"));
-                        if(!jobj2.isNull("qty"))
-                            mValue.setText(jobj2.getString("qty"));
-                        else
-                            mValue.setText("0 "+jobj2.getString("qty_type"));
-
-
-                        childLayout.addView(mValue);
-                        childLayout.addView(mType);
-
-                        IngView.addView(childLayout);
+                            mType.setText(jobj2.getString("name"));
+                            if (!jobj2.isNull("qty"))
+                                mValue.setText(jobj2.getString("qty"));
+                            else
+                                mValue.setText("0 " + jobj2.getString("qty_type"));
 
 
+                            childLayout.addView(mValue);
+                            childLayout.addView(mType);
+
+                            IngView.addView(childLayout);
 
 
 //                        LinearLayout inside=new LinearLayout(RecipeDetailsActivity.this);
@@ -540,8 +575,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 //                        IngView.addView(inside);
 
 
-
-
+                        }
                     }
 
                 } catch (JSONException e) {
@@ -809,6 +843,13 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             container.removeView((RelativeLayout) object);
 
         }
+    }
+
+
+    public static String getDomainName(String url) throws URISyntaxException {
+        URI uri = new URI(url);
+        String domain = uri.getHost();
+        return domain.startsWith("www.") ? domain.substring(4) : domain;
     }
 }
 

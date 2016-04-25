@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +33,7 @@ import com.nihas.smart.chef.api.WebRequest;
 import com.nihas.smart.chef.api.WebServices;
 import com.nihas.smart.chef.app.SmartChefApp;
 import com.nihas.smart.chef.db.MyDbHandler;
+import com.nihas.smart.chef.fragments.DrawerFragment;
 import com.nihas.smart.chef.fragments.FilterDialog;
 import com.nihas.smart.chef.fragments.FilterLayout;
 import com.nihas.smart.chef.fragments.ReviewDialog;
@@ -89,6 +91,11 @@ public class RecipeActivity extends AppCompatActivity {
         });
 
         progressBar=(ProgressBar)findViewById(R.id.pBar);
+
+        DrawerLayout drawerLayout=(DrawerLayout)findViewById(R.id.drawerlayout);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container_drawer,new DrawerFragment().newInstance(drawerLayout), "CupFragment")
+                .commit();
 
         try{
             if (SmartChefApp.isNetworkAvailable()) {
@@ -407,8 +414,9 @@ public class RecipeActivity extends AppCompatActivity {
 
                                     }
                                 }else {
-                            SmartChefApp.showAToast("No Data Available");
-                            showEmptyView();
+//                            SmartChefApp.showAToast("No Data Available");
+                            recipAdapter.enableFooter(false);
+//                            showEmptyView();
                         }
 
 

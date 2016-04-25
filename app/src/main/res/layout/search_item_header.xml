@@ -22,7 +22,7 @@
         android:layout_marginStart="@dimen/search_item_margin_text"
         android:layout_weight="1"
         android:textColor="#000000"
-        android:text="INGRADIENTS"
+        android:text="INGREDIENTS"
         android:gravity="start|center_vertical"
         android:singleLine="true"
         android:textSize="@dimen/search_text_small" />

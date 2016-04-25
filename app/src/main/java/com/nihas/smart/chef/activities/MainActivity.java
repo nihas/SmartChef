@@ -1,6 +1,7 @@
 package com.nihas.smart.chef.activities;
 
 import android.animation.ValueAnimator;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
@@ -19,6 +20,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -72,9 +74,11 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     ArrayList<AllPojo> listCuisines;
     ProgressBar progressBar;
+    int back_press=0;
 //    private static TabLayout tabLayout;
 //    private static ViewPager viewPager;
 //    ViewPagerAdapter adapter;
+
 
 
     @Override
@@ -411,7 +415,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-            super.onBackPressed();
+//            super.onBackPressed();
+        if(back_press==0){
+            SmartChefApp.showAToast("Press again to exit");
+            back_press++;
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Warning");
+            builder.setMessage("You are exiting the app. Do you want to clear the cup");
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    //TODO
+                    MyDbHandler dbHandler = new MyDbHandler(MainActivity.this, null, null, 1);
+                    dbHandler.removeAll();
+                    finishAffinity();
+                    dialog.dismiss();
+                    back_press=0;
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    //TODO
+                    dialog.dismiss();
+                    finishAffinity();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
 

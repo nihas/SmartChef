@@ -1,17 +1,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" tools:context=".MainActivity"
-    android:background="@color/colorPrimary">
+    android:background="@mipmap/fruits">
 
 
 
 
-    <ImageView android:src="@drawable/smartchef_logo"
+
+    <ImageView
+        android:id="@+id/logo"
+        android:src="@drawable/ic_logo"
         android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:padding="25dp"
+        android:layout_height="120dp"
         android:layout_centerInParent="true"
         android:textColor="#ffffff"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:layout_below="@+id/logo"
+        android:shadowColor="#000000"
+        android:shadowDx="1"
+        android:shadowRadius="1"
+        android:shadowDy="1"
+        android:layout_centerHorizontal="true"
+        android:textSize="30dp"
+        android:text="Smart Chef"/>
 
 </RelativeLayout>

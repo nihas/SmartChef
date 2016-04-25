@@ -20,11 +20,10 @@
 
 
             <ImageView
-                android:id="@+id/img_thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:id="@+id/cat_icon"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                android:visibility="gone"
                 android:src="@drawable/empty_photo" />
 
 
@@ -32,20 +31,20 @@
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:orientation="vertical"
                 android:paddingTop="40dp"
                 android:paddingBottom="40dp"
-                android:layout_centerInParent="true"
                 android:gravity="center">
 
 
                 <ImageView
-                    android:id="@+id/cat_icon"
+                    android:id="@+id/cat_ico"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:scaleType="centerCrop"
+                    android:visibility="gone"
                     android:src="@drawable/empty_photo" />
 
             <TextView
@@ -53,8 +52,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hiiii"
+                android:shadowRadius="1"
+                android:shadowDy="1"
+                android:shadowDx="1"
+                android:shadowColor="#808080"
                 android:layout_marginTop="10dp"
-                android:textColor="#000000"/>
+                android:textColor="#ffffff"/>
 
             <TextView
                 android:id="@+id/cuisineSubTitle"

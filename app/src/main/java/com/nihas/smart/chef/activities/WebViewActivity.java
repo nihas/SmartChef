@@ -46,7 +46,7 @@ public class WebViewActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle("SailusFood");
+        toolbar.setTitle(extra.getString("title").substring(4));
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
 
         final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);

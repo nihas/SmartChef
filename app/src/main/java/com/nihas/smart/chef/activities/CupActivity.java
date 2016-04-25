@@ -202,7 +202,10 @@ initialise();
         if(SmartChefApp.readFromPreferences(getApplicationContext(),"TO_CUP","").equals("ing")){
             Intent intent=new Intent(CupActivity.this,IngredientsActivity.class);
             Bundle extras=getIntent().getExtras();
+            if(extras.containsKey("POSITION"))
             intent.putExtra("POSITION", extras.getInt("POSITION"));
+            else
+                intent.putExtra("POSITION", 1);
             startActivity(intent);
             finish();
 

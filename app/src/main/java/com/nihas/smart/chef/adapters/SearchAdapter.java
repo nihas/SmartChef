@@ -116,10 +116,11 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 } else {
                     headerHolder.addPlus.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_icon));
                 }
-                headerHolder.addPlus.setOnClickListener(new View.OnClickListener() {
+                headerHolder.searchViewItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ImageView img = (ImageView) v;
+                        LinearLayout layout=(LinearLayout)v;
+                        ImageView img = (ImageView) layout.findViewById(R.id.addPlus);
                         if (img.getDrawable().getConstantState().equals
                                 (context.getResources().getDrawable(R.drawable.ic_add_icon).getConstantState())) {
 
@@ -165,7 +166,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                     pojo.setCup_count(c.getCount());
                                 }
                                 MainActivity.updateCupValue(pojo.getCup_count());
-                                IngredientsActivity.updateCupValue(pojo.getCup_count());
+//                                IngredientsActivity.updateCupValue(pojo.getCup_count());
                                 headerHolder.addPlus.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_icon));
 
                             } else
@@ -290,7 +291,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     class HeaderHolder extends RecyclerView.ViewHolder {
         TextView textView_Ing;
         ImageView addPlus;
-
+        LinearLayout searchViewItem;
 
 
         public HeaderHolder(View itemView) {
@@ -298,7 +299,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             textView_Ing = (TextView) itemView.findViewById(R.id.textView_item_text);
             addPlus = (ImageView) itemView.findViewById(R.id.addPlus);
-
+            searchViewItem=(LinearLayout)itemView.findViewById(R.id.search_view_item);
 
 
         }

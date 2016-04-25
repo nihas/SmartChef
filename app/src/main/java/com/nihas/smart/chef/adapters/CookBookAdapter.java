@@ -5,6 +5,10 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +32,11 @@ import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 
+import org.w3c.dom.Text;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,8 +75,8 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.ViewHo
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView title,serveTo,timeTaken,cusine;
-        ImageView thumbnail,foodType,fav;
+        public TextView title,serveTo,timeTaken,cusine,reference;
+        ImageView thumbnail,foodType,fav,share;
         CardView recipeView;
 //        LinearLayout addLayout,plusMinusLayout;
         public ViewHolder(View v) {
@@ -81,6 +90,9 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.ViewHo
             foodType=(ImageView)v.findViewById(R.id.food_type);
             fav=(ImageView)v.findViewById(R.id.fav);
             recipeView=(CardView)v.findViewById(R.id.recipe_card);
+            reference=(TextView)v.findViewById(R.id.reference);
+            reference.setVisibility(View.GONE);
+            share=(ImageView)v.findViewById(R.id.share_action);
 //            addPlus=(TextView)v.findViewById(R.id.addPlus);
 //            addLayout=(LinearLayout)v.findViewById(R.id.add_layout);
 //            addLayout.setVisibility(View.VISIBLE);
@@ -107,7 +119,7 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.ViewHo
 
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recipe_list_item, parent, false);
+                .inflate(R.layout.recipe_list_item_new, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
 
@@ -169,6 +181,13 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.ViewHo
             holder.fav.setImageDrawable(activity.getResources().getDrawable(R.drawable.fav));
         }
 
+        holder.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onShareItem(holder.thumbnail);
+            }
+        });
+
         holder.fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -211,6 +230,53 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.ViewHo
             }
         });
 
+    }
+
+
+    public void onShareItem(ImageView v) {
+        // Get access to bitmap image from view
+//        ImageView ivImage = (ImageView) findViewById(R.id.ivResult);
+        // Get access to the URI for the bitmap
+        Uri bmpUri = getLocalBitmapUri(v);
+        if (bmpUri != null) {
+            // Construct a ShareIntent with link to image
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Download Smart Chef to view recipe: " + v.getTag());
+            shareIntent.setType("image/*");
+            // Launch sharing dialog for image
+            activity.startActivity(Intent.createChooser(shareIntent, "Share Image"));
+        } else {
+            // ...sharing failed, handle error
+        }
+    }
+
+
+    // Returns the URI path to the Bitmap displayed in specified ImageView
+    public Uri getLocalBitmapUri(ImageView imageView) {
+        // Extract Bitmap from ImageView drawable
+        Drawable drawable = imageView.getDrawable();
+        Bitmap bmp = null;
+        if (drawable instanceof BitmapDrawable){
+            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        } else {
+            return null;
+        }
+        // Store image to default external storage directory
+        Uri bmpUri = null;
+        try {
+            File file =  new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
+            file.getParentFile().mkdirs();
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
     }
 
     // Return the size of your dataset (invoked by the layout manager)
